@@ -1,8 +1,8 @@
 # Mr.Roast Project Progress & Tracking
 
 ## Current Status
-- **Current Checkpoint**: CP3 (Frontend Core) Complete -> Moving to CP4 (Witty Layer & Pages)
-- **Active Task**: Full state machine (idle, loading with wake-up copy & timeout, reveal in burn theme, gentle/error handling), Web Audio sound engine, and design tokens verified against live backend.
+- **Current Checkpoint**: CP4 (Witty Layer & Utility Pages) Complete -> Moving to CP5 (Cards & Sharing)
+- **Active Task**: Quips engine, FakeButtons, RoastActions feedback, WittyFooter, Chrome easter eggs/cookie banner, mood faces, and all utility pages (404, error, privacy, terms, status, changelog) implemented and verified.
 
 ## Roadmap & Milestones
 
@@ -12,8 +12,8 @@
 | **CP1 Data & Models** | Done (Tagged) | Dev fixtures (32 drafts, intent & safety sets), `lint_roasts.py` clean, heads trained, index built. |
 | **CP2 Backend** | Done (Tagged) | FastAPI pipeline (/roast, /vote, /stats, /health), rate limits, signatures, fallbacks, smoke tests pass. |
 | **CP3 Frontend Core** | Done (Tagged) | Design tokens, Idle -> Loading -> Reveal flow, sound engine, early /health wake up, live API tested. |
-| **CP4 Witty Layer** | Next | Quips engine, FakeButtons, joke escalation, footer, cookie banner, mood faces, 404/500/utility pages. |
-| **CP5 Cards & Sharing** | Pending | RoastCard export, Web Share API, X intent, signed share links, `/s` route, dynamic OG image. |
+| **CP4 Witty Layer** | Done (Tagged) | Quips engine, FakeButtons, joke escalation, footer, cookie banner, mood faces, 404/error/utility pages. |
+| **CP5 Cards & Sharing** | Next | RoastCard export, Web Share API, X intent, signed share links, `/s` route, dynamic OG image. |
 | **CP6 Hardening** | Pending | Edge cases, safety & retrieval evaluations, accessibility audit, unit & smoke tests, `make check`. |
 | **CP7 Deploy Readiness**| Pending | Production builds, Docker build, environment verification, deployment guides. |
 | **CP8 v2 Prep** | Pending | Retriever fine-tuning scripts, cross-encoder reranker, humor scorer, spaCy custom NER. |

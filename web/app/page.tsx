@@ -1,9 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { Volume2, VolumeX, Loader2, ArrowLeft } from "lucide-react";
+import { Volume2, VolumeX, Loader2, ArrowLeft, Smile, Laugh, Meh, Frown, Annoyed } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { RoastActions } from "@/components/RoastActions";
+import { WittyFooter } from "@/components/WittyFooter";
 import { isMuted, setMuted, playTick, playBoom } from "@/lib/sound";
+import { quip } from "@/lib/quips";
 
 type AppState = "idle" | "loading" | "reveal" | "gentle" | "error";
 
@@ -25,6 +28,8 @@ export default function Home() {
   const [roastData, setRoastData] = React.useState<RoastResponse | null>(null);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const [muted, setMutedState] = React.useState(false);
+  const [forceGentle, setForceGentle] = React.useState(false);
+  const [selectedMood, setSelectedMood] = React.useState<number | null>(null);
 
   const abortControllerRef = React.useRef<AbortController | null>(null);
 
@@ -69,6 +74,19 @@ export default function Home() {
     setValidationError(null);
     setRoastData(null);
     setErrorMessage(null);
+    setForceGentle(false);
+    setSelectedMood(null);
+  };
+
+  const handleMoodClick = (index: number, isSad: boolean) => {
+    setSelectedMood(index);
+    if (isSad) {
+      setForceGentle(true);
+      quip("moodSad");
+    } else {
+      setForceGentle(false);
+      quip("mood");
+    }
   };
 
   const handleSubmit = async (e?: React.FormEvent) => {
@@ -86,6 +104,17 @@ export default function Home() {
     }
 
     setValidationError(null);
+
+    // If a sad mood was picked, bypass the roast API and force gentle mode immediately
+    if (forceGentle) {
+      setRoastData({
+        kind: "gentle",
+        text: "Take care today. No jokes from us.",
+      });
+      setState("gentle");
+      return;
+    }
+
     setState("loading");
     setLoadingText("Reflecting on your journey...");
 
@@ -223,6 +252,51 @@ export default function Home() {
                   </div>
                 </div>
 
+                {/* Mood Faces Row */}
+                <div className="flex items-center gap-2 pt-1" aria-label="Select mood">
+                  <span className="text-xs text-muted-foreground pr-1">Mood:</span>
+                  <button
+                    type="button"
+                    aria-label="Joyful mood"
+                    onClick={() => handleMoodClick(0, false)}
+                    className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 0 ? "text-foreground bg-muted" : ""}`}
+                  >
+                    <Laugh className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Happy mood"
+                    onClick={() => handleMoodClick(1, false)}
+                    className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 1 ? "text-foreground bg-muted" : ""}`}
+                  >
+                    <Smile className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Neutral mood"
+                    onClick={() => handleMoodClick(2, false)}
+                    className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 2 ? "text-foreground bg-muted" : ""}`}
+                  >
+                    <Meh className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Somber mood"
+                    onClick={() => handleMoodClick(3, true)}
+                    className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 3 ? "text-foreground bg-muted" : ""}`}
+                  >
+                    <Frown className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Distressed mood"
+                    onClick={() => handleMoodClick(4, true)}
+                    className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 4 ? "text-foreground bg-muted" : ""}`}
+                  >
+                    <Annoyed className="h-4 w-4" />
+                  </button>
+                </div>
+
                 {validationError && (
                   <p
                     id="validation-error"
@@ -287,16 +361,13 @@ export default function Home() {
               )}
             </div>
 
-            <div className="pt-4 flex flex-wrap gap-3">
-              <Button
-                id="reflect-again-btn"
-                variant="outline"
-                onClick={handleReset}
-                className="border-neutral-700 hover:bg-neutral-900 text-white"
-              >
-                Reflect again
-              </Button>
-            </div>
+            {/* Actions: Joke buttons render ONLY on roasts, never on gentle */}
+            <RoastActions
+              roastId={roastData.id}
+              roastText={roastData.text}
+              bragText={roastData.brag}
+              onReset={handleReset}
+            />
           </div>
         )}
 
@@ -363,10 +434,8 @@ export default function Home() {
         )}
       </div>
 
-      {/* Footer Promise */}
-      <footer className="w-full max-w-[640px] pt-8 text-center text-xs text-muted-foreground border-t border-border/50">
-        Private. No account. Nothing is stored.
-      </footer>
+      {/* Persistent Witty Footer */}
+      <WittyFooter />
     </main>
   );
 }
