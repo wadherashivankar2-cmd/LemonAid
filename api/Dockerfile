@@ -20,11 +20,17 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Pre-download spaCy model and sentence transformer cache for fast runtime startup
-RUN python -m spacy download en_core_web_sm
-RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
+ENV HF_HOME=/app/cache/huggingface
+RUN mkdir -p /app/cache/huggingface && \
+    python -m spacy download en_core_web_sm && \
+    python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-MiniLM-L6-v2')"
 
 # Copy application files
 COPY . .
+
+# Train lightweight heads and build retrieval index if not already pre-packaged
+RUN ALLOW_DRAFT=1 python train_heads.py && \
+    ALLOW_DRAFT=1 python build_index.py
 
 # Set permissions
 RUN chown -R appuser:appuser /app

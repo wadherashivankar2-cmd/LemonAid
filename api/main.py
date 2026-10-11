@@ -130,7 +130,38 @@ def load_resources():
 
 @app.on_event("startup")
 def startup_event():
+    import logging
+    logger = logging.getLogger("mrroast.startup")
+    logger.setLevel(logging.INFO)
+
+    print("\n--- Mr.Roast API Startup Validation ---")
+    
+    # 1. Environment Validations
+    print(f"[*] CORS Allowed Origins: {ALLOWED_ORIGINS}")
+    
+    if SHARE_SECRET == "dev_secret_key_must_be_shared_with_frontend":
+        print("[!] WARNING: SHARE_SECRET is using the insecure default dev key. Set a secret in production.")
+    else:
+        print("[+] SHARE_SECRET: Configured with custom secret.")
+
+    if not (0.1 <= RETR_MIN <= 0.9):
+        print(f"[!] WARNING: RETR_MIN={RETR_MIN} is outside standard [0.1, 0.9] bounds.")
+    else:
+        print(f"[+] RETR_MIN: {RETR_MIN} (optimal threshold from eval sweep)")
+
+    if UPSTASH_URL and UPSTASH_TOKEN:
+        print(f"[+] Upstash Redis: Configured ({UPSTASH_URL})")
+    else:
+        print("[*] Upstash Redis: Not configured (falling back to in-memory counters)")
+
+    # 2. Resource Preloading
     load_resources()
+
+    print(f"[+] Embedder: {'Ready' if embedder is not None else 'FAILED'}")
+    print(f"[+] Safety Classifier: {'Ready' if safety_clf is not None else 'MISSING'}")
+    print(f"[+] Intent Classifier: {'Ready' if intent_clf is not None else 'MISSING'}")
+    print(f"[+] Indexed Roasts: {len(indexed_roasts)} entries, {len(anchor_vecs) if anchor_vecs is not None else 0} anchor vectors")
+    print("--- Startup Complete ---\n")
 
 
 # --- Upstash / Counter Helpers ---

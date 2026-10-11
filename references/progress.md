@@ -1,8 +1,8 @@
 # Mr.Roast Project Progress & Tracking
 
 ## Current Status
-- **Current Checkpoint**: CP6 (Hardening & Audits) Complete -> Moving to CP7 (Deploy Readiness)
-- **Active Task**: Benchmarks (safety 200-case 100% recall / 5% false block, RETR_MIN sweep recall@3 100%, 100-request repeat test 0 repeats), a11y & edge-case hardening, and unified check.py runner verified.
+- **Current Checkpoint**: CP7 (Deploy Readiness) Complete -> Moving to CP8 (v2 Prep)
+- **Active Task**: Validated Next.js production builds, Dockerfile configuration (CPU PyTorch, uid 1000, port 7860, pre-built index), environment variable startup logging, zero-cost deployment guide, and quickstart documentation.
 
 ## Roadmap & Milestones
 
@@ -15,8 +15,8 @@
 | **CP4 Witty Layer** | Done (Tagged) | Quips engine, FakeButtons, joke escalation, footer, cookie banner, mood faces, 404/error/utility pages. |
 | **CP5 Cards & Sharing** | Done (Tagged) | RoastCard export, Web Share API, X intent, signed share links, `/s` route, dynamic OG image. |
 | **CP6 Hardening** | Done (Tagged) | Edge cases, safety & retrieval evaluations, accessibility audit, unit & smoke tests, `check.py`. |
-| **CP7 Deploy Readiness**| Next | Production builds, Docker build, environment verification, deployment guides. |
-| **CP8 v2 Prep** | Pending | Retriever fine-tuning scripts, cross-encoder reranker, humor scorer, spaCy custom NER. |
+| **CP7 Deploy Readiness**| Done (Tagged) | Production builds, Docker build, environment verification, deployment guides. |
+| **CP8 v2 Prep** | Next | Retriever fine-tuning scripts, cross-encoder reranker, humor scorer, spaCy custom NER. |
 
 ## Open Questions
 - None currently blocking.
