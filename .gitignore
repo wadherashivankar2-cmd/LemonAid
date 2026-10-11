@@ -1,10 +1,37 @@
-﻿node_modules/
+# Dependencies
+node_modules/
 venv/
+.venv/
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Large model weights and generated index files
+api/models/*
+!api/models/.gitkeep
+api/data/index/*
+!api/data/index/.gitkeep
+
+# Environment files
 .env
-.env.local
-.DS_Store
+.env*.local
+.env.development
+.env.test
+.env.production
+!.env.example
+
+# Next.js & build outputs
 .next/
+out/
 dist/
 build/
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #FAF8F5;
+    --foreground: #1F1B16;
+    --card: #FFFFFF;
+    --card-foreground: #1F1B16;
+    --border: #E7E2DA;
+    --input: #E7E2DA;
+    --muted: #F2EFE9;
+    --muted-foreground: #6B645B;
+    --primary: #1F1B16;
+    --primary-foreground: #FAF8F5;
+    --radius: 0.5rem;
+  }
+
+  [data-theme="burn"] {
+    --background: #000000;
+    --foreground: #FFFFFF;
+    --card: #0A0A0A;
+    --card-foreground: #FFFFFF;
+    --border: #222222;
+    --input: #222222;
+    --muted: #141414;
+    --muted-foreground: #8A8A8A;
+    --primary: #FFFFFF;
+    --primary-foreground: #000000;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
