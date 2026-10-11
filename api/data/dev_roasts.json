@@ -1,0 +1,511 @@
+[
+  {
+    "id": "career-001",
+    "category": "career",
+    "anchors": [
+      "I got promoted today",
+      "I became a senior associate",
+      "Finally got the promotion I worked for"
+    ],
+    "paraphrases": [
+      "my title changed on LinkedIn",
+      "promoted to lead after three years"
+    ],
+    "roast": "Congratulations on the new title. Same salary, more meetings, and a Slack channel you cannot mute.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "career-002",
+    "category": "career",
+    "anchors": [
+      "My manager praised my presentation today",
+      "Got positive feedback from the leadership team",
+      "My boss said I did great work on the project"
+    ],
+    "paraphrases": [
+      "leadership loved my slide deck",
+      "director commended my deliverables"
+    ],
+    "roast": "Your reward for being efficient at work is more work from people who are not.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "placements-001",
+    "category": "placements",
+    "anchors": [
+      "Got placed at Google today",
+      "Received an offer letter from Microsoft",
+      "Cleared all interview rounds at Amazon"
+    ],
+    "paraphrases": [
+      "offer signed at a tier-one tech firm",
+      "campus placement cracked"
+    ],
+    "roast": "All those LeetCode hard problems just to spend eight hours a day centering a div inside Jira.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "placements-002",
+    "category": "placements",
+    "anchors": [
+      "Landed a job with a 20 LPA package",
+      "Signed an offer for 15 lakhs",
+      "Got an entry level package of 30 LPA"
+    ],
+    "paraphrases": [
+      "got a high paying corporate offer",
+      "signed my dream compensation package"
+    ],
+    "roast": "Wait until you see how much of {amount} survives taxes, rent, and iced Americanos.",
+    "slots": ["amount"],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academics-001",
+    "category": "academics",
+    "anchors": [
+      "Scored a 9.5 GPA this semester",
+      "Got straight As on my final report card",
+      "Maintained a perfect 4.0 GPA this term"
+    ],
+    "paraphrases": [
+      "dean's list again this semester",
+      "aced every single exam this year"
+    ],
+    "roast": "Frame the transcript. It is the last time an authority figure grades you on an objective scale.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academics-002",
+    "category": "academics",
+    "anchors": [
+      "Finally finished writing my master's thesis",
+      "Submitted my dissertation draft today",
+      "Finished my academic research paper"
+    ],
+    "paraphrases": [
+      "thesis submitted after six months of stress",
+      "dissertation uploaded to portal"
+    ],
+    "roast": "A monumental accomplishment that will be read by exactly two advisors who skim chapter four.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-001",
+    "category": "fitness",
+    "anchors": [
+      "Ran my first 5k today",
+      "Completed a 10 km morning jog",
+      "Finished running 5k without stopping"
+    ],
+    "paraphrases": [
+      "strava logged my 5k run",
+      "completed my weekend distance run"
+    ],
+    "roast": "Strava saw it, Instagram saw it, and yet your knees will remember it longer than your followers.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-002",
+    "category": "fitness",
+    "anchors": [
+      "Hit a new personal record on bench press",
+      "Benched 100 kg for the first time",
+      "PR on deadlift this morning"
+    ],
+    "paraphrases": [
+      "new weight room personal best",
+      "hit a clean PR lift today"
+    ],
+    "roast": "You picked up heavy metal and set it down in the exact same spot. Science is stunned.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-003",
+    "category": "fitness",
+    "anchors": [
+      "Woke up at 5 am to work out before sunrise",
+      "Went to the gym before anyone else was awake",
+      "Started my day with a 5 am workout"
+    ],
+    "paraphrases": [
+      "morning grind at 5 am completed",
+      "up at dawn lifting weights"
+    ],
+    "roast": "Waking up at dawn just to be exhausted by 2 pm is not discipline, it is performance art.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-001",
+    "category": "dating",
+    "anchors": [
+      "Went on a great first date tonight",
+      "Had amazing chemistry on our coffee date",
+      "The date went so well we talked for hours"
+    ],
+    "paraphrases": [
+      "first date sparks were real",
+      "met someone special for drinks"
+    ],
+    "roast": "Enjoy the euphoria before they become an unread text message and a subtle personality tweak.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-002",
+    "category": "dating",
+    "anchors": [
+      "Celebrated our one year anniversary today",
+      "Two years together with my partner",
+      "One year of dating my best friend"
+    ],
+    "paraphrases": [
+      "anniversary dinner was romantic",
+      "one year milestone with my favorite person"
+    ],
+    "roast": "One full year of asking what you want for dinner and rejecting the first five options.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-001",
+    "category": "money",
+    "anchors": [
+      "Saved 10k in my emergency fund",
+      "Maxed out my retirement account for the year",
+      "Reached my savings goal this month"
+    ],
+    "paraphrases": [
+      "investment portfolio hit a milestone",
+      "saved a healthy cushion in my bank"
+    ],
+    "roast": "A responsible financial cushion that one minor dental procedure will dismantle with ease.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-002",
+    "category": "money",
+    "anchors": [
+      "Finally paid off my student loans",
+      "Made the final payment on my college debt",
+      "Zero balance on my student loans today"
+    ],
+    "paraphrases": [
+      "debt free after ten years",
+      "loan servicer account balance is finally zero"
+    ],
+    "roast": "You bought your own freedom back from the bank. Now you can afford groceries.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-001",
+    "category": "productivity",
+    "anchors": [
+      "Cleaned my entire apartment this morning",
+      "Did deep cleaning and organized my room",
+      "My living room and kitchen are spotless"
+    ],
+    "paraphrases": [
+      "decluttered my whole living space",
+      "spent Sunday cleaning the house"
+    ],
+    "roast": "A pristine sanctuary that will remain tidy until you open one drawer on Tuesday.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-002",
+    "category": "productivity",
+    "anchors": [
+      "Reached inbox zero today",
+      "Cleared every unread email in my inbox",
+      "Zero unread messages across all my mail accounts"
+    ],
+    "paraphrases": [
+      "inbox zero achieved at work",
+      "archived all remaining unread emails"
+    ],
+    "roast": "Inbox zero is a temporary ceasefire before five people reply to all with 'thanks'.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-003",
+    "category": "productivity",
+    "anchors": [
+      "Read an entire book in one weekend",
+      "Finished reading a 300 page novel",
+      "Completed my book reading goal for the month"
+    ],
+    "paraphrases": [
+      "finished a whole non fiction book",
+      "read a book cover to cover"
+    ],
+    "roast": "Logged on Goodreads so the algorithm knows you can concentrate for forty consecutive minutes.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-001",
+    "category": "tech",
+    "anchors": [
+      "Merged my pull request without any merge conflicts",
+      "My code passed all CI unit tests on the first try",
+      "Shipped my feature branch to production"
+    ],
+    "paraphrases": [
+      "pr approved and merged cleanly",
+      "production release went out smoothly"
+    ],
+    "roast": "Green checkmarks on GitHub today, a Sev-1 incident alert at 2 am on Saturday.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-002",
+    "category": "tech",
+    "anchors": [
+      "Switched my operating system to Linux",
+      "Set up Arch Linux on my personal laptop",
+      "Configured my custom window manager and Neovim"
+    ],
+    "paraphrases": [
+      "rice setup complete on my workstation",
+      "dual boot setup working seamlessly"
+    ],
+    "roast": "You spent fourteen hours configuring dotfiles to write the exact same console logs.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-003",
+    "category": "tech",
+    "anchors": [
+      "Built a full stack web app over the weekend",
+      "Launched my side project SaaS app today",
+      "Deployed my new web application"
+    ],
+    "paraphrases": [
+      "side project live on Product Hunt",
+      "coded a full stack tool from scratch"
+    ],
+    "roast": "Another CRUD app with Next.js, Stripe checkout, and a total addressable market of your roommate.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "hackathons-001",
+    "category": "hackathons",
+    "anchors": [
+      "Won first place at the college hackathon",
+      "Our team took first prize in the hackathon",
+      "Won the 36 hour university hackathon"
+    ],
+    "paraphrases": [
+      "won hackathon grand prize",
+      "first place trophy at hackathon"
+    ],
+    "roast": "Thirty-six hours without sleep to win an oversized novelty check and a branded polyester fleece.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "social-001",
+    "category": "social",
+    "anchors": [
+      "Had a wonderful dinner with close friends tonight",
+      "Caught up with old friends over drinks",
+      "Spent quality time with childhood friends"
+    ],
+    "paraphrases": [
+      "reunited with my friend group",
+      "great evening hanging out with friends"
+    ],
+    "roast": "Two hours of nostalgia and ninety minutes of talking about lower back pain and mortgage rates.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "social-002",
+    "category": "social",
+    "anchors": [
+      "Hosted a dinner party for eight people",
+      "Cooked a three course meal for my guests",
+      "Had friends over for a home cooked dinner"
+    ],
+    "paraphrases": [
+      "dinner party host duties completed",
+      "entertained friends with homemade food"
+    ],
+    "roast": "Four hours of prep, thirty minutes of eating, and a sink full of ramekins waiting for tomorrow.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "food-001",
+    "category": "food",
+    "anchors": [
+      "Baked sourdough bread from scratch today",
+      "My homemade sourdough loaf turned out perfect",
+      "First attempt baking sourdough and it looks amazing"
+    ],
+    "paraphrases": [
+      "fresh sourdough out of the oven",
+      "baked artisanal crusty bread"
+    ],
+    "roast": "You nurtured wild yeast for two weeks just to avoid paying four dollars at the bakery.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "food-002",
+    "category": "food",
+    "anchors": [
+      "Made fresh espresso with latte art this morning",
+      "Pulled a perfect espresso shot on my machine",
+      "Poured a swan latte art pattern"
+    ],
+    "paraphrases": [
+      "morning specialty coffee ritual",
+      "dialed in my coffee beans perfectly"
+    ],
+    "roast": "Six hundred dollars in espresso equipment to produce three ounces of anxiety before 9 am.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-001",
+    "category": "travel",
+    "anchors": [
+      "Landed in Tokyo for a solo trip",
+      "Arrived in Japan for a two week vacation",
+      "Started my solo backpacking journey in Tokyo"
+    ],
+    "paraphrases": [
+      "vacation in Japan begins today",
+      "solo travel trip across Asia"
+    ],
+    "roast": "Traveling twelve time zones away just to take pictures of convenience store sandwiches.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-002",
+    "category": "travel",
+    "anchors": [
+      "Hiked to the mountain summit before sunrise",
+      "Reached the mountain peak on our morning trek",
+      "Climbed to the ridge to watch the sunrise"
+    ],
+    "paraphrases": [
+      "summit view was breathtaking",
+      "morning mountain trail completed"
+    ],
+    "roast": "Nothing says oneness with nature quite like freezing at high altitude while adjusting exposure.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-003",
+    "category": "travel",
+    "anchors": [
+      "Booked flight tickets for a beach vacation",
+      "Going on holiday to Bali next month",
+      "Booked our summer getaway to the coast"
+    ],
+    "paraphrases": [
+      "beach trip reservations confirmed",
+      "vacation flights officially booked"
+    ],
+    "roast": "Excited to answer Slack messages from an ergonomic patio chair instead of a desk chair.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-001",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "A truly heartwarming achievement. Now tell us what you are actually avoiding.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-002",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "Inner peace logged. The universe remains completely indifferent.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-003",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": " Cherish this fleeting satisfaction before reality remembers your email address.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-004",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "A modest step forward in an otherwise elaborate coping mechanism.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-005",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "Congratulations on experiencing mild contentment for three consecutive minutes.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  }
+]

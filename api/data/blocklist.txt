@@ -1,0 +1,25 @@
+# Banned terms and slurs (exact lowercase substring or word matches)
+# Prohibited: hate speech, slurs, body shaming, explicit gore
+nigger
+nigga
+faggot
+kike
+chink
+spic
+retard
+tranny
+cunt
+fatass
+whore
+slut
+kill yourself
+die
+commit suicide
+anorexia
+bulimia
+cancer patient
+dead parent
+orphan
+rapist
+pedophile
+pedophelia

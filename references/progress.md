@@ -1,16 +1,16 @@
 # Mr.Roast Project Progress & Tracking
 
 ## Current Status
-- **Current Checkpoint**: CP0 (Housekeeping & Scaffolding)
-- **Active Task**: Creating repo structure, `web/` and `api/` scaffolds, environment configurations, and reference notes.
+- **Current Checkpoint**: CP1 (Data and Models) Complete -> Moving to CP2 (Backend)
+- **Active Task**: All dev fixtures created, roasts linted, linear classifier heads trained, and retrieval index built.
 
 ## Roadmap & Milestones
 
 | Checkpoint | Status | Description |
 | :--- | :--- | :--- |
-| **CP0 Housekeeping** | In Progress | Clean blueprint, scaffolds for `web/` and `api/`, `.env.example`, references notes. |
-| **CP1 Data & Models** | Pending | Dev fixtures (30 drafts, intent & safety sets), `build_index.py`, `train_heads.py`, `lint_roasts.py`. |
-| **CP2 Backend** | Pending | FastAPI pipeline (/roast, /vote, /stats, /health), rate limits, signatures, fallbacks, Dockerfile. |
+| **CP0 Housekeeping** | Done (Tagged) | Clean blueprint, scaffolds for `web/` and `api/`, `.env.example`, references notes. |
+| **CP1 Data & Models** | Done (Tagged) | Dev fixtures (32 drafts, intent & safety sets), `lint_roasts.py` clean, heads trained, index built. |
+| **CP2 Backend** | Next | FastAPI pipeline (/roast, /vote, /stats, /health), rate limits, signatures, fallbacks, Dockerfile. |
 | **CP3 Frontend Core** | Pending | Design tokens, Idle -> Loading -> Reveal flow, sound engine, early /health wake up. |
 | **CP4 Witty Layer** | Pending | Quips engine, FakeButtons, joke escalation, footer, cookie banner, mood faces, 404/500/utility pages. |
 | **CP5 Cards & Sharing** | Pending | RoastCard export, Web Share API, X intent, signed share links, `/s` route, dynamic OG image. |
@@ -19,7 +19,7 @@
 | **CP8 v2 Prep** | Pending | Retriever fine-tuning scripts, cross-encoder reranker, humor scorer, spaCy custom NER. |
 
 ## Open Questions
-- None currently blocking. All requirements specified in `references/blueprint.md` and user directives.
+- None currently blocking.
 
 ## Human Owner To-Do List (Blocked for Agent)
 - [ ] Review and approve production roast bank (`api/data/roasts.json`) – agent strictly marks drafts.
