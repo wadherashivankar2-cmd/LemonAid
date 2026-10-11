@@ -1,8 +1,8 @@
 # Mr.Roast Project Progress & Tracking
 
 ## Current Status
-- **Current Checkpoint**: CP2 (Backend) Complete -> Moving to CP3 (Frontend Core)
-- **Active Task**: FastAPI `/roast`, `/vote`, `/stats`, and `/health` pipeline verified against all safety, rate-limit, and validation edge cases.
+- **Current Checkpoint**: CP3 (Frontend Core) Complete -> Moving to CP4 (Witty Layer & Pages)
+- **Active Task**: Full state machine (idle, loading with wake-up copy & timeout, reveal in burn theme, gentle/error handling), Web Audio sound engine, and design tokens verified against live backend.
 
 ## Roadmap & Milestones
 
@@ -11,8 +11,8 @@
 | **CP0 Housekeeping** | Done (Tagged) | Clean blueprint, scaffolds for `web/` and `api/`, `.env.example`, references notes. |
 | **CP1 Data & Models** | Done (Tagged) | Dev fixtures (32 drafts, intent & safety sets), `lint_roasts.py` clean, heads trained, index built. |
 | **CP2 Backend** | Done (Tagged) | FastAPI pipeline (/roast, /vote, /stats, /health), rate limits, signatures, fallbacks, smoke tests pass. |
-| **CP3 Frontend Core** | Next | Design tokens, Idle -> Loading -> Reveal flow, sound engine, early /health wake up. |
-| **CP4 Witty Layer** | Pending | Quips engine, FakeButtons, joke escalation, footer, cookie banner, mood faces, 404/500/utility pages. |
+| **CP3 Frontend Core** | Done (Tagged) | Design tokens, Idle -> Loading -> Reveal flow, sound engine, early /health wake up, live API tested. |
+| **CP4 Witty Layer** | Next | Quips engine, FakeButtons, joke escalation, footer, cookie banner, mood faces, 404/500/utility pages. |
 | **CP5 Cards & Sharing** | Pending | RoastCard export, Web Share API, X intent, signed share links, `/s` route, dynamic OG image. |
 | **CP6 Hardening** | Pending | Edge cases, safety & retrieval evaluations, accessibility audit, unit & smoke tests, `make check`. |
 | **CP7 Deploy Readiness**| Pending | Production builds, Docker build, environment verification, deployment guides. |
