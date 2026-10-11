@@ -4,9 +4,11 @@ import * as React from "react";
 import { Volume2, VolumeX, Loader2, ArrowLeft, Smile, Laugh, Meh, Frown, Annoyed } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RoastActions } from "@/components/RoastActions";
+import { RoastCard } from "@/components/RoastCard";
 import { WittyFooter } from "@/components/WittyFooter";
 import { isMuted, setMuted, playTick, playBoom } from "@/lib/sound";
 import { quip } from "@/lib/quips";
+import { downloadCard, shareX, setCurrentShare } from "@/lib/share";
 
 type AppState = "idle" | "loading" | "reveal" | "gentle" | "error";
 
@@ -165,6 +167,9 @@ export default function Home() {
       if (data.kind === "gentle") {
         setState("gentle");
       } else {
+        if (data.brag && data.sig) {
+          setCurrentShare({ brag: data.brag, roast: data.text, sig: data.sig });
+        }
         setState("reveal");
         // Play low dramatic boom on roast reveal
         playBoom();
@@ -181,6 +186,16 @@ export default function Home() {
 
       setState("error");
       setErrorMessage("The universe is buffering. Try again in a moment.");
+    }
+  };
+
+  const handleDownloadCard = () => {
+    downloadCard("roast-card");
+  };
+
+  const handleShareX = () => {
+    if (roastData) {
+      shareX(roastData.text, roastData.brag, roastData.sig);
     }
   };
 
@@ -331,42 +346,29 @@ export default function Home() {
           </div>
         )}
 
-        {/* State 3: REVEAL (ROAST) */}
+        {/* State 3: REVEAL (ROAST CARD & ACTIONS) */}
         {state === "reveal" && roastData && (
           <div
             className="space-y-6 animate-fade-in"
             aria-live="polite"
             id="roast-reveal-container"
           >
-            <div className="flex items-center gap-2">
-              <span className="rounded bg-[#C62828]/15 px-2 py-0.5 text-xs font-semibold uppercase tracking-wider text-[#C62828] border border-[#C62828]/30">
-                The burn
-              </span>
-              {roastData.category && (
-                <span className="text-xs text-muted-foreground capitalize">
-                  {roastData.category}
-                </span>
-              )}
+            {/* The shareable RoastCard */}
+            <div className="flex justify-center">
+              <RoastCard
+                brag={roastData.brag || input}
+                roast={roastData.text}
+              />
             </div>
 
-            <div className="space-y-4">
-              <p className="font-sans text-xl sm:text-2xl font-medium text-foreground leading-snug">
-                {roastData.text}
-              </p>
-
-              {roastData.brag && (
-                <p className="text-sm text-muted-foreground italic border-l-2 border-border pl-3">
-                  &ldquo;{roastData.brag}&rdquo;
-                </p>
-              )}
-            </div>
-
-            {/* Actions: Joke buttons render ONLY on roasts, never on gentle */}
+            {/* Actions: Joke buttons, download, share on X */}
             <RoastActions
               roastId={roastData.id}
               roastText={roastData.text}
-              bragText={roastData.brag}
+              bragText={roastData.brag || input}
               onReset={handleReset}
+              onDownloadCard={handleDownloadCard}
+              onShareX={handleShareX}
             />
           </div>
         )}

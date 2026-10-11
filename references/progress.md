@@ -1,8 +1,8 @@
 # Mr.Roast Project Progress & Tracking
 
 ## Current Status
-- **Current Checkpoint**: CP4 (Witty Layer & Utility Pages) Complete -> Moving to CP5 (Cards & Sharing)
-- **Active Task**: Quips engine, FakeButtons, RoastActions feedback, WittyFooter, Chrome easter eggs/cookie banner, mood faces, and all utility pages (404, error, privacy, terms, status, changelog) implemented and verified.
+- **Current Checkpoint**: CP5 (Cards & Sharing) Complete -> Moving to CP6 (Hardening & Audits)
+- **Active Task**: RoastCard (540px split layout), double-pass html-to-image export, Web Share API, Share on X, signed share viewer route (`/s`), and Edge runtime OpenGraph image generation (`/api/og`) implemented and verified.
 
 ## Roadmap & Milestones
 
@@ -13,8 +13,8 @@
 | **CP2 Backend** | Done (Tagged) | FastAPI pipeline (/roast, /vote, /stats, /health), rate limits, signatures, fallbacks, smoke tests pass. |
 | **CP3 Frontend Core** | Done (Tagged) | Design tokens, Idle -> Loading -> Reveal flow, sound engine, early /health wake up, live API tested. |
 | **CP4 Witty Layer** | Done (Tagged) | Quips engine, FakeButtons, joke escalation, footer, cookie banner, mood faces, 404/error/utility pages. |
-| **CP5 Cards & Sharing** | Next | RoastCard export, Web Share API, X intent, signed share links, `/s` route, dynamic OG image. |
-| **CP6 Hardening** | Pending | Edge cases, safety & retrieval evaluations, accessibility audit, unit & smoke tests, `make check`. |
+| **CP5 Cards & Sharing** | Done (Tagged) | RoastCard export, Web Share API, X intent, signed share links, `/s` route, dynamic OG image. |
+| **CP6 Hardening** | Next | Edge cases, safety & retrieval evaluations, accessibility audit, unit & smoke tests, `make check`. |
 | **CP7 Deploy Readiness**| Pending | Production builds, Docker build, environment verification, deployment guides. |
 | **CP8 v2 Prep** | Pending | Retriever fine-tuning scripts, cross-encoder reranker, humor scorer, spaCy custom NER. |
 
