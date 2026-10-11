@@ -27,6 +27,10 @@ def check_rate_limit(request: Request, limit: int, window_seconds: int = 60, det
     Check if the client IP has exceeded the allowed number of requests in the sliding window.
     Raises HTTPException(429) if limit exceeded.
     """
+    import os
+    if os.getenv("DISABLE_RATE_LIMIT") == "1":
+        return
+
     ip = get_client_ip(request)
     now = time.time()
     q = _rate_limits[ip]

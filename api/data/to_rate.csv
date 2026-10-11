@@ -1,0 +1,151 @@
+query_index,input_text,rank,roast_id,similarity,roast_text
+0,got promoted to senior associate today,1,career-001,0.8313,"Congratulations on the new title. Same salary, more meetings, and a Slack channel you cannot mute."
+0,got promoted to senior associate today,2,academics-001,0.4080,Frame the transcript. It is the last time an authority figure grades you on an objective scale.
+0,got promoted to senior associate today,3,placements-002,0.3784,"Wait until you see how much of {amount} survives taxes, rent, and iced Americanos."
+0,got promoted to senior associate today,4,fitness-002,0.3707,You picked up heavy metal and set it down in the exact same spot. Science is stunned.
+0,got promoted to senior associate today,5,career-002,0.3590,Your reward for being efficient at work is more work from people who are not.
+1,boss gave me a shoutout in all hands,1,career-002,0.4484,Your reward for being efficient at work is more work from people who are not.
+1,boss gave me a shoutout in all hands,2,career-001,0.3981,"Congratulations on the new title. Same salary, more meetings, and a Slack channel you cannot mute."
+1,boss gave me a shoutout in all hands,3,food-002,0.2871,Six hundred dollars in espresso equipment to produce three ounces of anxiety before 9 am.
+1,boss gave me a shoutout in all hands,4,academics-001,0.2686,Frame the transcript. It is the last time an authority figure grades you on an objective scale.
+1,boss gave me a shoutout in all hands,5,hackathons-001,0.2683,Thirty-six hours without sleep to win an oversized novelty check and a branded polyester fleece.
+2,finally got placed at google,1,placements-001,0.8794,All those LeetCode hard problems just to spend eight hours a day centering a div inside Jira.
+2,finally got placed at google,2,career-001,0.3441,"Congratulations on the new title. Same salary, more meetings, and a Slack channel you cannot mute."
+2,finally got placed at google,3,academics-002,0.3419,A monumental accomplishment that will be read by exactly two advisors who skim chapter four.
+2,finally got placed at google,4,productivity-002,0.3019,Inbox zero is a temporary ceasefire before five people reply to all with 'thanks'.
+2,finally got placed at google,5,academics-001,0.2829,Frame the transcript. It is the last time an authority figure grades you on an objective scale.
+3,got an offer of 20 lpa from startup,1,placements-002,0.6814,"Wait until you see how much of {amount} survives taxes, rent, and iced Americanos."
+3,got an offer of 20 lpa from startup,2,placements-001,0.4283,All those LeetCode hard problems just to spend eight hours a day centering a div inside Jira.
+3,got an offer of 20 lpa from startup,3,money-001,0.2960,A responsible financial cushion that one minor dental procedure will dismantle with ease.
+3,got an offer of 20 lpa from startup,4,tech-003,0.2734,"Another CRUD app with Next.js, Stripe checkout, and a total addressable market of your roommate."
+3,got an offer of 20 lpa from startup,5,career-001,0.2692,"Congratulations on the new title. Same salary, more meetings, and a Slack channel you cannot mute."
+4,ran my first 5k this morning in the rain,1,fitness-001,0.8327,"Strava saw it, Instagram saw it, and yet your knees will remember it longer than your followers."
+4,ran my first 5k this morning in the rain,2,fitness-003,0.4895,"Waking up at dawn just to be exhausted by 2 pm is not discipline, it is performance art."
+4,ran my first 5k this morning in the rain,3,money-001,0.4484,A responsible financial cushion that one minor dental procedure will dismantle with ease.
+4,ran my first 5k this morning in the rain,4,fitness-002,0.3525,You picked up heavy metal and set it down in the exact same spot. Science is stunned.
+4,ran my first 5k this morning in the rain,5,travel-002,0.3438,Nothing says oneness with nature quite like freezing at high altitude while adjusting exposure.
+5,benched 100kg clean pr,1,fitness-002,0.6594,You picked up heavy metal and set it down in the exact same spot. Science is stunned.
+5,benched 100kg clean pr,2,fitness-001,0.3817,"Strava saw it, Instagram saw it, and yet your knees will remember it longer than your followers."
+5,benched 100kg clean pr,3,tech-001,0.3580,"Green checkmarks on GitHub today, a Sev-1 incident alert at 2 am on Saturday."
+5,benched 100kg clean pr,4,career-002,0.2720,Your reward for being efficient at work is more work from people who are not.
+5,benched 100kg clean pr,5,career-001,0.2666,"Congratulations on the new title. Same salary, more meetings, and a Slack channel you cannot mute."
+6,up at 5am hitting the gym before work,1,fitness-003,0.7246,"Waking up at dawn just to be exhausted by 2 pm is not discipline, it is performance art."
+6,up at 5am hitting the gym before work,2,fitness-002,0.4390,You picked up heavy metal and set it down in the exact same spot. Science is stunned.
+6,up at 5am hitting the gym before work,3,fitness-001,0.3800,"Strava saw it, Instagram saw it, and yet your knees will remember it longer than your followers."
+6,up at 5am hitting the gym before work,4,travel-002,0.3250,Nothing says oneness with nature quite like freezing at high altitude while adjusting exposure.
+6,up at 5am hitting the gym before work,5,social-001,0.2811,Two hours of nostalgia and ninety minutes of talking about lower back pain and mortgage rates.
+7,had a really sweet first date tonight,1,dating-001,0.8873,Enjoy the euphoria before they become an unread text message and a subtle personality tweak.
+7,had a really sweet first date tonight,2,social-001,0.5110,Two hours of nostalgia and ninety minutes of talking about lower back pain and mortgage rates.
+7,had a really sweet first date tonight,3,dating-002,0.4960,One full year of asking what you want for dinner and rejecting the first five options.
+7,had a really sweet first date tonight,4,social-002,0.3585,"Four hours of prep, thirty minutes of eating, and a sink full of ramekins waiting for tomorrow."
+7,had a really sweet first date tonight,5,fitness-003,0.3260,"Waking up at dawn just to be exhausted by 2 pm is not discipline, it is performance art."
+8,one year anniversary with my gf,1,dating-002,0.7017,One full year of asking what you want for dinner and rejecting the first five options.
+8,one year anniversary with my gf,2,dating-001,0.3579,Enjoy the euphoria before they become an unread text message and a subtle personality tweak.
+8,one year anniversary with my gf,3,social-001,0.2476,Two hours of nostalgia and ninety minutes of talking about lower back pain and mortgage rates.
+8,one year anniversary with my gf,4,money-001,0.2452,A responsible financial cushion that one minor dental procedure will dismantle with ease.
+8,one year anniversary with my gf,5,productivity-003,0.2292,Logged on Goodreads so the algorithm knows you can concentrate for forty consecutive minutes.
+9,finally saved 10k in my emergency fund,1,money-001,0.9633,A responsible financial cushion that one minor dental procedure will dismantle with ease.
+9,finally saved 10k in my emergency fund,2,fitness-001,0.4339,"Strava saw it, Instagram saw it, and yet your knees will remember it longer than your followers."
+9,finally saved 10k in my emergency fund,3,money-002,0.3913,You bought your own freedom back from the bank. Now you can afford groceries.
+9,finally saved 10k in my emergency fund,4,career-001,0.3221,"Congratulations on the new title. Same salary, more meetings, and a Slack channel you cannot mute."
+9,finally saved 10k in my emergency fund,5,placements-002,0.3032,"Wait until you see how much of {amount} survives taxes, rent, and iced Americanos."
+10,paid off my student loans completely,1,money-002,0.8778,You bought your own freedom back from the bank. Now you can afford groceries.
+10,paid off my student loans completely,2,placements-002,0.3293,"Wait until you see how much of {amount} survives taxes, rent, and iced Americanos."
+10,paid off my student loans completely,3,money-001,0.2942,A responsible financial cushion that one minor dental procedure will dismantle with ease.
+10,paid off my student loans completely,4,hackathons-001,0.2542,Thirty-six hours without sleep to win an oversized novelty check and a branded polyester fleece.
+10,paid off my student loans completely,5,placements-001,0.2412,All those LeetCode hard problems just to spend eight hours a day centering a div inside Jira.
+11,deep cleaned the whole apartment,1,productivity-001,0.7799,A pristine sanctuary that will remain tidy until you open one drawer on Tuesday.
+11,deep cleaned the whole apartment,2,fitness-002,0.2779,You picked up heavy metal and set it down in the exact same spot. Science is stunned.
+11,deep cleaned the whole apartment,3,placements-001,0.2628,All those LeetCode hard problems just to spend eight hours a day centering a div inside Jira.
+11,deep cleaned the whole apartment,4,food-002,0.2500,Six hundred dollars in espresso equipment to produce three ounces of anxiety before 9 am.
+11,deep cleaned the whole apartment,5,social-002,0.2497,"Four hours of prep, thirty minutes of eating, and a sink full of ramekins waiting for tomorrow."
+12,hit inbox zero on my work email,1,productivity-002,0.8320,Inbox zero is a temporary ceasefire before five people reply to all with 'thanks'.
+12,hit inbox zero on my work email,2,career-002,0.2504,Your reward for being efficient at work is more work from people who are not.
+12,hit inbox zero on my work email,3,money-002,0.2431,You bought your own freedom back from the bank. Now you can afford groceries.
+12,hit inbox zero on my work email,4,placements-001,0.2352,All those LeetCode hard problems just to spend eight hours a day centering a div inside Jira.
+12,hit inbox zero on my work email,5,academics-001,0.2238,Frame the transcript. It is the last time an authority figure grades you on an objective scale.
+13,finished reading an entire book in two days,1,productivity-003,0.7435,Logged on Goodreads so the algorithm knows you can concentrate for forty consecutive minutes.
+13,finished reading an entire book in two days,2,academics-002,0.3634,A monumental accomplishment that will be read by exactly two advisors who skim chapter four.
+13,finished reading an entire book in two days,3,fitness-001,0.3437,"Strava saw it, Instagram saw it, and yet your knees will remember it longer than your followers."
+13,finished reading an entire book in two days,4,fitness-003,0.3300,"Waking up at dawn just to be exhausted by 2 pm is not discipline, it is performance art."
+13,finished reading an entire book in two days,5,productivity-002,0.3295,Inbox zero is a temporary ceasefire before five people reply to all with 'thanks'.
+14,pr merged without any merge conflicts,1,tech-001,0.7639,"Green checkmarks on GitHub today, a Sev-1 incident alert at 2 am on Saturday."
+14,pr merged without any merge conflicts,2,fitness-002,0.2436,You picked up heavy metal and set it down in the exact same spot. Science is stunned.
+14,pr merged without any merge conflicts,3,placements-002,0.1771,"Wait until you see how much of {amount} survives taxes, rent, and iced Americanos."
+14,pr merged without any merge conflicts,4,dating-002,0.1763,One full year of asking what you want for dinner and rejecting the first five options.
+14,pr merged without any merge conflicts,5,social-001,0.1704,Two hours of nostalgia and ninety minutes of talking about lower back pain and mortgage rates.
+15,installed arch linux and rice looks clean,1,tech-002,0.5159,You spent fourteen hours configuring dotfiles to write the exact same console logs.
+15,installed arch linux and rice looks clean,2,food-001,0.2644,You nurtured wild yeast for two weeks just to avoid paying four dollars at the bakery.
+15,installed arch linux and rice looks clean,3,productivity-001,0.2515,A pristine sanctuary that will remain tidy until you open one drawer on Tuesday.
+15,installed arch linux and rice looks clean,4,food-002,0.2067,Six hundred dollars in espresso equipment to produce three ounces of anxiety before 9 am.
+15,installed arch linux and rice looks clean,5,fitness-002,0.2024,You picked up heavy metal and set it down in the exact same spot. Science is stunned.
+16,launched my side project on product hunt,1,tech-003,0.8596,"Another CRUD app with Next.js, Stripe checkout, and a total addressable market of your roommate."
+16,launched my side project on product hunt,2,money-001,0.3411,A responsible financial cushion that one minor dental procedure will dismantle with ease.
+16,launched my side project on product hunt,3,career-002,0.3384,Your reward for being efficient at work is more work from people who are not.
+16,launched my side project on product hunt,4,tech-001,0.3214,"Green checkmarks on GitHub today, a Sev-1 incident alert at 2 am on Saturday."
+16,launched my side project on product hunt,5,academics-002,0.3133,A monumental accomplishment that will be read by exactly two advisors who skim chapter four.
+17,our team won first place in hackathon,1,hackathons-001,0.8731,Thirty-six hours without sleep to win an oversized novelty check and a branded polyester fleece.
+17,our team won first place in hackathon,2,career-002,0.3376,Your reward for being efficient at work is more work from people who are not.
+17,our team won first place in hackathon,3,career-001,0.2842,"Congratulations on the new title. Same salary, more meetings, and a Slack channel you cannot mute."
+17,our team won first place in hackathon,4,academics-001,0.2458,Frame the transcript. It is the last time an authority figure grades you on an objective scale.
+17,our team won first place in hackathon,5,social-001,0.2389,Two hours of nostalgia and ninety minutes of talking about lower back pain and mortgage rates.
+18,reunited with the boys for drinks and dinner,1,social-001,0.5631,Two hours of nostalgia and ninety minutes of talking about lower back pain and mortgage rates.
+18,reunited with the boys for drinks and dinner,2,dating-001,0.5518,Enjoy the euphoria before they become an unread text message and a subtle personality tweak.
+18,reunited with the boys for drinks and dinner,3,social-002,0.5108,"Four hours of prep, thirty minutes of eating, and a sink full of ramekins waiting for tomorrow."
+18,reunited with the boys for drinks and dinner,4,dating-002,0.3974,One full year of asking what you want for dinner and rejecting the first five options.
+18,reunited with the boys for drinks and dinner,5,travel-003,0.2732,Excited to answer Slack messages from an ergonomic patio chair instead of a desk chair.
+19,baked my first sourdough loaf from scratch,1,food-001,0.8872,You nurtured wild yeast for two weeks just to avoid paying four dollars at the bakery.
+19,baked my first sourdough loaf from scratch,2,productivity-003,0.2405,Logged on Goodreads so the algorithm knows you can concentrate for forty consecutive minutes.
+19,baked my first sourdough loaf from scratch,3,food-002,0.2345,Six hundred dollars in espresso equipment to produce three ounces of anxiety before 9 am.
+19,baked my first sourdough loaf from scratch,4,dating-001,0.2275,Enjoy the euphoria before they become an unread text message and a subtle personality tweak.
+19,baked my first sourdough loaf from scratch,5,fitness-002,0.2171,You picked up heavy metal and set it down in the exact same spot. Science is stunned.
+20,pulled a smooth espresso shot with latte art,1,food-002,0.8151,Six hundred dollars in espresso equipment to produce three ounces of anxiety before 9 am.
+20,pulled a smooth espresso shot with latte art,2,dating-001,0.3155,Enjoy the euphoria before they become an unread text message and a subtle personality tweak.
+20,pulled a smooth espresso shot with latte art,3,fitness-002,0.2475,You picked up heavy metal and set it down in the exact same spot. Science is stunned.
+20,pulled a smooth espresso shot with latte art,4,academics-001,0.2204,Frame the transcript. It is the last time an authority figure grades you on an objective scale.
+20,pulled a smooth espresso shot with latte art,5,placements-002,0.2151,"Wait until you see how much of {amount} survives taxes, rent, and iced Americanos."
+21,just touched down in tokyo for solo trip,1,travel-001,0.8478,Traveling twelve time zones away just to take pictures of convenience store sandwiches.
+21,just touched down in tokyo for solo trip,2,fitness-001,0.3121,"Strava saw it, Instagram saw it, and yet your knees will remember it longer than your followers."
+21,just touched down in tokyo for solo trip,3,social-001,0.3052,Two hours of nostalgia and ninety minutes of talking about lower back pain and mortgage rates.
+21,just touched down in tokyo for solo trip,4,dating-001,0.3007,Enjoy the euphoria before they become an unread text message and a subtle personality tweak.
+21,just touched down in tokyo for solo trip,5,travel-003,0.2965,Excited to answer Slack messages from an ergonomic patio chair instead of a desk chair.
+22,hiked up to the summit to see the sunrise,1,travel-002,0.8813,Nothing says oneness with nature quite like freezing at high altitude while adjusting exposure.
+22,hiked up to the summit to see the sunrise,2,fitness-003,0.4712,"Waking up at dawn just to be exhausted by 2 pm is not discipline, it is performance art."
+22,hiked up to the summit to see the sunrise,3,fitness-001,0.3602,"Strava saw it, Instagram saw it, and yet your knees will remember it longer than your followers."
+22,hiked up to the summit to see the sunrise,4,travel-001,0.2984,Traveling twelve time zones away just to take pictures of convenience store sandwiches.
+22,hiked up to the summit to see the sunrise,5,travel-003,0.2769,Excited to answer Slack messages from an ergonomic patio chair instead of a desk chair.
+23,booked flights for a holiday in bali,1,travel-003,0.8038,Excited to answer Slack messages from an ergonomic patio chair instead of a desk chair.
+23,booked flights for a holiday in bali,2,travel-001,0.3711,Traveling twelve time zones away just to take pictures of convenience store sandwiches.
+23,booked flights for a holiday in bali,3,social-002,0.2074,"Four hours of prep, thirty minutes of eating, and a sink full of ramekins waiting for tomorrow."
+23,booked flights for a holiday in bali,4,productivity-003,0.1816,Logged on Goodreads so the algorithm knows you can concentrate for forty consecutive minutes.
+23,booked flights for a holiday in bali,5,academics-001,0.1675,Frame the transcript. It is the last time an authority figure grades you on an objective scale.
+24,i ate a sandwich for lunch,1,social-002,0.4049,"Four hours of prep, thirty minutes of eating, and a sink full of ramekins waiting for tomorrow."
+24,i ate a sandwich for lunch,2,fitness-003,0.3730,"Waking up at dawn just to be exhausted by 2 pm is not discipline, it is performance art."
+24,i ate a sandwich for lunch,3,travel-002,0.3626,Nothing says oneness with nature quite like freezing at high altitude while adjusting exposure.
+24,i ate a sandwich for lunch,4,social-001,0.3053,Two hours of nostalgia and ninety minutes of talking about lower back pain and mortgage rates.
+24,i ate a sandwich for lunch,5,productivity-001,0.2782,A pristine sanctuary that will remain tidy until you open one drawer on Tuesday.
+25,it rained on the way home,1,productivity-001,0.3999,A pristine sanctuary that will remain tidy until you open one drawer on Tuesday.
+25,it rained on the way home,2,social-002,0.3469,"Four hours of prep, thirty minutes of eating, and a sink full of ramekins waiting for tomorrow."
+25,it rained on the way home,3,travel-002,0.3141,Nothing says oneness with nature quite like freezing at high altitude while adjusting exposure.
+25,it rained on the way home,4,travel-003,0.3020,Excited to answer Slack messages from an ergonomic patio chair instead of a desk chair.
+25,it rained on the way home,5,social-001,0.2987,Two hours of nostalgia and ninety minutes of talking about lower back pain and mortgage rates.
+26,went to the post office to pick up mail,1,productivity-002,0.3881,Inbox zero is a temporary ceasefire before five people reply to all with 'thanks'.
+26,went to the post office to pick up mail,2,placements-001,0.3301,All those LeetCode hard problems just to spend eight hours a day centering a div inside Jira.
+26,went to the post office to pick up mail,3,tech-001,0.2725,"Green checkmarks on GitHub today, a Sev-1 incident alert at 2 am on Saturday."
+26,went to the post office to pick up mail,4,career-001,0.2631,"Congratulations on the new title. Same salary, more meetings, and a Slack channel you cannot mute."
+26,went to the post office to pick up mail,5,social-001,0.2612,Two hours of nostalgia and ninety minutes of talking about lower back pain and mortgage rates.
+27,the office air conditioner is cold,1,productivity-001,0.1866,A pristine sanctuary that will remain tidy until you open one drawer on Tuesday.
+27,the office air conditioner is cold,2,placements-001,0.1689,All those LeetCode hard problems just to spend eight hours a day centering a div inside Jira.
+27,the office air conditioner is cold,3,productivity-002,0.1628,Inbox zero is a temporary ceasefire before five people reply to all with 'thanks'.
+27,the office air conditioner is cold,4,food-002,0.1484,Six hundred dollars in espresso equipment to produce three ounces of anxiety before 9 am.
+27,the office air conditioner is cold,5,fitness-003,0.1428,"Waking up at dawn just to be exhausted by 2 pm is not discipline, it is performance art."
+28,rebooted my computer this morning,1,productivity-001,0.4192,A pristine sanctuary that will remain tidy until you open one drawer on Tuesday.
+28,rebooted my computer this morning,2,fitness-003,0.3115,"Waking up at dawn just to be exhausted by 2 pm is not discipline, it is performance art."
+28,rebooted my computer this morning,3,tech-002,0.3031,You spent fourteen hours configuring dotfiles to write the exact same console logs.
+28,rebooted my computer this morning,4,productivity-002,0.2821,Inbox zero is a temporary ceasefire before five people reply to all with 'thanks'.
+28,rebooted my computer this morning,5,travel-002,0.2792,Nothing says oneness with nature quite like freezing at high altitude while adjusting exposure.
+29,bought new socks online,1,career-001,0.2892,"Congratulations on the new title. Same salary, more meetings, and a Slack channel you cannot mute."
+29,bought new socks online,2,money-002,0.2769,You bought your own freedom back from the bank. Now you can afford groceries.
+29,bought new socks online,3,productivity-002,0.2682,Inbox zero is a temporary ceasefire before five people reply to all with 'thanks'.
+29,bought new socks online,4,placements-001,0.2569,All those LeetCode hard problems just to spend eight hours a day centering a div inside Jira.
+29,bought new socks online,5,placements-002,0.2205,"Wait until you see how much of {amount} survives taxes, rent, and iced Americanos."

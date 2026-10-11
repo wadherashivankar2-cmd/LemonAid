@@ -483,7 +483,7 @@
     "category": "generic",
     "anchors": [],
     "paraphrases": [],
-    "roast": " Cherish this fleeting satisfaction before reality remembers your email address.",
+    "roast": "Cherish this fleeting satisfaction before reality remembers your email address.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -504,6 +504,106 @@
     "anchors": [],
     "paraphrases": [],
     "roast": "Congratulations on experiencing mild contentment for three consecutive minutes.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-006",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "A lovely sentiment. Let us see how long it survives your morning commute.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-007",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "Recorded for posterity. Nobody will ever ask to see it.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-008",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "A heartwarming moment that will be completely overshadowed by noon.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-009",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "Noted. Your dopamine receptors may now resume their regular baseline.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-010",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "You did something nice. The bar was on the floor, but you cleared it.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-011",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "A breakthrough in self-care. Truly revolutionary for you.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-012",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "Delightful. Now back to whatever you were supposed to be doing.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-013",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "Take a screenshot. This is as good as today gets.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-014",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "A genuine accomplishment. Tell your journal, not us.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "generic-015",
+    "category": "generic",
+    "anchors": [],
+    "paraphrases": [],
+    "roast": "Your gratitude has been received and processed with profound indifference.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"

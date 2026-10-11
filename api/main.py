@@ -50,7 +50,7 @@ in_memory_counters: dict[str, int] = defaultdict(int)
 
 # --- Regex Gateways ---
 CRISIS_REGEX = re.compile(
-    r"\b(?:suicid\w*|kill\s*myself|self\s*harm|end\s*my\s*life|cutting\s*myself)\b",
+    r"\b(?:suicid\w*|kill\s*myself|self\s*harm|end\s*my\s*life|cutting\s*myself|wanting\s*to\s*jump|bridge\s*to\s*jump)\b",
     re.IGNORECASE,
 )
 SAFETY_REGEX = re.compile(

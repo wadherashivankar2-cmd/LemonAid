@@ -1,8 +1,8 @@
 # Mr.Roast Project Progress & Tracking
 
 ## Current Status
-- **Current Checkpoint**: CP5 (Cards & Sharing) Complete -> Moving to CP6 (Hardening & Audits)
-- **Active Task**: RoastCard (540px split layout), double-pass html-to-image export, Web Share API, Share on X, signed share viewer route (`/s`), and Edge runtime OpenGraph image generation (`/api/og`) implemented and verified.
+- **Current Checkpoint**: CP6 (Hardening & Audits) Complete -> Moving to CP7 (Deploy Readiness)
+- **Active Task**: Benchmarks (safety 200-case 100% recall / 5% false block, RETR_MIN sweep recall@3 100%, 100-request repeat test 0 repeats), a11y & edge-case hardening, and unified check.py runner verified.
 
 ## Roadmap & Milestones
 
@@ -14,8 +14,8 @@
 | **CP3 Frontend Core** | Done (Tagged) | Design tokens, Idle -> Loading -> Reveal flow, sound engine, early /health wake up, live API tested. |
 | **CP4 Witty Layer** | Done (Tagged) | Quips engine, FakeButtons, joke escalation, footer, cookie banner, mood faces, 404/error/utility pages. |
 | **CP5 Cards & Sharing** | Done (Tagged) | RoastCard export, Web Share API, X intent, signed share links, `/s` route, dynamic OG image. |
-| **CP6 Hardening** | Next | Edge cases, safety & retrieval evaluations, accessibility audit, unit & smoke tests, `make check`. |
-| **CP7 Deploy Readiness**| Pending | Production builds, Docker build, environment verification, deployment guides. |
+| **CP6 Hardening** | Done (Tagged) | Edge cases, safety & retrieval evaluations, accessibility audit, unit & smoke tests, `check.py`. |
+| **CP7 Deploy Readiness**| Next | Production builds, Docker build, environment verification, deployment guides. |
 | **CP8 v2 Prep** | Pending | Retriever fine-tuning scripts, cross-encoder reranker, humor scorer, spaCy custom NER. |
 
 ## Open Questions

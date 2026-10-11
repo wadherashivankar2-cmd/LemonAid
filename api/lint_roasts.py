@@ -115,10 +115,10 @@ def lint_roasts(file_path: Path, blocklist: list[str]) -> tuple[int, int]:
                 print(f"WARNING {prefix}: Contains exclamation mark. Blueprint suggests deadpan understatements.")
                 warnings += 1
 
-            # Check blocklist
+            # Check blocklist with word boundaries
             roast_lower = roast_text.lower()
             for banned in blocklist:
-                if banned in roast_lower:
+                if re.search(rf"\b{re.escape(banned)}\b", roast_lower):
                     print(f"ERROR {prefix}: Blocklist violation. Contains '{banned}'")
                     errors += 1
 
