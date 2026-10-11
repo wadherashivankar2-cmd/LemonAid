@@ -57,9 +57,9 @@ export function RoastActions({
       <div className="flex flex-wrap items-center gap-2.5">
         <Button
           id="reflect-again-btn"
-          variant="outline"
+          variant="default"
           onClick={handleAgain}
-          className="border-neutral-700 hover:bg-neutral-900 text-white font-medium"
+          className="font-medium"
         >
           Reflect again
         </Button>
@@ -69,7 +69,6 @@ export function RoastActions({
             id="share-x-btn"
             variant="outline"
             onClick={onShareX}
-            className="border-neutral-700 hover:bg-neutral-900 text-white"
           >
             Share on X
           </Button>
@@ -80,7 +79,6 @@ export function RoastActions({
             id="download-card-btn"
             variant="outline"
             onClick={onDownloadCard}
-            className="border-neutral-700 hover:bg-neutral-900 text-white"
           >
             Download Card
           </Button>
@@ -88,7 +86,7 @@ export function RoastActions({
       </div>
 
       {/* Deadpan Feedback Controls */}
-      <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-neutral-800">
+      <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-border">
         <FakeButton
           id="vote-helpful-btn"
           quipKey="funny"
@@ -96,7 +94,7 @@ export function RoastActions({
           run={() => vote("funny")}
           variant="ghost"
           size="sm"
-          className="text-neutral-400 hover:text-white hover:bg-neutral-900 text-xs"
+          className="text-muted-foreground hover:text-foreground hover:bg-muted text-xs"
         >
           Helpful
         </FakeButton>
@@ -108,7 +106,7 @@ export function RoastActions({
           run={() => vote("meh")}
           variant="ghost"
           size="sm"
-          className="text-neutral-400 hover:text-white hover:bg-neutral-900 text-xs"
+          className="text-muted-foreground hover:text-foreground hover:bg-muted text-xs"
         >
           Not helpful
         </FakeButton>
@@ -120,7 +118,7 @@ export function RoastActions({
           run={() => vote("salt")}
           variant="ghost"
           size="sm"
-          className="text-neutral-400 hover:text-[#C62828] hover:bg-neutral-900 text-xs"
+          className="text-muted-foreground hover:text-[#C62828] hover:bg-muted text-xs"
         >
           Report
         </FakeButton>

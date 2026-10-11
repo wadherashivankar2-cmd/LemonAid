@@ -107,13 +107,15 @@
     "anchors": [
       "Ran my first 5k today",
       "Completed a 10 km morning jog",
-      "Finished running 5k without stopping"
+      "Finished running 5k without stopping",
+      "Completed my first half marathon today"
     ],
     "paraphrases": [
       "strava logged my 5k run",
-      "completed my weekend distance run"
+      "completed my weekend distance run",
+      "morning running session done"
     ],
-    "roast": "Strava saw it, Instagram saw it, and yet your knees will remember it longer than your followers.",
+    "roast": "If nobody saw your Strava, did you really run at all?",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -124,13 +126,15 @@
     "anchors": [
       "Hit a new personal record on bench press",
       "Benched 100 kg for the first time",
-      "PR on deadlift this morning"
+      "PR on deadlift this morning",
+      "Crushed my leg day workout at the gym"
     ],
     "paraphrases": [
       "new weight room personal best",
-      "hit a clean PR lift today"
+      "hit a clean PR lift today",
+      "squatted heavy at the gym"
     ],
-    "roast": "You picked up heavy metal and set it down in the exact same spot. Science is stunned.",
+    "roast": "You picked up heavy metal just to put it right back down.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -147,7 +151,79 @@
       "morning grind at 5 am completed",
       "up at dawn lifting weights"
     ],
-    "roast": "Waking up at dawn just to be exhausted by 2 pm is not discipline, it is performance art.",
+    "roast": "Waking up at dawn to be tired by noon is not discipline.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-004",
+    "category": "fitness",
+    "anchors": [
+      "My football team won the championship match",
+      "Scored the winning goal in our soccer game",
+      "We won the five a side football league",
+      "Played football with friends and scored two goals"
+    ],
+    "paraphrases": [
+      "Sunday league football victory",
+      "scored a hat trick in soccer",
+      "won our weekend football match"
+    ],
+    "roast": "Sunday league glory. Monday morning back pain.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-005",
+    "category": "fitness",
+    "anchors": [
+      "My favorite football club won the derby today",
+      "Arsenal won their match 3-0 today",
+      "Manchester United finally won a game today",
+      "Real Madrid won the match tonight"
+    ],
+    "paraphrases": [
+      "my team won the match",
+      "celebrating our football victory",
+      "we won the big game"
+    ],
+    "roast": "You sat on a couch while eleven strangers did cardio.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-006",
+    "category": "fitness",
+    "anchors": [
+      "Hit three pointers all night at pickup basketball",
+      "Played basketball with the boys and won",
+      "Drained the game winning shot in basketball"
+    ],
+    "paraphrases": [
+      "pickup hoops run was incredible",
+      "balled out at the court today"
+    ],
+    "roast": "You are thirty. Nobody is drafting you.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-007",
+    "category": "fitness",
+    "anchors": [
+      "Hit 10,000 steps today on my smartwatch",
+      "Walked ten thousand steps before evening",
+      "Completed my daily step goal"
+    ],
+    "paraphrases": [
+      "closed all my fitness rings",
+      "10k steps logged today"
+    ],
+    "roast": "Congratulations on existing in three-dimensional space.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"

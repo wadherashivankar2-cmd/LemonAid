@@ -43,11 +43,9 @@ export default function Home() {
     fetch(`${apiUrl}/health`, { mode: "cors" }).catch(() => {});
   }, []);
 
-  // Sync data-theme with state
+  // Ensure data-theme is never flipped to burn
   React.useEffect(() => {
-    if (state === "reveal") {
-      document.documentElement.setAttribute("data-theme", "burn");
-    } else {
+    if (typeof document !== "undefined") {
       document.documentElement.removeAttribute("data-theme");
     }
   }, [state]);
@@ -226,8 +224,8 @@ export default function Home() {
 
       {/* Main Container */}
       <div className="w-full max-w-[640px] flex-1 flex flex-col justify-center my-8">
-        {/* State 1: IDLE */}
-        {state === "idle" && (
+        {/* States 1, 2, 3: IDLE, LOADING, REVEAL */}
+        {(state === "idle" || state === "loading" || state === "reveal") && (
           <div className="space-y-8 animate-fade-in">
             <header className="space-y-3">
               <h1 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight leading-tight">
@@ -246,10 +244,11 @@ export default function Home() {
                     rows={4}
                     maxLength={200}
                     value={input}
+                    disabled={state === "loading" || state === "reveal"}
                     onChange={handleInputChange}
                     placeholder="Today I felt grateful for..."
                     aria-label="What brought you genuine peace or pride today?"
-                    className="w-full resize-none rounded-lg border border-border bg-card p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition"
+                    className="w-full resize-none rounded-lg border border-border bg-card p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition disabled:opacity-85"
                   />
                   <div className="mt-1.5 flex justify-between items-center text-xs text-muted-foreground">
                     <div>
@@ -268,49 +267,51 @@ export default function Home() {
                 </div>
 
                 {/* Mood Faces Row */}
-                <div className="flex items-center gap-2 pt-1" aria-label="Select mood">
-                  <span className="text-xs text-muted-foreground pr-1">Mood:</span>
-                  <button
-                    type="button"
-                    aria-label="Joyful mood"
-                    onClick={() => handleMoodClick(0, false)}
-                    className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 0 ? "text-foreground bg-muted" : ""}`}
-                  >
-                    <Laugh className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    aria-label="Happy mood"
-                    onClick={() => handleMoodClick(1, false)}
-                    className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 1 ? "text-foreground bg-muted" : ""}`}
-                  >
-                    <Smile className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    aria-label="Neutral mood"
-                    onClick={() => handleMoodClick(2, false)}
-                    className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 2 ? "text-foreground bg-muted" : ""}`}
-                  >
-                    <Meh className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    aria-label="Somber mood"
-                    onClick={() => handleMoodClick(3, true)}
-                    className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 3 ? "text-foreground bg-muted" : ""}`}
-                  >
-                    <Frown className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    aria-label="Distressed mood"
-                    onClick={() => handleMoodClick(4, true)}
-                    className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 4 ? "text-foreground bg-muted" : ""}`}
-                  >
-                    <Annoyed className="h-4 w-4" />
-                  </button>
-                </div>
+                {state === "idle" && (
+                  <div className="flex items-center gap-2 pt-1" aria-label="Select mood">
+                    <span className="text-xs text-muted-foreground pr-1">Mood:</span>
+                    <button
+                      type="button"
+                      aria-label="Joyful mood"
+                      onClick={() => handleMoodClick(0, false)}
+                      className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 0 ? "text-foreground bg-muted" : ""}`}
+                    >
+                      <Laugh className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Happy mood"
+                      onClick={() => handleMoodClick(1, false)}
+                      className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 1 ? "text-foreground bg-muted" : ""}`}
+                    >
+                      <Smile className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Neutral mood"
+                      onClick={() => handleMoodClick(2, false)}
+                      className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 2 ? "text-foreground bg-muted" : ""}`}
+                    >
+                      <Meh className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Somber mood"
+                      onClick={() => handleMoodClick(3, true)}
+                      className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 3 ? "text-foreground bg-muted" : ""}`}
+                    >
+                      <Frown className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label="Distressed mood"
+                      onClick={() => handleMoodClick(4, true)}
+                      className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 4 ? "text-foreground bg-muted" : ""}`}
+                    >
+                      <Annoyed className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
 
                 {validationError && (
                   <p
@@ -323,53 +324,78 @@ export default function Home() {
                 )}
               </div>
 
-              <Button
-                id="save-to-heart-btn"
-                type="submit"
-                disabled={input.trim().length === 0}
-                className="w-full sm:w-auto min-w-[160px] font-medium"
-              >
-                Save to Heart
-              </Button>
+              {state === "idle" && (
+                <Button
+                  id="save-to-heart-btn"
+                  type="submit"
+                  disabled={input.trim().length === 0}
+                  className="w-full sm:w-auto min-w-[160px] font-medium"
+                >
+                  Save to Heart
+                </Button>
+              )}
             </form>
-          </div>
-        )}
 
-        {/* State 2: LOADING */}
-        {state === "loading" && (
-          <div
-            className="flex flex-col items-center justify-center space-y-4 py-16 text-center animate-fade-in"
-            aria-live="polite"
-          >
-            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" aria-hidden="true" />
-            <p className="text-base text-foreground font-serif tracking-wide">{loadingText}</p>
-          </div>
-        )}
+            {/* State: LOADING */}
+            {state === "loading" && (
+              <div
+                className="flex flex-col items-center justify-center space-y-4 py-8 text-center animate-fade-in"
+                aria-live="polite"
+              >
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" aria-hidden="true" />
+                <p className="text-base text-foreground font-serif tracking-wide">{loadingText}</p>
+              </div>
+            )}
 
-        {/* State 3: REVEAL (ROAST CARD & ACTIONS) */}
-        {state === "reveal" && roastData && (
-          <div
-            className="space-y-6 animate-fade-in"
-            aria-live="polite"
-            id="roast-reveal-container"
-          >
-            {/* The shareable RoastCard */}
-            <div className="flex justify-center">
-              <RoastCard
-                brag={roastData.brag || input}
-                roast={roastData.text}
-              />
-            </div>
+            {/* State: REVEAL (UNDER THE INPUT AREA WITH UNDERSTATED BURN BADGE) */}
+            {state === "reveal" && roastData && (
+              <div
+                id="roast-reveal-container"
+                className="space-y-5 rounded-xl border border-border bg-card p-6 shadow-sm animate-fade-in"
+                aria-live="polite"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-200/80 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-800">
+                    The Burn
+                  </span>
+                  <span className="text-xs text-muted-foreground font-serif italic">
+                    What your journal actually thought
+                  </span>
+                </div>
 
-            {/* Actions: Joke buttons, download, share on X */}
-            <RoastActions
-              roastId={roastData.id}
-              roastText={roastData.text}
-              bragText={roastData.brag || input}
-              onReset={handleReset}
-              onDownloadCard={handleDownloadCard}
-              onShareX={handleShareX}
-            />
+                <p className="font-serif text-xl sm:text-2xl text-foreground leading-snug">
+                  &ldquo;{roastData.text}&rdquo;
+                </p>
+
+                {/* Actions: Reflect again, Share on X, Download Card, and feedback */}
+                <RoastActions
+                  roastId={roastData.id}
+                  roastText={roastData.text}
+                  bragText={roastData.brag || input}
+                  onReset={handleReset}
+                  onDownloadCard={handleDownloadCard}
+                  onShareX={handleShareX}
+                />
+              </div>
+            )}
+
+            {/* Off-screen RoastCard for high-res PNG export via html-to-image */}
+            {state === "reveal" && roastData && (
+              <div
+                style={{
+                  position: "fixed",
+                  left: "-9999px",
+                  top: 0,
+                  pointerEvents: "none",
+                }}
+                aria-hidden="true"
+              >
+                <RoastCard
+                  brag={roastData.brag || input}
+                  roast={roastData.text}
+                />
+              </div>
+            )}
           </div>
         )}
 
