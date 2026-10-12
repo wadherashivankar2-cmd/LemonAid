@@ -12,12 +12,19 @@ from typing import Literal, Optional
 import httpx
 import joblib
 import numpy as np
+from dotenv import load_dotenv
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, field_validator
 from sentence_transformers import SentenceTransformer
 
 from rate import check_rate_limit
+
+# --- Environment & Configuration Loading ---
+load_dotenv()
+_local_env = Path(__file__).resolve().parent / ".env"
+if _local_env.exists():
+    load_dotenv(_local_env)
 
 app = FastAPI(title="Mr.Roast API", version="1.0.0")
 
@@ -38,6 +45,11 @@ RETR_MIN = float(os.getenv("RETR_MIN", "0.40"))
 RERANK_MIN = float(os.getenv("RERANK_MIN", "0.45"))
 UPSTASH_URL = os.getenv("UPSTASH_URL", "").rstrip("/")
 UPSTASH_TOKEN = os.getenv("UPSTASH_TOKEN", "")
+
+# Groq Hybrid Fallback
+GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+LLM_FALLBACK_ENABLED = os.getenv("LLM_FALLBACK_ENABLED", "false").lower() in ("1", "true", "yes")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
@@ -128,6 +140,51 @@ def load_resources():
     roast_id_map = {r["id"]: r for r in indexed_roasts}
 
 
+def generate_groq_roast(brag: str) -> Optional[str]:
+    """Call Groq API for deadpan cynical roast under 15 words on unusual brag."""
+    if not GROQ_API_KEY:
+        return None
+    try:
+        from groq import Groq, NotFoundError
+        client = Groq(api_key=GROQ_API_KEY)
+        system_prompt = (
+            "You are a deadpan, deeply cynical satirist. "
+            "Read the user's reflection or brag and output a single, ruthlessly observant roast under 15 words. "
+            "Puncture their ego, vanity, or wasted effort directly. "
+            "No hashtags, no emojis, no exclamation points, no introductory filler."
+        )
+
+        models_to_try = [GROQ_MODEL]
+        for alt in ["openai/gpt-oss-20b", "qwen/qwen3.8-27b"]:
+            if alt not in models_to_try:
+                models_to_try.append(alt)
+
+        for model_name in models_to_try:
+            try:
+                resp = client.chat.completions.create(
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": brag},
+                    ],
+                    model=model_name,
+                    temperature=0.7,
+                    max_tokens=60,
+                )
+                text = resp.choices[0].message.content or ""
+                clean_text = text.strip().strip('"\'').rstrip('!').strip()
+                if clean_text:
+                    return clean_text
+            except NotFoundError:
+                continue
+            except Exception as e:
+                print(f"[!] Groq error with {model_name}: {e}")
+                break
+        return None
+    except Exception as e:
+        print(f"[!] Groq client error: {e}")
+        return None
+
+
 @app.on_event("startup")
 def startup_event():
     import logging
@@ -153,6 +210,13 @@ def startup_event():
         print(f"[+] Upstash Redis: Configured ({UPSTASH_URL})")
     else:
         print("[*] Upstash Redis: Not configured (falling back to in-memory counters)")
+
+    if LLM_FALLBACK_ENABLED and GROQ_API_KEY:
+        print(f"[+] LLM Hybrid Fallback: Enabled (Groq, model: {GROQ_MODEL})")
+    elif LLM_FALLBACK_ENABLED and not GROQ_API_KEY:
+        print("[!] LLM Hybrid Fallback: Enabled in env but GROQ_API_KEY is not set")
+    else:
+        print("[*] LLM Hybrid Fallback: Disabled")
 
     # 2. Resource Preloading
     load_resources()
@@ -306,13 +370,41 @@ def generate_roast(req: RoastRequest, request: Request, background_tasks: Backgr
     # 5. Cosine similarity against anchor vectors (anchor_vecs @ q)
     extracted_slots = extract_slots(input_text)
     roast_scores: dict[int, float] = defaultdict(float)
+    max_sim = 0.0
 
     if anchor_vecs is not None and len(anchor_vecs) > 0:
         sims = anchor_vecs @ q_vec
+        max_sim = float(np.max(sims)) if len(sims) > 0 else 0.0
         for sim, owner_idx in zip(sims, anchor_owners):
             sim_f = float(sim)
             if sim_f > roast_scores[owner_idx]:
                 roast_scores[owner_idx] = sim_f
+
+    # Hybrid Fallback: If similarity < 0.65 and LLM_FALLBACK_ENABLED is true with valid key
+    if max_sim < 0.65 and LLM_FALLBACK_ENABLED and GROQ_API_KEY:
+        groq_roast = generate_groq_roast(input_text)
+        if groq_roast:
+            roast_id = f"llm-{hashlib.md5(groq_roast.encode('utf-8')).hexdigest()[:8]}"
+            selected_roast = {
+                "id": roast_id,
+                "category": "llm",
+                "roast": groq_roast,
+            }
+            roast_id_map[roast_id] = selected_roast
+            recent_served.append(roast_id)
+            sig = compute_sig(input_text, groq_roast)
+
+            background_tasks.add_task(increment_counter_sync, "served:total")
+            background_tasks.add_task(increment_counter_sync, f"served:{roast_id}")
+
+            return {
+                "kind": "roast",
+                "text": groq_roast,
+                "id": roast_id,
+                "category": "llm",
+                "brag": input_text,
+                "sig": sig,
+            }
 
     # 6. Top 10 with similarity >= RETR_MIN & slot eligibility
     candidates = []
