@@ -13,7 +13,8 @@ from pathlib import Path
 
 VALID_CATEGORIES = {
     "career", "placements", "academics", "fitness", "dating", "money",
-    "productivity", "tech", "hackathons", "social", "food", "travel", "generic"
+    "productivity", "tech", "hackathons", "social", "food", "travel", "generic",
+    "corporate", "academia", "cooking", "self_care"
 }
 VALID_SLOTS = {"org", "amount", "distance", "grade", "num"}
 VALID_STATUSES = {"draft", "approved", "cut"}

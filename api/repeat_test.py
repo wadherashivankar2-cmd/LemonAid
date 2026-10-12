@@ -47,7 +47,7 @@ def run_repeat_test():
     inputs = [base_inputs[i % len(base_inputs)] for i in range(100)]
 
     served_ids = []
-    window = deque(maxlen=10)
+    window = deque(maxlen=15)
     repeats_found = 0
 
     print("Executing 100 requests through /roast pipeline...")
@@ -58,7 +58,7 @@ def run_repeat_test():
         assert data["kind"] == "roast", f"Expected roast, got: {data}"
         roast_id = data["id"]
 
-        # Check if roast_id was served in the last 10 requests
+        # Check if roast_id was served in the last 15 requests
         if roast_id in window:
             print(f"[REPEAT DETECTED] Roast '{roast_id}' repeated within {len(window)} requests at step {i}!")
             repeats_found += 1
@@ -69,13 +69,13 @@ def run_repeat_test():
     print(f"\n--- Repeat Test Results ---")
     print(f"Total Requests: {len(inputs)}")
     print(f"Distinct Roasts Served: {len(set(served_ids))}")
-    print(f"Window Collisions (<10 steps): {repeats_found}")
+    print(f"Window Collisions (<15 steps): {repeats_found}")
 
     if repeats_found == 0:
-        print("\nPASS: Anti-repetition queue satisfied (zero repeats within 10 requests)!")
+        print("\nPASS: Anti-repetition queue satisfied (zero repeats within 15 requests)!")
         return True
     else:
-        print(f"\nFAIL: {repeats_found} repeats detected within 10-request window.", file=sys.stderr)
+        print(f"\nFAIL: {repeats_found} repeats detected within 15-request window.", file=sys.stderr)
         return False
 
 

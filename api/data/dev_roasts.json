@@ -63,7 +63,9 @@
       "signed my dream compensation package"
     ],
     "roast": "Wait until you see how much of {amount} survives taxes, rent, and iced Americanos.",
-    "slots": ["amount"],
+    "slots": [
+      "amount"
+    ],
     "tone": "deadpan",
     "status": "draft"
   },
@@ -680,6 +682,2211 @@
     "anchors": [],
     "paraphrases": [],
     "roast": "Your gratitude has been received and processed with profound indifference.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-001",
+    "category": "corporate",
+    "anchors": [
+      "Got promoted to senior manager today",
+      "Finally received my promotion at work",
+      "Stepped up to lead my team",
+      "Officially promoted to director"
+    ],
+    "paraphrases": [],
+    "roast": "Congratulations on the promotion. Same compensation, four more meetings a day.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-002",
+    "category": "corporate",
+    "anchors": [
+      "Finished all my sprint deliverables early",
+      "Completed all my project milestones ahead of schedule",
+      "Cleared my entire backlog today",
+      "Delivered the client presentation three days early"
+    ],
+    "paraphrases": [],
+    "roast": "Your reward for being efficient is the unfinished work of your colleagues.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-003",
+    "category": "corporate",
+    "anchors": [
+      "Celebrated five years at my company today",
+      "Ten years of service at my firm",
+      "Marked my work anniversary at the office",
+      "Staying loyal to my team for four years"
+    ],
+    "paraphrases": [],
+    "roast": "The company values your loyalty until next quarter's margin review.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-004",
+    "category": "corporate",
+    "anchors": [
+      "Gave an all-hands presentation today",
+      "Presented our quarterly roadmap to leadership",
+      "Delivered our company keynote speech",
+      "Hosted the global town hall meeting"
+    ],
+    "paraphrases": [],
+    "roast": "A standing ovation on Zoom is just people unmuting by accident.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-005",
+    "category": "corporate",
+    "anchors": [
+      "Received my annual performance bonus today",
+      "Got a huge bonus for Q3 results",
+      "Rewarded with a great year-end bonus",
+      "Earned my target achievement bonus"
+    ],
+    "paraphrases": [],
+    "roast": "Your performance bonus after taxes will cover half of your therapist.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-006",
+    "category": "corporate",
+    "anchors": [
+      "Survived the company restructuring",
+      "Made it through the department reorg safely",
+      "Kept my role after the company merger",
+      "Navigated the corporate acquisition smoothly"
+    ],
+    "paraphrases": [],
+    "roast": "You survived the reorg just in time for the next reorg.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-007",
+    "category": "corporate",
+    "anchors": [
+      "Leadership commended my project deliverables",
+      "The VP praised our team execution",
+      "Executive team loved my strategy document",
+      "Got direct praise from the CEO today"
+    ],
+    "paraphrases": [],
+    "roast": "Leadership noticed your hard work and scheduled another weekly sync.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-008",
+    "category": "corporate",
+    "anchors": [
+      "Attended a great executive summit",
+      "Built so many connections at the conference",
+      "Expanded my professional network in Chicago",
+      "Met amazing industry leaders this week"
+    ],
+    "paraphrases": [],
+    "roast": "All that networking just to exchange polite nods at airport lounges.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-009",
+    "category": "corporate",
+    "anchors": [
+      "Moved into my new corner office today",
+      "Got upgraded to a private office space",
+      "Finally have my own executive desk",
+      "Decorated my new director office"
+    ],
+    "paraphrases": [],
+    "roast": "Enjoy the executive corner desk while the lease remains active.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-010",
+    "category": "corporate",
+    "anchors": [
+      "Received a glowing LinkedIn recommendation today",
+      "Colleagues wrote amazing reviews on my profile",
+      "My manager endorsed all my skills",
+      "Got five new peer recommendations"
+    ],
+    "paraphrases": [],
+    "roast": "A LinkedIn recommendation is a polite eulogy for your weekend.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-011",
+    "category": "corporate",
+    "anchors": [
+      "Resolved a critical client emergency today",
+      "Saved a major enterprise account",
+      "De-escalated our biggest customer conflict",
+      "Turned around an angry client relationship"
+    ],
+    "paraphrases": [],
+    "roast": "You solved the client escalation by agreeing to work on Sunday.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-012",
+    "category": "corporate",
+    "anchors": [
+      "Won employee of the month today",
+      "Awarded high performer of the year",
+      "Received the annual excellence trophy",
+      "Recognized as top contributor of our division"
+    ],
+    "paraphrases": [],
+    "roast": "A company award is a cheap plaque to delay your raise.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-013",
+    "category": "corporate",
+    "anchors": [
+      "Free catered sushi lunch at the office today",
+      "Company bought us lunch to celebrate success",
+      "Enjoyed our team milestone lunch",
+      "Executive lunch provided for the department"
+    ],
+    "paraphrases": [],
+    "roast": "Enjoy the catered lunch. It was funded by unpaid overtime.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-014",
+    "category": "corporate",
+    "anchors": [
+      "Mentored a brilliant college intern this summer",
+      "Finished training our new team member",
+      "Helped onboard our summer analyst cohort",
+      "Loved guiding our junior associate"
+    ],
+    "paraphrases": [],
+    "roast": "You mentored an intern who will replace you in eighteen months.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "corporate-015",
+    "category": "corporate",
+    "anchors": [
+      "Signed a massive annual client retainer",
+      "Closed a six figure consulting engagement",
+      "Secured a new enterprise contract",
+      "Renewed our largest recurring service deal"
+    ],
+    "paraphrases": [],
+    "roast": "Signing a lucrative retainer just guarantees more emergency phone calls.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-004",
+    "category": "tech",
+    "anchors": [
+      "Passed all coding rounds at Meta",
+      "Cleared my technical interview at Apple",
+      "Aced the system design loops",
+      "Cracked my dream FAANG job"
+    ],
+    "paraphrases": [],
+    "roast": "You solved fifty LeetCode hard problems to center buttons in Jira.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-005",
+    "category": "tech",
+    "anchors": [
+      "Deployed our major release to prod today",
+      "Shipped the new version to production",
+      "Pushed our v2 launch live today",
+      "Finished our quarterly production rollout"
+    ],
+    "paraphrases": [],
+    "roast": "Shipped to production on a Friday. Enjoy your ruined weekend.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-006",
+    "category": "tech",
+    "anchors": [
+      "Rewrote our backend services in Rust",
+      "Migrated our legacy microservices to Rust",
+      "Ported our core architecture to Rust",
+      "Rebuilt our parser using Rust"
+    ],
+    "paraphrases": [],
+    "roast": "Rewriting the codebase in Rust will not fix your product.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-007",
+    "category": "tech",
+    "anchors": [
+      "Split our monolith into twenty microservices",
+      "Designed a distributed cloud architecture",
+      "Finished our Kubernetes cluster migration",
+      "Adopted event-driven microservices"
+    ],
+    "paraphrases": [],
+    "roast": "Your microservices architecture is just distributed failure with extra latency.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-008",
+    "category": "tech",
+    "anchors": [
+      "Published my open source library to GitHub",
+      "Open sourced my developer tooling framework",
+      "Released my TypeScript utility package",
+      "Shared my open source repository publicly"
+    ],
+    "paraphrases": [],
+    "roast": "Open source contributors will ignore your project until someone finds vulnerabilities.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-009",
+    "category": "tech",
+    "anchors": [
+      "Hit 1000 stars on my GitHub repository",
+      "Reached 500 GitHub stargazers today",
+      "My open source repo is trending on GitHub",
+      "Crossed 2000 stars on my open source tool"
+    ],
+    "paraphrases": [],
+    "roast": "A thousand GitHub stars will not pay your hosting bill.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-010",
+    "category": "tech",
+    "anchors": [
+      "Automated my entire daily workflow with Python",
+      "Built a custom automation script for work",
+      "Automated our deployment pipeline completely",
+      "Wrote a script to automate routine tasks"
+    ],
+    "paraphrases": [],
+    "roast": "You automated a five minute task in only forty-two hours.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-011",
+    "category": "tech",
+    "anchors": [
+      "Built my custom mechanical keyboard today",
+      "Got a new ergonomic split keyboard",
+      "Finished soldering my custom key switches",
+      "Upgraded to an artisan mechanical keyboard"
+    ],
+    "paraphrases": [],
+    "roast": "A new mechanical keyboard will not make your code compile.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-012",
+    "category": "tech",
+    "anchors": [
+      "Launched my new AI startup on Product Hunt",
+      "Shipped our generative AI SaaS application",
+      "Built an AI tool that solves real problems",
+      "Went live with our autonomous AI agent"
+    ],
+    "paraphrases": [],
+    "roast": "Your AI startup is just a wrapper around someone else's API.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-013",
+    "category": "tech",
+    "anchors": [
+      "Refactored our entire codebase to clean architecture",
+      "Completed a massive codebase cleanup",
+      "Eliminated all technical debt in our app",
+      "Implemented domain driven design"
+    ],
+    "paraphrases": [],
+    "roast": "Clean architecture cannot save a product nobody wants to use.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-014",
+    "category": "tech",
+    "anchors": [
+      "Reached 100 percent unit test coverage",
+      "All unit and integration tests passing",
+      "Zero untested code paths in our app",
+      "Wrote end-to-end tests for every single feature"
+    ],
+    "paraphrases": [],
+    "roast": "Achieved one hundred percent test coverage for bugs users find first.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-015",
+    "category": "tech",
+    "anchors": [
+      "Migrated our infrastructure to multi-cloud",
+      "Built hybrid AWS and GCP deployments",
+      "Set up multi-region cloud redundancy",
+      "Achieved multi-cloud high availability"
+    ],
+    "paraphrases": [],
+    "roast": "A multi-cloud deployment just means paying two cloud providers instead.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-016",
+    "category": "tech",
+    "anchors": [
+      "Resolved all pending bug tickets today",
+      "Cleared the entire issue tracker",
+      "Squashed twenty critical bugs this week",
+      "Closed all open issues in our repo"
+    ],
+    "paraphrases": [],
+    "roast": "You closed fifty tickets and created eighty-five new edge cases.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-017",
+    "category": "tech",
+    "anchors": [
+      "Set up my triple monitor developer desk",
+      "Upgraded to an ultrawide curved monitor",
+      "Built the ultimate programming battle station",
+      "My multi-monitor workspace is complete"
+    ],
+    "paraphrases": [],
+    "roast": "Buying three curved monitors will not increase your attention span.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "tech-018",
+    "category": "tech",
+    "anchors": [
+      "Optimized our slow database query by 50%",
+      "Added compound indexes for database speed",
+      "Tuned our PostgreSQL query performance",
+      "Reduced query latency across all tables"
+    ],
+    "paraphrases": [],
+    "roast": "You optimized a database query from three milliseconds to two milliseconds.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-008",
+    "category": "fitness",
+    "anchors": [
+      "Hit a new bench press PR today",
+      "Squatted 140kg for a new personal record",
+      "Deadlifted my personal best this morning",
+      "Crushed a heavy leg day at the gym"
+    ],
+    "paraphrases": [],
+    "roast": "You lifted heavy metal just to put it right back down.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-009",
+    "category": "fitness",
+    "anchors": [
+      "Scored the winning goal in soccer today",
+      "Our football team won the championship",
+      "Won our weekend five a side league",
+      "Scored twice in our pickup soccer match"
+    ],
+    "paraphrases": [],
+    "roast": "Sunday league glory is just tomorrow morning's knee brace.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-010",
+    "category": "fitness",
+    "anchors": [
+      "Woke up at 5 am for gym workout",
+      "Started my workout before sunrise today",
+      "Trained at dawn before anyone was awake",
+      "Hit the gym at 5:30 am sharp"
+    ],
+    "paraphrases": [],
+    "roast": "Waking up at dawn to be exhausted by noon is vanity.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-011",
+    "category": "fitness",
+    "anchors": [
+      "Hit three pointers all night at pickup basketball",
+      "Won our rec league basketball tournament",
+      "Balled out with friends at the court",
+      "Drained the game winning basketball shot"
+    ],
+    "paraphrases": [],
+    "roast": "You are thirty-two years old. The NBA is not calling.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-012",
+    "category": "fitness",
+    "anchors": [
+      "Finished my first full marathon today",
+      "Crossed the marathon finish line strong",
+      "Completed the 26.2 mile race",
+      "Ran across the city marathon finish line"
+    ],
+    "paraphrases": [],
+    "roast": "A marathon sticker on your bumper will not reduce traffic.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-013",
+    "category": "fitness",
+    "anchors": [
+      "Did a three minute ice bath this morning",
+      "Took a freezing cold plunge before breakfast",
+      "Started daily cold plunge therapy",
+      "Embraced the cold with an ice bath"
+    ],
+    "paraphrases": [],
+    "roast": "Your cold plunge is just shivering with an expensive thermometer.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-014",
+    "category": "fitness",
+    "anchors": [
+      "Drank my post workout protein smoothie",
+      "Hit my daily protein macronutrient goal",
+      "Dialed in my workout nutrition perfectly",
+      "Prepped my clean high-protein meals"
+    ],
+    "paraphrases": [],
+    "roast": "Drinking a thirty dollar protein shake will not fix posture.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-015",
+    "category": "fitness",
+    "anchors": [
+      "Bought new marathon racing shoes today",
+      "Upgraded to carbon plate running shoes",
+      "Got the latest running sneakers for race day",
+      "Invested in elite road racing shoes"
+    ],
+    "paraphrases": [],
+    "roast": "Buying carbon-fiber running shoes will not make you faster.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-016",
+    "category": "fitness",
+    "anchors": [
+      "Held a three minute plank this morning",
+      "Set a personal record on plank duration",
+      "Completed my core plank workout challenge",
+      "Held an unbroken core plank today"
+    ],
+    "paraphrases": [],
+    "roast": "Holding a plank for two minutes just prolongs your misery.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-017",
+    "category": "fitness",
+    "anchors": [
+      "Feeling proud of my gym progress today",
+      "Progress photo after six months of lifting",
+      "Consistency in the gym is showing results",
+      "Proud of my physical transformation journey"
+    ],
+    "paraphrases": [],
+    "roast": "A gym selfie is proof you paid for the lighting.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-018",
+    "category": "fitness",
+    "anchors": [
+      "Cycled fifty miles on the highway today",
+      "Completed a century bike ride this weekend",
+      "Rode fifty kilometers through the hills",
+      "Finished a grueling road cycling session"
+    ],
+    "paraphrases": [],
+    "roast": "Biking fifty miles in full spandex will not impress motorists.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-019",
+    "category": "fitness",
+    "anchors": [
+      "Burned 800 active calories in my workout",
+      "Tracked a high intensity workout session",
+      "Crushed my daily active calorie target",
+      "Maxed out my daily calorie burn goal"
+    ],
+    "paraphrases": [],
+    "roast": "Your smartwatch burned more battery than you burned real calories.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-004",
+    "category": "productivity",
+    "anchors": [
+      "Color coded my entire weekly schedule",
+      "Organized my Google Calendar with colors",
+      "Mapped out my hourly time blocks",
+      "Built a pristine time-blocked calendar"
+    ],
+    "paraphrases": [],
+    "roast": "Color-coding your calendar does not mean you will do anything.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-005",
+    "category": "productivity",
+    "anchors": [
+      "Organized my life in a new Notion template",
+      "Built an aesthetic Notion dashboard",
+      "Migrated all my tasks into Notion",
+      "Set up a second brain Notion system"
+    ],
+    "paraphrases": [],
+    "roast": "Setting up another Notion workspace will not fix your procrastination.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-006",
+    "category": "productivity",
+    "anchors": [
+      "Reached inbox zero across all email accounts",
+      "Cleared all two hundred unread emails today",
+      "Cleaned out my work inbox completely",
+      "Inbox is finally empty at zero"
+    ],
+    "paraphrases": [],
+    "roast": "Inbox zero is just an empty room waiting for spam.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-007",
+    "category": "productivity",
+    "anchors": [
+      "Started my day at 4:30 am sharp",
+      "Joined the 5 am club this morning",
+      "Woke up early before the rest of the world",
+      "Consistent 4 am morning routine"
+    ],
+    "paraphrases": [],
+    "roast": "Waking up at four in the morning only impresses squirrels.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-008",
+    "category": "productivity",
+    "anchors": [
+      "Bought a gorgeous leather-bound journal",
+      "Started writing in my new paper diary",
+      "Invested in a premium fountain pen notebook",
+      "Began morning pages in my journal"
+    ],
+    "paraphrases": [],
+    "roast": "Buying a leather journal will not give you better thoughts.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-009",
+    "category": "productivity",
+    "anchors": [
+      "Checked off ten items on my to-do list",
+      "Completed almost all my checklist tasks today",
+      "Made huge progress on my daily checklist",
+      "Ticked off everything on my reminder app"
+    ],
+    "paraphrases": [],
+    "roast": "You checked off five tiny tasks to avoid the one.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-010",
+    "category": "productivity",
+    "anchors": [
+      "Organized and tidied my entire desk today",
+      "Decluttered my home office workspace",
+      "Arranged all my stationery neatly",
+      "Created a pristine minimalist desk setup"
+    ],
+    "paraphrases": [],
+    "roast": "Arranging your desk supplies is not the same as working.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-011",
+    "category": "productivity",
+    "anchors": [
+      "Worked for three hours with brown noise",
+      "Focused deeply with ambient binaural beats",
+      "Used background rain sounds for deep work",
+      "Listened to white noise while studying"
+    ],
+    "paraphrases": [],
+    "roast": "Listening to white noise will not generate your missing ideas.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-012",
+    "category": "productivity",
+    "anchors": [
+      "Tracked every hour of my productive day",
+      "Logged six focused hours on Toggl",
+      "Used a pomodoro timer for all tasks",
+      "Measured my deep work hours today"
+    ],
+    "paraphrases": [],
+    "roast": "A time tracking app just measures how long you hesitated.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-013",
+    "category": "productivity",
+    "anchors": [
+      "Finished reading another book on productivity",
+      "Read Atomic Habits for the second time",
+      "Studied Deep Work by Cal Newport",
+      "Learned so much from a time management book"
+    ],
+    "paraphrases": [],
+    "roast": "Reading productivity books is your favorite way to delay action.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-014",
+    "category": "productivity",
+    "anchors": [
+      "Built a digital second brain in Obsidian",
+      "Organized all my notes with the PARA method",
+      "Connected all my thoughts in Obsidian notes",
+      "Created a knowledge graph of my life"
+    ],
+    "paraphrases": [],
+    "roast": "Your second brain is just as disorganized as the first.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-015",
+    "category": "productivity",
+    "anchors": [
+      "Completed a two hour deep work block",
+      "Did unbroken deep focus for ninety minutes",
+      "Put my phone in another room for deep work",
+      "Dedicated my morning to uninterrupted focus"
+    ],
+    "paraphrases": [],
+    "roast": "A ninety-minute focus block where you just stared at slack.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-016",
+    "category": "productivity",
+    "anchors": [
+      "Closed fifty open browser tabs today",
+      "Cleaned up my messy browser windows",
+      "Organized my bookmarks and browser tabs",
+      "Finally closed all sixty browser tabs"
+    ],
+    "paraphrases": [],
+    "roast": "Decluttering your browser tabs just buries what you forgot.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-017",
+    "category": "productivity",
+    "anchors": [
+      "Maintained a thirty day habit streak",
+      "Kept my habit tracker streak alive",
+      "Completed every habit on my tracker today",
+      "Hit a 50 day streak on my habit app"
+    ],
+    "paraphrases": [],
+    "roast": "A habit tracker cannot track the willpower you ran out of.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "productivity-018",
+    "category": "productivity",
+    "anchors": [
+      "Perfected my ten step morning routine",
+      "Followed my morning wellness routine perfectly",
+      "Executed my morning habits without delay",
+      "Tuned my morning ritual for peak performance"
+    ],
+    "paraphrases": [],
+    "roast": "You optimized your morning routine until the morning was over.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-003",
+    "category": "money",
+    "anchors": [
+      "Made coffee at home instead of buying Starbucks",
+      "Saved money by skipping specialty coffee today",
+      "Cut out expensive iced coffee drinks",
+      "Brewed my own coffee to save cash"
+    ],
+    "paraphrases": [],
+    "roast": "Saving five dollars on coffee will not buy a home.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-004",
+    "category": "money",
+    "anchors": [
+      "Checked my investment portfolio returns today",
+      "Watched my index fund portfolio grow",
+      "Reviewed my retirement account balance",
+      "Monitored my stock market dividend gains"
+    ],
+    "paraphrases": [],
+    "roast": "Checking your investment portfolio twelve times daily will not raise stocks.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-005",
+    "category": "money",
+    "anchors": [
+      "Finally paid off all my credit card debt",
+      "Brought my credit card balance down to zero",
+      "Cleared my credit card statements completely",
+      "Zero credit card balance achieved today"
+    ],
+    "paraphrases": [],
+    "roast": "Paid off your credit card just in time for bills.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-006",
+    "category": "money",
+    "anchors": [
+      "Opened a high yield savings account today",
+      "Transferred my emergency fund to high yield",
+      "Earning 5% interest on my savings account",
+      "Optimized my cash into a high yield account"
+    ],
+    "paraphrases": [],
+    "roast": "Your high yield savings account pays less than your snacks.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-007",
+    "category": "money",
+    "anchors": [
+      "Maxed out my annual Roth IRA contributions",
+      "Invested my monthly paycheck in index funds",
+      "Automated my S&P 500 index investments",
+      "Funded my retirement investment account fully"
+    ],
+    "paraphrases": [],
+    "roast": "Buying index funds is exciting until inflation outpaces your returns.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-008",
+    "category": "money",
+    "anchors": [
+      "Haggled and got a great discount today",
+      "Negotiated a lower price on my purchase",
+      "Got a ten percent discount by asking",
+      "Scored a great deal at the market"
+    ],
+    "paraphrases": [],
+    "roast": "You bargained for ten minutes to save two dollars.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-009",
+    "category": "money",
+    "anchors": [
+      "Built a detailed monthly expense spreadsheet",
+      "Tracked every single dollar in my budget",
+      "Created a comprehensive personal finance budget",
+      "Budgeted my monthly spending down to the cent"
+    ],
+    "paraphrases": [],
+    "roast": "Making a spreadsheet budget will not stop your impulsive purchases.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-010",
+    "category": "money",
+    "anchors": [
+      "Canceled three streaming subscriptions I never use",
+      "Cleaned up all my recurring subscriptions",
+      "Cut unnecessary subscription costs today",
+      "Saved monthly money by canceling unused apps"
+    ],
+    "paraphrases": [],
+    "roast": "Canceling an unused streaming subscription is not financial freedom.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-011",
+    "category": "money",
+    "anchors": [
+      "Made my first dollar on my side hustle",
+      "Earned money from my passive income project",
+      "My side business made its first profit",
+      "Generated side income over the weekend"
+    ],
+    "paraphrases": [],
+    "roast": "Your side hustle earns eighty cents an hour after expenses.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-012",
+    "category": "money",
+    "anchors": [
+      "Got approved for a premium cashback credit card",
+      "Maximized all my credit card reward points",
+      "Earned 5% cashback on all my spending",
+      "Redeemed travel reward points from credit cards"
+    ],
+    "paraphrases": [],
+    "roast": "A five percent cashback card is useless if you overspend.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-013",
+    "category": "money",
+    "anchors": [
+      "Switched to store brand groceries to save money",
+      "Bought generic products at the supermarket",
+      "Saved twenty percent by buying store brands",
+      "Practiced smart frugality at the grocery store"
+    ],
+    "paraphrases": [],
+    "roast": "You bought generic brand toilet paper and called it frugality.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-014",
+    "category": "money",
+    "anchors": [
+      "My credit score just reached 800",
+      "Hit an excellent credit score rating today",
+      "Credit score went up ten points this month",
+      "Checked my credit score and it's near perfect"
+    ],
+    "paraphrases": [],
+    "roast": "Checking your credit score daily will not make it rise.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-015",
+    "category": "money",
+    "anchors": [
+      "Prepped homemade lunch for the work week",
+      "Packed my own lunch instead of eating out",
+      "Brought homemade food to the office today",
+      "Saved money by meal prepping office lunches"
+    ],
+    "paraphrases": [],
+    "roast": "Packing your lunch took longer than buying the sandwich.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-016",
+    "category": "money",
+    "anchors": [
+      "Bought Bitcoin during the recent dip",
+      "Added Ethereum to my crypto portfolio",
+      "Invested in cryptocurrency assets today",
+      "My crypto holdings gained value this week"
+    ],
+    "paraphrases": [],
+    "roast": "Buying crypto at the peak is an expensive education.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "money-017",
+    "category": "money",
+    "anchors": [
+      "Used coupons to save money on shopping",
+      "Found a 20% off promo code at checkout",
+      "Saved thirty dollars with retail store coupons",
+      "Got discounts on everything in my shopping cart"
+    ],
+    "paraphrases": [],
+    "roast": "You saved ten dollars using a coupon on useless junk.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-003",
+    "category": "dating",
+    "anchors": [
+      "Had an amazing first date tonight",
+      "The chemistry on our first date was electric",
+      "Had great conversation over dinner with someone new",
+      "First date went so well we talked for hours"
+    ],
+    "paraphrases": [],
+    "roast": "A fantastic first date is just tomorrow's unread text message.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-004",
+    "category": "dating",
+    "anchors": [
+      "Deleted all my dating apps today",
+      "Taking a detox break from online dating",
+      "Removed Tinder and Hinge from my phone",
+      "Done with dating apps to focus on myself"
+    ],
+    "paraphrases": [],
+    "roast": "Deleting dating apps for three days is not spiritual growth.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-005",
+    "category": "dating",
+    "anchors": [
+      "Celebrated one month of dating my partner",
+      "One month anniversary with someone special",
+      "Marked our first month together as a couple",
+      "One month in and everything feels magical"
+    ],
+    "paraphrases": [],
+    "roast": "Celebrating one month together is just counting days before reality.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-006",
+    "category": "dating",
+    "anchors": [
+      "Met someone with the exact same taste in music",
+      "We have identical taste in songs and movies",
+      "Bonded over obscure indie bands on our date",
+      "Our shared music playlist is pure perfection"
+    ],
+    "paraphrases": [],
+    "roast": "They were not your soulmate. They just liked the playlist.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-007",
+    "category": "dating",
+    "anchors": [
+      "Exchanged cute smiles with a stranger at the cafe",
+      "Had a movie moment with someone in a bookstore",
+      "Met someone organically without dating apps",
+      "Locked eyes with an attractive stranger today"
+    ],
+    "paraphrases": [],
+    "roast": "Making eye contact across a bookstore is not a romance.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-008",
+    "category": "dating",
+    "anchors": [
+      "Cooked an intimate dinner together with my partner",
+      "Had a romantic home cooking date night",
+      "Made homemade pasta together with my significant other",
+      "Cooked dinner from scratch as a couple"
+    ],
+    "paraphrases": [],
+    "roast": "A couple's cooking date just creates twice as many dishes.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-009",
+    "category": "dating",
+    "anchors": [
+      "Wore matching couple outfits with my partner",
+      "Coordinated our clothes for date night",
+      "Dressed up in matching colors together",
+      "Rocked matching couple hoodies today"
+    ],
+    "paraphrases": [],
+    "roast": "Matching shirts is a relationship milestone nobody asked to witness.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-010",
+    "category": "dating",
+    "anchors": [
+      "Posted our anniversary photo on Instagram",
+      "Celebrated our anniversary on social media",
+      "Shared cute pictures of us together today",
+      "Marked three years together with a photo"
+    ],
+    "paraphrases": [],
+    "roast": "Posting your anniversary photo is just demanding applause from strangers.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-011",
+    "category": "dating",
+    "anchors": [
+      "Had a wonderful double date with close friends",
+      "Went on a fun double date this weekend",
+      "Hosted another couple for dinner date night",
+      "Enjoyed a great double date evening out"
+    ],
+    "paraphrases": [],
+    "roast": "A double date is just an audition for polite small talk.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-012",
+    "category": "dating",
+    "anchors": [
+      "Packed a romantic picnic in the park today",
+      "Had a lovely outdoor picnic with my date",
+      "Enjoyed wine and cheese at a park picnic",
+      "Spent a sunny afternoon on a picnic date"
+    ],
+    "paraphrases": [],
+    "roast": "A picnic date is just eating lukewarm cheese near insects.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-013",
+    "category": "dating",
+    "anchors": [
+      "Made my date laugh until they cried tonight",
+      "My jokes landed so well on our dinner date",
+      "We laughed non-stop throughout the entire date",
+      "Kept my date laughing all evening long"
+    ],
+    "paraphrases": [],
+    "roast": "They did not laugh at your joke because it was funny.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-014",
+    "category": "dating",
+    "anchors": [
+      "Signed our first apartment lease together",
+      "Moved in with my partner this weekend",
+      "Unpacked boxes in our new shared home",
+      "Officially living together under one roof"
+    ],
+    "paraphrases": [],
+    "roast": "Moving in together just divides the blame for dirty dishes.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-015",
+    "category": "dating",
+    "anchors": [
+      "Wrote a heartfelt love letter to my partner",
+      "Gave my significant other a handwritten note",
+      "Exchanged sweet love letters this morning",
+      "Wrote down all the reasons I love them"
+    ],
+    "paraphrases": [],
+    "roast": "A handwritten love letter will look awkward in divorce proceedings.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-016",
+    "category": "dating",
+    "anchors": [
+      "Met my partner's parents for the first time",
+      "Dinner with their family went smoothly",
+      "Their parents welcomed me so warmly today",
+      "Survived meeting the parents over the weekend"
+    ],
+    "paraphrases": [],
+    "roast": "Meeting their parents is just an unpaid background investigation.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "dating-017",
+    "category": "dating",
+    "anchors": [
+      "Booked a romantic weekend trip together",
+      "Going on our first couple's getaway trip",
+      "Planned a cozy weekend cabin trip as a couple",
+      "Taking a romantic road trip this weekend"
+    ],
+    "paraphrases": [],
+    "roast": "You agreed on a weekend getaway. Prepare for mutual exhaustion.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-001",
+    "category": "academia",
+    "anchors": [
+      "Scored 100 percent on my physics exam",
+      "Aced my organic chemistry midterm",
+      "Got top marks in our university cohort",
+      "Received the highest score on my finals"
+    ],
+    "paraphrases": [],
+    "roast": "A perfect grade on the exam will impress zero employers.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-002",
+    "category": "academia",
+    "anchors": [
+      "Submitted my master thesis after months of work",
+      "Finished defending my master dissertation",
+      "Turned in the final draft of my master thesis",
+      "Successfully defended my thesis today"
+    ],
+    "paraphrases": [],
+    "roast": "Finishing your master thesis just earns you an overqualified rejection.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-003",
+    "category": "academia",
+    "anchors": [
+      "My first peer-reviewed paper was accepted",
+      "Published research in a reputable journal",
+      "Paper got accepted for publication today",
+      "Research paper officially published in IEEE"
+    ],
+    "paraphrases": [],
+    "roast": "A published paper will be read by your advisor and nobody else.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-004",
+    "category": "academia",
+    "anchors": [
+      "Highlighted four chapters of my textbook today",
+      "Read and annotated my university readings",
+      "Took detailed study notes across the textbook",
+      "Finished reading all required course materials"
+    ],
+    "paraphrases": [],
+    "roast": "Highlighting the whole textbook does not count as retaining knowledge.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-005",
+    "category": "academia",
+    "anchors": [
+      "Had a deep academic talk with my professor",
+      "Professor gave great feedback during office hours",
+      "Connected meaningfully with my department dean",
+      "Had a great meeting with my faculty advisor"
+    ],
+    "paraphrases": [],
+    "roast": "Your professor forgot your name five minutes after office hours.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-006",
+    "category": "academia",
+    "anchors": [
+      "Graduated magna cum laude from university",
+      "Finished my degree with highest honors",
+      "Earned top academic distinction at graduation",
+      "Completed my bachelor degree with first class honors"
+    ],
+    "paraphrases": [],
+    "roast": "Graduating with honors just adds six syllables to your debt.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-007",
+    "category": "academia",
+    "anchors": [
+      "Pulled an all-nighter to finish my essay",
+      "Studied all night in the university library",
+      "Stayed up until dawn preparing for exams",
+      "Crammed all night and submitted on time"
+    ],
+    "paraphrases": [],
+    "roast": "Pulling an all-nighter is poor time management disguised as dedication.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-008",
+    "category": "academia",
+    "anchors": [
+      "Won a competitive academic research grant",
+      "Awarded funding for my doctoral research",
+      "Secured a university grant for our lab",
+      "Research proposal received full funding"
+    ],
+    "paraphrases": [],
+    "roast": "A research grant is permission to do clerical work for years.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-009",
+    "category": "academia",
+    "anchors": [
+      "Finished the literature review for my thesis",
+      "Synthesized eighty academic papers for my review",
+      "Completed the background literature chapter",
+      "Organized citations across my literature review"
+    ],
+    "paraphrases": [],
+    "roast": "Your literature review is just paraphrasing seventy people who were wrong.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-010",
+    "category": "academia",
+    "anchors": [
+      "Presented my research paper at the conference",
+      "Delivered an oral presentation at academic summit",
+      "Spoke at an international academic symposium",
+      "Presented my findings to fellow researchers"
+    ],
+    "paraphrases": [],
+    "roast": "A conference presentation is twenty minutes of speaking to sleeping peers.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-011",
+    "category": "academia",
+    "anchors": [
+      "Made two hundred digital flashcards on Anki",
+      "Created color-coded revision cards for exams",
+      "Finished reviewing all my study flashcards",
+      "Built a comprehensive flashcard deck for finals"
+    ],
+    "paraphrases": [],
+    "roast": "Making color-coded study flashcards will not improve your recall.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-012",
+    "category": "academia",
+    "anchors": [
+      "Finally passed my PhD defense today",
+      "Officially earned my doctoral degree",
+      "Defended my doctoral dissertation successfully",
+      "Can officially call myself doctor now"
+    ],
+    "paraphrases": [],
+    "roast": "A doctorate title just means relatives ask for medical advice.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-013",
+    "category": "academia",
+    "anchors": [
+      "Formatted fifty academic citations in APA format",
+      "Organized my entire bibliography cleanly",
+      "Completed the reference list for my term paper",
+      "Cited forty peer-reviewed sources properly"
+    ],
+    "paraphrases": [],
+    "roast": "Writing thirty pages of citations does not make you scholarly.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-014",
+    "category": "academia",
+    "anchors": [
+      "Hosted a productive study session with classmates",
+      "Formed an effective study group for exams",
+      "Collaborated with peers on our group revision",
+      "Had an inspiring study session at the library"
+    ],
+    "paraphrases": [],
+    "roast": "A study group is four people complaining about the professor.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "academia-015",
+    "category": "academia",
+    "anchors": [
+      "Spent Friday night reading journal articles",
+      "Catching up on academic reading over the weekend",
+      "Diving deep into research literature tonight",
+      "Reading research papers instead of partying"
+    ],
+    "paraphrases": [],
+    "roast": "Reading academic papers on a Friday night is a quiet tragedy.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-001",
+    "category": "cooking",
+    "anchors": [
+      "Made fresh handmade pasta from scratch today",
+      "Rolled out homemade fettuccine for dinner",
+      "Crafted artisanal pasta dough by hand",
+      "Cooked fresh ravioli completely from scratch"
+    ],
+    "paraphrases": [],
+    "roast": "Spending four hours making pasta to eat it in six minutes.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-002",
+    "category": "cooking",
+    "anchors": [
+      "Fed my sourdough starter and it doubled",
+      "Baked a rustic sourdough boule this morning",
+      "My sourdough starter is alive and bubbly",
+      "Got an open crumb on my sourdough loaf"
+    ],
+    "paraphrases": [],
+    "roast": "Your sourdough starter is just mold with emotional support.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-003",
+    "category": "cooking",
+    "anchors": [
+      "Plated a restaurant quality dinner at home",
+      "Arranged our dinner like a Michelin restaurant",
+      "Focused on gourmet plating aesthetics tonight",
+      "Garnished our home cooked meal beautifully"
+    ],
+    "paraphrases": [],
+    "roast": "Plating food with tweezers will not make the chicken tender.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-004",
+    "category": "cooking",
+    "anchors": [
+      "Bought an enameled cast iron dutch oven",
+      "Simmered beef bourguignon in my dutch oven",
+      "Invested in a premium French dutch oven",
+      "Braised dinner in my new cast iron pot"
+    ],
+    "paraphrases": [],
+    "roast": "A three hundred dollar dutch oven will not improve stew.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-005",
+    "category": "cooking",
+    "anchors": [
+      "Diced fresh garlic and herbs for dinner",
+      "Mince garlic finely for a homemade pasta sauce",
+      "Prepped all aromatics from scratch tonight",
+      "Infused extra virgin olive oil with fresh garlic"
+    ],
+    "paraphrases": [],
+    "roast": "You chopped garlic for twenty minutes to mask burnt vegetables.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-006",
+    "category": "cooking",
+    "anchors": [
+      "Finished meal prepping lunches for the whole week",
+      "Cooked healthy food in glass containers for work",
+      "Prepped chicken rice and broccoli for five days",
+      "Lined up my balanced weekly meal prep boxes"
+    ],
+    "paraphrases": [],
+    "roast": "A meal prep photo is just seven containers of sadness.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-007",
+    "category": "cooking",
+    "anchors": [
+      "Infused olive oil with rosemary and chili",
+      "Made homemade rosemary garlic infused oil",
+      "Bottled my own flavored extra virgin olive oil",
+      "Crafted herb infused finishing oil for cooking"
+    ],
+    "paraphrases": [],
+    "roast": "Infusing your own olive oil is an expensive way to spill.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-008",
+    "category": "cooking",
+    "anchors": [
+      "Sharpened my Japanese chef knife to a razor edge",
+      "Used my new forged kitchen knife for dinner prep",
+      "Invested in an authentic Japanese kitchen knife",
+      "Knife skills were on point during prep today"
+    ],
+    "paraphrases": [],
+    "roast": "A chef's knife does not cut down your dishwashing time.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-009",
+    "category": "cooking",
+    "anchors": [
+      "Made a modern deconstructed dessert tonight",
+      "Served a deconstructed cheesecake for guests",
+      "Experimental deconstructed dinner presentation",
+      "Created a deconstructed apple tart dessert"
+    ],
+    "paraphrases": [],
+    "roast": "Calling it deconstructed just means you dropped the pie.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-010",
+    "category": "cooking",
+    "anchors": [
+      "Got a perfect sear on my ribeye steak",
+      "Cooked a restaurant steak in my cast iron skillet",
+      "Basted a thick steak with butter and thyme",
+      "Achieved a flawless medium rare steak sear"
+    ],
+    "paraphrases": [],
+    "roast": "Grilling a steak on cast iron will smoke your apartment.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-011",
+    "category": "cooking",
+    "anchors": [
+      "Brewed a batch of homemade flavored kombucha",
+      "My homemade kombucha fermented with great fizz",
+      "Bottled second fermentation kombucha with fruit",
+      "Growing my own kombucha scoby from scratch"
+    ],
+    "paraphrases": [],
+    "roast": "Fermenting your own kombucha is just vinegar in disguise.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-012",
+    "category": "cooking",
+    "anchors": [
+      "Cooked an elaborate multi-course meal for friends",
+      "Hosted an intimate dinner party from scratch",
+      "Served five courses to dinner party guests",
+      "Made an entire banquet dinner for our friend group"
+    ],
+    "paraphrases": [],
+    "roast": "A five-course dinner for friends just means forty dirty plates.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-013",
+    "category": "cooking",
+    "anchors": [
+      "Baked delicate French macarons with clean feet",
+      "Piped chocolate ganache macarons from scratch",
+      "Mastered the tricky French macaron technique",
+      "Baked a batch of colorful raspberry macarons"
+    ],
+    "paraphrases": [],
+    "roast": "Baking French macarons is just paying thirty dollars for sugar.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-014",
+    "category": "cooking",
+    "anchors": [
+      "Smoked a beef brisket for sixteen hours",
+      "Got a deep smoke ring on my smoked brisket",
+      "Tended the barbecue smoker all night long",
+      "Low and slow smoked barbecue turned out tender"
+    ],
+    "paraphrases": [],
+    "roast": "Smoking brisket for sixteen hours will not speed up dinner.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "cooking-015",
+    "category": "cooking",
+    "anchors": [
+      "Pounded fresh basil pesto in a mortar",
+      "Made traditional Genoa pesto with fresh pine nuts",
+      "Blended fragrant green pesto from garden herbs",
+      "Harvested garden basil for homemade pesto sauce"
+    ],
+    "paraphrases": [],
+    "roast": "Homemade pesto is an elaborate excuse to consume pine nuts.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-004",
+    "category": "travel",
+    "anchors": [
+      "Landed in Tokyo for an exciting vacation",
+      "Exploring convenience store snacks in Japan",
+      "Arrived in Osaka for our food holiday",
+      "Started our two week vacation across Tokyo"
+    ],
+    "paraphrases": [],
+    "roast": "Traveling across eight time zones to take pictures of convenience food.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-005",
+    "category": "travel",
+    "anchors": [
+      "Reached the mountain summit before sunrise today",
+      "Climbed to the top of the mountain peak",
+      "Hiked the steep trail to catch the sunrise view",
+      "Stood at the mountain ridge overlooking clouds"
+    ],
+    "paraphrases": [],
+    "roast": "Hiking to the summit just to adjust camera exposure settings.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-006",
+    "category": "travel",
+    "anchors": [
+      "Booked our tropical beach getaway in Bali",
+      "Relaxing poolside at a tropical beach resort",
+      "Landed on the coast for a week by the ocean",
+      "Enjoying the warm sand and ocean breezes"
+    ],
+    "paraphrases": [],
+    "roast": "An exotic beach resort is just answering Slack while sunburned.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-007",
+    "category": "travel",
+    "anchors": [
+      "Working remotely from a coffee shop in Lisbon",
+      "Officially living the digital nomad remote lifestyle",
+      "Basing myself in Southeast Asia for remote work",
+      "Working online while traveling around the globe"
+    ],
+    "paraphrases": [],
+    "roast": "A digital nomad is an unemployed tourist with a laptop.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-008",
+    "category": "travel",
+    "anchors": [
+      "Started my first solo backpacking adventure",
+      "Traveling alone across Europe with a backpack",
+      "Embracing independence on my solo trip",
+      "Solo travel has taught me so much about life"
+    ],
+    "paraphrases": [],
+    "roast": "Solo travel is eating dinner alone while staring at walls.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-009",
+    "category": "travel",
+    "anchors": [
+      "Added another country stamp to my passport",
+      "Visited my thirtieth country in the world",
+      "Collected three new passport stamps this trip",
+      "Crossed the border into country number twenty-five"
+    ],
+    "paraphrases": [],
+    "roast": "A passport stamp will not make you more culturally enlightened.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-010",
+    "category": "travel",
+    "anchors": [
+      "Packed for a two week trip in one carry-on",
+      "Traveled carry-on only without checking bags",
+      "Mastered minimalist one-bag travel techniques",
+      "Fitting everything for Europe into a single backpack"
+    ],
+    "paraphrases": [],
+    "roast": "Packing only a carry-on is an odd source of pride.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-011",
+    "category": "travel",
+    "anchors": [
+      "Walked through the lavender fields in Provence",
+      "Took gorgeous photos in blooming flower fields",
+      "Visited the purple lavender meadows today",
+      "Enjoyed the fragrance in the lavender fields"
+    ],
+    "paraphrases": [],
+    "roast": "Taking photos in a lavender field is basic tourist behavior.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-012",
+    "category": "travel",
+    "anchors": [
+      "Checked into a stylish boutique hostel in Berlin",
+      "Staying at an eco-friendly designer hostel",
+      "Met cool fellow travelers at our hostel lounge",
+      "Enjoying the social vibe of our city hostel"
+    ],
+    "paraphrases": [],
+    "roast": "A boutique hostel is still sleeping three feet from strangers.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-013",
+    "category": "travel",
+    "anchors": [
+      "Flew in a hot air balloon over Cappadocia",
+      "Watched sunrise from a hot air balloon basket",
+      "Floating high above the valleys in a balloon",
+      "Incredible hot air balloon views this morning"
+    ],
+    "paraphrases": [],
+    "roast": "A sunrise hot air balloon ride is just windy heights.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-014",
+    "category": "travel",
+    "anchors": [
+      "Found an untouched hidden gem away from crowds",
+      "Discovered a secret alleyway in Rome",
+      "Explored off the beaten path local spots",
+      "Avoided tourist traps and found hidden locations"
+    ],
+    "paraphrases": [],
+    "roast": "Visiting hidden gems that twenty million tourists reviewed on TripAdvisor.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-015",
+    "category": "travel",
+    "anchors": [
+      "Enjoyed free drinks at the airport business lounge",
+      "Relaxing in the priority pass airport lounge",
+      "Complimentary lounge access before my flight",
+      "Waiting for boarding in the first class lounge"
+    ],
+    "paraphrases": [],
+    "roast": "Airport lounge access is just waiting in carpeted holding rooms.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-016",
+    "category": "travel",
+    "anchors": [
+      "Took a traditional pasta making class in Florence",
+      "Learned authentic cooking from a Tuscan chef",
+      "Attended an Italian culinary masterclass today",
+      "Made homemade gnocchi with a local Italian cook"
+    ],
+    "paraphrases": [],
+    "roast": "Taking a cooking class in Italy will not make you Italian.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-017",
+    "category": "travel",
+    "anchors": [
+      "Rented a scooter to explore the island roads",
+      "Riding mopeds through coastal roads with friends",
+      "Cruised the island coast on a rental scooter",
+      "Exploring rural villages on a motorbike rental"
+    ],
+    "paraphrases": [],
+    "roast": "Renting a scooter abroad is just risking unfamiliar asphalt.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "travel-018",
+    "category": "travel",
+    "anchors": [
+      "Walked among the ancient ruins of Athens",
+      "Explored the historic archaeological park today",
+      "Stood before ancient Roman temple pillars",
+      "Visited the ancient amphitheater ruins"
+    ],
+    "paraphrases": [],
+    "roast": "Visiting ancient ruins just means reading plaques in the sun.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-001",
+    "category": "self_care",
+    "anchors": [
+      "Lit an expensive scented candle for relaxation",
+      "Unwinding with a luxury candle tonight",
+      "Created a calm ambiance with scented candles",
+      "Burned a fragrant artisan candle while resting"
+    ],
+    "paraphrases": [],
+    "roast": "Lighting a forty-dollar candle will not burn away your responsibilities.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-002",
+    "category": "self_care",
+    "anchors": [
+      "Meditated for twenty mindful minutes this morning",
+      "Completed my daily mindfulness meditation practice",
+      "Practiced deep mindful breathing to center myself",
+      "Sat in stillness for twenty minutes of meditation"
+    ],
+    "paraphrases": [],
+    "roast": "A twenty-minute meditation where you just worried about your schedule.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-003",
+    "category": "self_care",
+    "anchors": [
+      "Brewed a warm cup of calming chamomile tea",
+      "Sipping hot herbal tea to soothe evening stress",
+      "Enjoying loose leaf herbal tea before bedtime",
+      "Drinking calming green tea for mindfulness"
+    ],
+    "paraphrases": [],
+    "roast": "Drinking herbal tea will not solve your structural life choices.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-004",
+    "category": "self_care",
+    "anchors": [
+      "Did a soothing sheet mask skincare routine",
+      "Treated my skin to a hydrating face mask",
+      "Pampered myself with a multi-step skincare session",
+      "Rejuvenating skin with a luxury Korean sheet mask"
+    ],
+    "paraphrases": [],
+    "roast": "A facial sheet mask is just wet paper on regret.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-005",
+    "category": "self_care",
+    "anchors": [
+      "Took a relaxing warm bubble bath after work",
+      "Soaked in an Epsom salt bath with candles",
+      "Unwinding in a long hot bubble bath tonight",
+      "Ran a soothing evening bath to de-stress"
+    ],
+    "paraphrases": [],
+    "roast": "Taking a bubble bath is just soaking in your own thoughts.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-006",
+    "category": "self_care",
+    "anchors": [
+      "Protected my peace by declining social invitations",
+      "Set healthy boundaries by saying no to plans",
+      "Prioritized myself and stayed home tonight",
+      "Saying no to events to recharge my energy"
+    ],
+    "paraphrases": [],
+    "roast": "Saying no to plans is just practicing your anti-social habits.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-007",
+    "category": "self_care",
+    "anchors": [
+      "Wrote down three things I am grateful for",
+      "Logged my daily gratitude list in my journal",
+      "Counted my blessings in my gratitude notebook",
+      "Practiced gratitude before starting the morning"
+    ],
+    "paraphrases": [],
+    "roast": "Journaling three grateful things will not change your landlord's notice.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-008",
+    "category": "self_care",
+    "anchors": [
+      "Attended a restorative Tibetan sound bath session",
+      "Relaxed deeply during a crystal bowl sound healing",
+      "Experienced vibrational healing in a sound bath",
+      "Surrendered to meditative gong and bowl soundscapes"
+    ],
+    "paraphrases": [],
+    "roast": "A sound bath is just paying to hear someone clang.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-009",
+    "category": "self_care",
+    "anchors": [
+      "Bought all organic fresh produce at the market",
+      "Stocked the fridge with local organic vegetables",
+      "Invested in clean chemical-free organic groceries",
+      "Switched entirely to organic whole foods"
+    ],
+    "paraphrases": [],
+    "roast": "Buying organic groceries is just paying double for dirt.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-010",
+    "category": "self_care",
+    "anchors": [
+      "Set strict screen time limits on my smartphone",
+      "Digital detox limits configured for social apps",
+      "Restricted my daily phone app usage limits",
+      "Taking control of screen time with app limits"
+    ],
+    "paraphrases": [],
+    "roast": "Setting a screen time limit that you override every ten minutes.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-011",
+    "category": "self_care",
+    "anchors": [
+      "Took an afternoon mental health walk outside",
+      "Went for a gentle walk to clear my head",
+      "Stepped out for fresh air and mental clarity",
+      "Cleared anxious thoughts with a walk in nature"
+    ],
+    "paraphrases": [],
+    "roast": "Going for a mental health walk is just pacing outdoors.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-012",
+    "category": "self_care",
+    "anchors": [
+      "Used a chilled jade roller for facial lymphatic drainage",
+      "Did my morning facial massage with a quartz roller",
+      "Depuffed my face with a cold jade roller",
+      "Practiced gua sha and jade rolling on my face"
+    ],
+    "paraphrases": [],
+    "roast": "A jade roller will not smooth over your credit score.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-013",
+    "category": "self_care",
+    "anchors": [
+      "Decluttered my wardrobe using the Marie Kondo method",
+      "Donated four bags of clothes I no longer wear",
+      "Organized my minimalist capsule wardrobe today",
+      "Purged my bedroom closet of unnecessary clutter"
+    ],
+    "paraphrases": [],
+    "roast": "Decluttering your closet is just moving dust around the room.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-014",
+    "category": "self_care",
+    "anchors": [
+      "Drank three full liters of water today",
+      "Hit my daily hydration water gallon goal",
+      "Stayed hydrated with sixty-four ounces of water",
+      "Carried my water bottle everywhere and drank plenty"
+    ],
+    "paraphrases": [],
+    "roast": "Drinking three liters of water will only increase bathroom visits.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "self_care-015",
+    "category": "self_care",
+    "anchors": [
+      "Spent an entire weekend completely off screens",
+      "Unplugged from technology for 24 peaceful hours",
+      "Did a full weekend digital detox in nature",
+      "Turned off all electronics to disconnect and recharge"
+    ],
+    "paraphrases": [],
+    "roast": "A weekend digital detox where you kept checking the time.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
