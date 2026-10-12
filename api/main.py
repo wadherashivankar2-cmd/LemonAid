@@ -43,18 +43,21 @@ app.add_middleware(
 SHARE_SECRET = os.getenv("SHARE_SECRET", "dev_secret_key_must_be_shared_with_frontend")
 RETR_MIN = float(os.getenv("RETR_MIN", "0.40"))
 RERANK_MIN = float(os.getenv("RERANK_MIN", "0.45"))
+CACHE_SIM_THRESHOLD = float(os.getenv("CACHE_SIM_THRESHOLD", "0.74"))
+
 UPSTASH_URL = os.getenv("UPSTASH_URL", "").rstrip("/")
 UPSTASH_TOKEN = os.getenv("UPSTASH_TOKEN", "")
 
 # Groq Hybrid Fallback
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-LLM_FALLBACK_ENABLED = os.getenv("LLM_FALLBACK_ENABLED", "false").lower() in ("1", "true", "yes")
+LLM_FALLBACK_ENABLED = os.getenv("LLM_FALLBACK_ENABLED", "true").lower() in ("1", "true", "yes")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 INDEX_DIR = DATA_DIR / "index"
 MODELS_DIR = BASE_DIR / "models"
+COMMUNITY_ROASTS_FILE = DATA_DIR / "community_roasts.json"
 
 # --- In-Memory State & Fallbacks ---
 recent_served: deque[str] = deque(maxlen=25)
@@ -63,10 +66,6 @@ in_memory_counters: dict[str, int] = defaultdict(int)
 # --- Regex Gateways ---
 CRISIS_REGEX = re.compile(
     r"\b(?:suicid\w*|kill\s*myself|self\s*harm|end\s*my\s*life|cutting\s*myself|wanting\s*to\s*jump|bridge\s*to\s*jump)\b",
-    re.IGNORECASE,
-)
-SAFETY_REGEX = re.compile(
-    r"\b(?:died|death|passed\s*away|funeral|cancer|diagnos\w*|miscarriage|abus\w*|assault\w*|rape\w*|laid\s*off|fired|divorc\w*|hospital|overdose)\b",
     re.IGNORECASE,
 )
 
@@ -91,7 +90,35 @@ SLOT_PATTERNS = {
     ),
 }
 
-# --- Lazy-Loaded Models & Index ---
+GROQ_SYSTEM_PROMPT = """You are a ruthless, quick-witted internet roaster. You talk like a real human roasting someone in a group chat, NOT like a 19th-century philosopher or an old book.
+
+STRICT BANS:
+- NEVER use Victorian or pretentious words: "vanity", "mere", "illusion", "monument to", "testament", "ephemeral", "folly", "futility".
+- Zero emojis. Zero exclamation marks. Zero quotation marks.
+- No intro banter (no "Oh", no "Well", no "Imagine").
+- Keep it strictly under 14 words.
+
+HOW TO ROAST:
+- Conversational, modern, brutal, direct.
+- Target the insecurity, lack of personality, wasted effort, or the fact that nobody cares.
+
+Examples:
+Input: <reflection>Woke up early to hit leg day</reflection>
+Roast: Waking up at 5 AM to squat won't make anyone text you back.
+
+Input: <reflection>Hit a new PR on bench today</reflection>
+Roast: All that joint damage just to still look like you work in IT.
+
+Input: <reflection>Got promoted to Senior Software Engineer</reflection>
+Roast: Enjoy the extra 15 hours of meetings for an extra 4% pay.
+
+Input: <reflection>Cooked an entire 3-course meal from scratch</reflection>
+Roast: Two hours of dirty dishes just to eat average food alone.
+
+Input: <reflection>Reading a 400-page book on discipline</reflection>
+Roast: You bought a 400-page book to avoid doing twenty minutes of actual work."""
+
+# --- Lazy-Loaded Models & Clients ---
 embedder: Optional[SentenceTransformer] = None
 safety_clf = None
 intent_clf = None
@@ -99,17 +126,16 @@ indexed_roasts: list[dict] = []
 anchor_vecs: Optional[np.ndarray] = None
 anchor_owners: Optional[np.ndarray] = None
 roast_id_map: dict[str, dict] = {}
+async_groq_client = None
 
 
 def load_resources():
-    global embedder, safety_clf, intent_clf, indexed_roasts, anchor_vecs, anchor_owners, roast_id_map
+    global embedder, safety_clf, intent_clf, indexed_roasts, anchor_vecs, anchor_owners, roast_id_map, async_groq_client
 
-    # 1. Load SentenceTransformer Embedder
     if embedder is None:
         model_path = os.getenv("RETRIEVER_PATH", "sentence-transformers/all-MiniLM-L6-v2")
         embedder = SentenceTransformer(model_path)
 
-    # 2. Load Intent & Safety Classifiers
     safety_path = MODELS_DIR / "safety.joblib"
     if safety_path.exists() and safety_clf is None:
         safety_clf = joblib.load(safety_path)
@@ -118,7 +144,6 @@ def load_resources():
     if intent_path.exists() and intent_clf is None:
         intent_clf = joblib.load(intent_path)
 
-    # 3. Load Index Artifacts
     roasts_json = INDEX_DIR / "roasts.json"
     vecs_npy = INDEX_DIR / "anchor_vecs.npy"
     owners_npy = INDEX_DIR / "anchor_owner.npy"
@@ -129,7 +154,6 @@ def load_resources():
         anchor_vecs = np.load(vecs_npy)
         anchor_owners = np.load(owners_npy)
     else:
-        # Fallback to dev_roasts if index hasn't been built yet
         dev_file = DATA_DIR / "dev_roasts.json"
         if dev_file.exists():
             with open(dev_file, "r", encoding="utf-8") as f:
@@ -139,98 +163,128 @@ def load_resources():
 
     roast_id_map = {r["id"]: r for r in indexed_roasts}
 
+    # Load any previously saved community roasts into memory
+    if COMMUNITY_ROASTS_FILE.exists():
+        try:
+            with open(COMMUNITY_ROASTS_FILE, "r", encoding="utf-8") as f:
+                community_data = json.load(f)
+            for item in community_data:
+                if item["id"] not in roast_id_map:
+                    roast_id_map[item["id"]] = item
+        except Exception:
+            pass
 
-def generate_groq_roast(brag: str) -> Optional[str]:
-    """Call Groq API for deadpan cynical roast under 15 words on unusual brag."""
+    if GROQ_API_KEY and async_groq_client is None:
+        try:
+            from groq import AsyncGroq
+            async_groq_client = AsyncGroq(api_key=GROQ_API_KEY)
+        except ImportError:
+            pass
+
+
+async def generate_groq_roast(brag: str) -> Optional[str]:
+    """Asynchronous non-blocking Groq API call with prompt injection defense."""
+    global async_groq_client
     if not GROQ_API_KEY:
         return None
-    try:
-        from groq import Groq, NotFoundError
-        client = Groq(api_key=GROQ_API_KEY)
-        system_prompt = (
-            "You are a deadpan, deeply cynical satirist. "
-            "Read the user's reflection or brag and output a single, ruthlessly observant roast under 15 words. "
-            "Puncture their ego, vanity, or wasted effort directly. "
-            "No hashtags, no emojis, no exclamation points, no introductory filler."
-        )
 
-        models_to_try = [GROQ_MODEL]
-        for alt in ["openai/gpt-oss-20b", "qwen/qwen3.8-27b"]:
-            if alt not in models_to_try:
-                models_to_try.append(alt)
+    if async_groq_client is None:
+        from groq import AsyncGroq
+        async_groq_client = AsyncGroq(api_key=GROQ_API_KEY)
 
-        for model_name in models_to_try:
-            try:
-                resp = client.chat.completions.create(
-                    messages=[
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": brag},
-                    ],
-                    model=model_name,
-                    temperature=0.7,
-                    max_tokens=60,
-                )
-                text = resp.choices[0].message.content or ""
-                clean_text = text.strip().strip('"\'').rstrip('!').strip()
-                if clean_text:
-                    return clean_text
-            except NotFoundError:
+    from groq import NotFoundError
+
+    models_to_try = [GROQ_MODEL, "llama-3.1-8b-instant", "openai/gpt-oss-20b", "qwen/qwen3.8-27b"]
+    deduped_models = []
+    for m in models_to_try:
+        if m not in deduped_models:
+            deduped_models.append(m)
+
+    sanitized_input = f"<reflection>\n{brag}\n</reflection>"
+
+    for model_name in deduped_models:
+        try:
+            resp = await async_groq_client.chat.completions.create(
+                messages=[
+                    {"role": "system", "content": GROQ_SYSTEM_PROMPT},
+                    {"role": "user", "content": sanitized_input},
+                ],
+                model=model_name,
+                temperature=0.88,
+                frequency_penalty=0.2,
+                max_tokens=60,
+            )
+            text = resp.choices[0].message.content or ""
+            clean_text = text.strip().strip('"\'').rstrip('!').strip()
+            if clean_text:
+                return clean_text
+        except Exception as e:
+            err_str = str(e).lower()
+            if "not found" in err_str or "decommissioned" in err_str or "does not exist" in err_str or "access" in err_str or "404" in err_str or "400" in err_str:
                 continue
-            except Exception as e:
-                print(f"[!] Groq error with {model_name}: {e}")
-                break
-        return None
-    except Exception as e:
-        print(f"[!] Groq client error: {e}")
-        return None
+            print(f"[!] Groq error with {model_name}: {e}")
+            break
+    return None
+
+
+def persist_community_roast(brag: str, roast: str, roast_id: str):
+    """Save an approved dynamic roast to disk and warm up the in-memory index."""
+    global anchor_vecs, anchor_owners, indexed_roasts, embedder
+    
+    community_data = []
+    if COMMUNITY_ROASTS_FILE.exists():
+        try:
+            with open(COMMUNITY_ROASTS_FILE, "r", encoding="utf-8") as f:
+                community_data = json.load(f)
+        except Exception:
+            community_data = []
+
+    new_entry = {
+        "id": roast_id,
+        "category": "community",
+        "roast": roast,
+        "anchors": [brag],
+    }
+    community_data.append(new_entry)
+    with open(COMMUNITY_ROASTS_FILE, "w", encoding="utf-8") as f:
+        json.dump(community_data, f, indent=2)
+
+    if embedder is not None and anchor_vecs is not None and anchor_owners is not None:
+        new_vec = embedder.encode(brag, normalize_embeddings=True, convert_to_numpy=True).astype(np.float32)
+        new_owner_idx = len(indexed_roasts)
+        
+        indexed_roasts.append(new_entry)
+        anchor_vecs = np.vstack([anchor_vecs, new_vec[np.newaxis, :]])
+        anchor_owners = np.append(anchor_owners, new_owner_idx)
 
 
 @app.on_event("startup")
 def startup_event():
-    import logging
-    logger = logging.getLogger("mrroast.startup")
-    logger.setLevel(logging.INFO)
-
     print("\n--- Mr.Roast API Startup Validation ---")
-    
-    # 1. Environment Validations
     print(f"[*] CORS Allowed Origins: {ALLOWED_ORIGINS}")
-    
-    if SHARE_SECRET == "dev_secret_key_must_be_shared_with_frontend":
-        print("[!] WARNING: SHARE_SECRET is using the insecure default dev key. Set a secret in production.")
-    else:
-        print("[+] SHARE_SECRET: Configured with custom secret.")
-
-    if not (0.1 <= RETR_MIN <= 0.9):
-        print(f"[!] WARNING: RETR_MIN={RETR_MIN} is outside standard [0.1, 0.9] bounds.")
-    else:
-        print(f"[+] RETR_MIN: {RETR_MIN} (optimal threshold from eval sweep)")
+    print(f"[+] CACHE_SIM_THRESHOLD: {CACHE_SIM_THRESHOLD}")
 
     if UPSTASH_URL and UPSTASH_TOKEN:
         print(f"[+] Upstash Redis: Configured ({UPSTASH_URL})")
     else:
-        print("[*] Upstash Redis: Not configured (falling back to in-memory counters)")
+        print("[*] Upstash Redis: In-memory fallback mode")
 
     if LLM_FALLBACK_ENABLED and GROQ_API_KEY:
-        print(f"[+] LLM Hybrid Fallback: Enabled (Groq, model: {GROQ_MODEL})")
+        print(f"[+] LLM Dynamic Fallback: Active (AsyncGroq, model: {GROQ_MODEL})")
     elif LLM_FALLBACK_ENABLED and not GROQ_API_KEY:
-        print("[!] LLM Hybrid Fallback: Enabled in env but GROQ_API_KEY is not set")
+        print("[!] LLM Dynamic Fallback: Enabled but GROQ_API_KEY is missing")
     else:
-        print("[*] LLM Hybrid Fallback: Disabled")
+        print("[*] LLM Dynamic Fallback: Disabled")
 
-    # 2. Resource Preloading
     load_resources()
 
     print(f"[+] Embedder: {'Ready' if embedder is not None else 'FAILED'}")
-    print(f"[+] Safety Classifier: {'Ready' if safety_clf is not None else 'MISSING'}")
-    print(f"[+] Intent Classifier: {'Ready' if intent_clf is not None else 'MISSING'}")
     print(f"[+] Indexed Roasts: {len(indexed_roasts)} entries, {len(anchor_vecs) if anchor_vecs is not None else 0} anchor vectors")
     print("--- Startup Complete ---\n")
 
 
 # --- Upstash / Counter Helpers ---
 def increment_counter_sync(key: str) -> int:
-    """Increment counter in Upstash REST or fallback in-memory."""
     if UPSTASH_URL and UPSTASH_TOKEN:
         try:
             url = f"{UPSTASH_URL}/incr/{key}"
@@ -241,14 +295,13 @@ def increment_counter_sync(key: str) -> int:
                     data = res.json()
                     return int(data.get("result", 1))
         except Exception:
-            pass  # Fall back to in-memory on any network error or timeout
+            pass
 
     in_memory_counters[key] += 1
     return in_memory_counters[key]
 
 
 def get_counter_sync(key: str) -> int:
-    """Retrieve counter from Upstash REST or fallback in-memory."""
     if UPSTASH_URL and UPSTASH_TOKEN:
         try:
             url = f"{UPSTASH_URL}/get/{key}"
@@ -308,13 +361,11 @@ def health():
 
 
 @app.post("/roast")
-def generate_roast(req: RoastRequest, request: Request, background_tasks: BackgroundTasks):
-    # 1. Rate limit per IP (20/min)
+async def generate_roast(req: RoastRequest, request: Request, background_tasks: BackgroundTasks):
     check_rate_limit(request, limit=20, window_seconds=60)
-
     input_text = req.happy_thought
 
-    # 2. Safety regex
+    # 1. Critical crisis gateway
     if CRISIS_REGEX.search(input_text):
         return {
             "kind": "gentle",
@@ -322,52 +373,16 @@ def generate_roast(req: RoastRequest, request: Request, background_tasks: Backgr
             "crisis_url": "https://findahelpline.com",
         }
 
-    if SAFETY_REGEX.search(input_text):
-        return {
-            "kind": "gentle",
-            "text": "Take care today. Some days are heavy, and that is okay.",
-        }
-
-    # Ensure resources loaded
     load_resources()
 
-    # 3. Embed input once (normalized)
+    # 2. Embed user input once
     q_vec = embedder.encode(
         input_text,
         normalize_embeddings=True,
         convert_to_numpy=True,
     ).astype(np.float32)
 
-    # 4. Classifier Gates
-    if safety_clf is not None:
-        try:
-            classes = list(safety_clf.classes_)
-            if "sensitive" in classes:
-                sens_idx = classes.index("sensitive")
-                p_sensitive = safety_clf.predict_proba([q_vec])[0][sens_idx]
-                if p_sensitive > 0.35:
-                    return {
-                        "kind": "gentle",
-                        "text": "Take care today. Some days are heavy, and that is okay.",
-                    }
-        except Exception:
-            pass
-
-    if intent_clf is not None:
-        try:
-            classes = list(intent_clf.classes_)
-            if "sad" in classes:
-                sad_idx = classes.index("sad")
-                p_sad = intent_clf.predict_proba([q_vec])[0][sad_idx]
-                if p_sad > 0.50:
-                    return {
-                        "kind": "gentle",
-                        "text": "Take care today. Some days are heavy, and that is okay.",
-                    }
-        except Exception:
-            pass
-
-    # 5. Cosine similarity against anchor vectors (anchor_vecs @ q)
+    # 3. Vector similarity calculation
     extracted_slots = extract_slots(input_text)
     roast_scores: dict[int, float] = defaultdict(float)
     max_sim = 0.0
@@ -380,15 +395,16 @@ def generate_roast(req: RoastRequest, request: Request, background_tasks: Backgr
             if sim_f > roast_scores[owner_idx]:
                 roast_scores[owner_idx] = sim_f
 
-    # Hybrid Fallback: If similarity < 0.65 and LLM_FALLBACK_ENABLED is true with valid key
-    if max_sim < 0.65 and LLM_FALLBACK_ENABLED and GROQ_API_KEY:
-        groq_roast = generate_groq_roast(input_text)
+    # 4. Asynchronous Groq Fallback for unique inputs / similarity < threshold
+    if max_sim < CACHE_SIM_THRESHOLD and LLM_FALLBACK_ENABLED and GROQ_API_KEY:
+        groq_roast = await generate_groq_roast(input_text)
         if groq_roast:
             roast_id = f"llm-{hashlib.md5(groq_roast.encode('utf-8')).hexdigest()[:8]}"
             selected_roast = {
                 "id": roast_id,
-                "category": "llm",
+                "category": "dynamic_burn",
                 "roast": groq_roast,
+                "brag": input_text,
             }
             roast_id_map[roast_id] = selected_roast
             recent_served.append(roast_id)
@@ -401,18 +417,17 @@ def generate_roast(req: RoastRequest, request: Request, background_tasks: Backgr
                 "kind": "roast",
                 "text": groq_roast,
                 "id": roast_id,
-                "category": "llm",
+                "category": "dynamic_burn",
                 "brag": input_text,
                 "sig": sig,
             }
 
-    # 6. Top 10 with similarity >= RETR_MIN & slot eligibility
+    # 5. Semantic Cache Match Retrieval (similarity >= RETR_MIN)
     candidates = []
     for owner_idx, score in roast_scores.items():
         if score >= RETR_MIN and owner_idx < len(indexed_roasts):
             roast_item = indexed_roasts[owner_idx]
             req_slots = roast_item.get("slots", [])
-            # Must satisfy all required slots
             if all(slot in extracted_slots for slot in req_slots):
                 try:
                     rendered_text = roast_item["roast"].format(**extracted_slots)
@@ -426,14 +441,10 @@ def generate_roast(req: RoastRequest, request: Request, background_tasks: Backgr
                     "final": score,
                 })
 
-    # Sort descending by score and keep top 10
     candidates.sort(key=lambda c: c["final"], reverse=True)
     candidates = candidates[:10]
-
-    # 8. Filter by RERANK_MIN
     candidates = [c for c in candidates if c["final"] >= RETR_MIN]
 
-    # 9. Anti-repetition: exclude recently served in last 25 requests
     filtered_candidates = [
         c for c in candidates if c["roast"]["id"] not in recent_served
     ]
@@ -443,7 +454,6 @@ def generate_roast(req: RoastRequest, request: Request, background_tasks: Backgr
     selected_roast = None
     rendered_roast_text = ""
 
-    # 10. Sample from top 3 with weights exp(8 * final)
     if candidates:
         top_k = candidates[:3]
         scores = np.array([c["final"] for c in top_k], dtype=np.float64)
@@ -454,31 +464,24 @@ def generate_roast(req: RoastRequest, request: Request, background_tasks: Backgr
         selected_roast = chosen["roast"]
         rendered_roast_text = chosen["rendered"]
     else:
-        # 11. Fallback to a random generic roast
-        generics = [r for r in indexed_roasts if r.get("category") == "generic"]
-        if generics:
-            # Prefer not recently served
-            available_generics = [g for g in generics if g["id"] not in recent_served]
-            if not available_generics:
-                available_generics = generics
-            selected_roast = random.choice(available_generics)
-            rendered_roast_text = selected_roast["roast"]
-        elif indexed_roasts:
-            selected_roast = random.choice(indexed_roasts)
-            rendered_roast_text = selected_roast["roast"]
-        else:
-            selected_roast = {
-                "id": "generic-000",
-                "category": "generic",
-                "roast": "Inner peace logged. The universe remains completely indifferent.",
-            }
-            rendered_roast_text = selected_roast["roast"]
+        universal_burns = [
+            "Celebrating the absolute bare minimum is your greatest talent.",
+            "That is a whole lot of excitement for something nobody cares about.",
+            "You wrote all that just to remind us you have no hobbies.",
+            "All that self-satisfaction for something nobody else will ever remember.",
+        ]
+        chosen_burn = random.choice(universal_burns)
+        selected_roast = {
+            "id": f"univ-{hashlib.md5(chosen_burn.encode()).hexdigest()[:6]}",
+            "category": "universal",
+            "roast": chosen_burn,
+        }
+        rendered_roast_text = chosen_burn
 
-    # 12. Record served, sign, and return
     recent_served.append(selected_roast["id"])
+    roast_id_map[selected_roast["id"]] = selected_roast
     sig = compute_sig(input_text, rendered_roast_text)
 
-    # Background counter increment
     background_tasks.add_task(increment_counter_sync, "served:total")
     background_tasks.add_task(increment_counter_sync, f"served:{selected_roast['id']}")
 
@@ -493,16 +496,23 @@ def generate_roast(req: RoastRequest, request: Request, background_tasks: Backgr
 
 
 @app.post("/vote")
-def record_vote(req: VoteRequest, request: Request):
-    # Rate limit: 30 per min
+def record_vote(req: VoteRequest, request: Request, background_tasks: BackgroundTasks):
     check_rate_limit(request, limit=30, window_seconds=60)
-
     load_resources()
     if req.roast_id not in roast_id_map:
         raise HTTPException(status_code=404, detail="Unknown roast ID.")
 
     key = f"vote:{req.roast_id}:{req.kind}"
     new_count = increment_counter_sync(key)
+
+    # Ingestion Trigger: Auto-promote upvoted dynamic roasts to permanent vector cache
+    target_roast = roast_id_map[req.roast_id]
+    if req.kind == "funny" and target_roast.get("category") == "dynamic_burn":
+        brag_text = target_roast.get("brag", "")
+        roast_text = target_roast.get("roast", "")
+        if brag_text and roast_text:
+            background_tasks.add_task(persist_community_roast, brag_text, roast_text, req.roast_id)
+
     return {"count": new_count}
 
 
@@ -512,14 +522,9 @@ def get_stats(roast_id: str):
     if roast_id not in roast_id_map:
         raise HTTPException(status_code=404, detail="Unknown roast ID.")
 
-    funny_count = get_counter_sync(f"vote:{roast_id}:funny")
-    meh_count = get_counter_sync(f"vote:{roast_id}:meh")
-    salt_count = get_counter_sync(f"vote:{roast_id}:salt")
-    served_count = get_counter_sync(f"served:{roast_id}")
-
     return {
-        "funny": funny_count,
-        "meh": meh_count,
-        "salt": salt_count,
-        "served": served_count,
+        "funny": get_counter_sync(f"vote:{roast_id}:funny"),
+        "meh": get_counter_sync(f"vote:{roast_id}:meh"),
+        "salt": get_counter_sync(f"vote:{roast_id}:salt"),
+        "served": get_counter_sync(f"served:{roast_id}"),
     }

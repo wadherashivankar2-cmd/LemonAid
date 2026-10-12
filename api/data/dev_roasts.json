@@ -11,7 +11,7 @@
       "my title changed on LinkedIn",
       "promoted to lead after three years"
     ],
-    "roast": "Congratulations on the new title. Same salary, more meetings, and a Slack channel you cannot mute.",
+    "roast": "New job title, same paycheck, and four more calendar invites every day.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -28,7 +28,7 @@
       "leadership loved my slide deck",
       "director commended my deliverables"
     ],
-    "roast": "Your reward for being efficient at work is more work from people who are not.",
+    "roast": "Being fast at your job just gets you other people's slack work.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -45,7 +45,7 @@
       "offer signed at a tier-one tech firm",
       "campus placement cracked"
     ],
-    "roast": "All those LeetCode hard problems just to spend eight hours a day centering a div inside Jira.",
+    "roast": "Grinding two hundred LeetCode problems just to center a button in Jira.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -81,7 +81,7 @@
       "dean's list again this semester",
       "aced every single exam this year"
     ],
-    "roast": "Frame the transcript. It is the last time an authority figure grades you on an objective scale.",
+    "roast": "Frame the transcript. Nobody will ever ask for your GPA again.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -98,7 +98,7 @@
       "thesis submitted after six months of stress",
       "dissertation uploaded to portal"
     ],
-    "roast": "A monumental accomplishment that will be read by exactly two advisors who skim chapter four.",
+    "roast": "Your entire thesis will be skimmed by two advisors who barely care.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -242,7 +242,7 @@
       "first date sparks were real",
       "met someone special for drinks"
     ],
-    "roast": "Enjoy the euphoria before they become an unread text message and a subtle personality tweak.",
+    "roast": "Enjoy the crush before they leave you on read by Thursday.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -259,7 +259,7 @@
       "anniversary dinner was romantic",
       "one year milestone with my favorite person"
     ],
-    "roast": "One full year of asking what you want for dinner and rejecting the first five options.",
+    "roast": "One whole year of arguing about dinner and picking takeout anyway.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -310,7 +310,7 @@
       "decluttered my whole living space",
       "spent Sunday cleaning the house"
     ],
-    "roast": "A pristine sanctuary that will remain tidy until you open one drawer on Tuesday.",
+    "roast": "Your room stays clean until you open one closet drawer tomorrow.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -395,7 +395,7 @@
       "side project live on Product Hunt",
       "coded a full stack tool from scratch"
     ],
-    "roast": "Another CRUD app with Next.js, Stripe checkout, and a total addressable market of your roommate.",
+    "roast": "Another Next.js side project where your only active user is your roommate.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -412,7 +412,7 @@
       "won hackathon grand prize",
       "first place trophy at hackathon"
     ],
-    "roast": "Thirty-six hours without sleep to win an oversized novelty check and a branded polyester fleece.",
+    "roast": "Thirty-six sleepless hours just to win a cheap branded fleece jacket.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -429,7 +429,7 @@
       "reunited with my friend group",
       "great evening hanging out with friends"
     ],
-    "roast": "Two hours of nostalgia and ninety minutes of talking about lower back pain and mortgage rates.",
+    "roast": "Two hours of catching up, ninety minutes discussing lower back pain.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -446,7 +446,7 @@
       "dinner party host duties completed",
       "entertained friends with homemade food"
     ],
-    "roast": "Four hours of prep, thirty minutes of eating, and a sink full of ramekins waiting for tomorrow.",
+    "roast": "Four hours cooking, fifteen minutes eating, and twenty greasy pans left over.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -463,7 +463,7 @@
       "fresh sourdough out of the oven",
       "baked artisanal crusty bread"
     ],
-    "roast": "You nurtured wild yeast for two weeks just to avoid paying four dollars at the bakery.",
+    "roast": "Two weeks feeding sour yeast to avoid paying four dollars for bread.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -480,7 +480,7 @@
       "morning specialty coffee ritual",
       "dialed in my coffee beans perfectly"
     ],
-    "roast": "Six hundred dollars in espresso equipment to produce three ounces of anxiety before 9 am.",
+    "roast": "Six hundred dollars in coffee gear just to shake before nine am.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -531,7 +531,7 @@
       "beach trip reservations confirmed",
       "vacation flights officially booked"
     ],
-    "roast": "Excited to answer Slack messages from an ergonomic patio chair instead of a desk chair.",
+    "roast": "Answering the same urgent Slack pings from a slightly warmer patio.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -551,7 +551,7 @@
     "category": "generic",
     "anchors": [],
     "paraphrases": [],
-    "roast": "Inner peace logged. The universe remains completely indifferent.",
+    "roast": "You logged your peace, but literally nobody in your contacts asked.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -561,7 +561,7 @@
     "category": "generic",
     "anchors": [],
     "paraphrases": [],
-    "roast": "Cherish this fleeting satisfaction before reality remembers your email address.",
+    "roast": "Enjoy the good mood before your unread emails ruin your afternoon.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -571,7 +571,7 @@
     "category": "generic",
     "anchors": [],
     "paraphrases": [],
-    "roast": "A modest step forward in an otherwise elaborate coping mechanism.",
+    "roast": "Celebrating a tiny win to avoid facing your actual problems.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -601,7 +601,7 @@
     "category": "generic",
     "anchors": [],
     "paraphrases": [],
-    "roast": "Recorded for posterity. Nobody will ever ask to see it.",
+    "roast": "Saved to your journal. Nobody will ever ask to read it.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -621,7 +621,7 @@
     "category": "generic",
     "anchors": [],
     "paraphrases": [],
-    "roast": "Noted. Your dopamine receptors may now resume their regular baseline.",
+    "roast": "Cool story. Now get back to whatever you were actually avoiding.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -641,7 +641,7 @@
     "category": "generic",
     "anchors": [],
     "paraphrases": [],
-    "roast": "A breakthrough in self-care. Truly revolutionary for you.",
+    "roast": "A massive breakthrough for someone with basically zero standards.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -681,7 +681,7 @@
     "category": "generic",
     "anchors": [],
     "paraphrases": [],
-    "roast": "Your gratitude has been received and processed with profound indifference.",
+    "roast": "You logged your gratitude, but nobody in your contacts list cares.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -831,7 +831,7 @@
       "Got five new peer recommendations"
     ],
     "paraphrases": [],
-    "roast": "A LinkedIn recommendation is a polite eulogy for your weekend.",
+    "roast": "A LinkedIn recommendation is just polite applause for giving up weekends.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -1176,7 +1176,7 @@
       "Hit the gym at 5:30 am sharp"
     ],
     "paraphrases": [],
-    "roast": "Waking up at dawn to be exhausted by noon is vanity.",
+    "roast": "Waking up at dawn just to crash on your couch by noon.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
@@ -2211,7 +2211,7 @@
       "Reading research papers instead of partying"
     ],
     "paraphrases": [],
-    "roast": "Reading academic papers on a Friday night is a quiet tragedy.",
+    "roast": "Reading academic papers on a Friday night is genuinely depressing.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
