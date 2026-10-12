@@ -198,40 +198,40 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between px-4 py-8 sm:py-16 selection:bg-neutral-300">
+    <main className="max-w-xl mx-auto px-4 min-h-screen flex flex-col justify-between py-12 selection:bg-neutral-200">
       {/* Top Utility Bar */}
-      <div className="w-full max-w-[640px] flex justify-end">
+      <div className="w-full flex justify-end">
         <button
           id="sound-toggle-btn"
           onClick={toggleSound}
           type="button"
           aria-label={muted ? "Unmute sounds" : "Mute sounds"}
-          className="inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground"
+          className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground"
         >
           {muted ? (
             <>
-              <VolumeX className="h-4 w-4" aria-hidden="true" />
+              <VolumeX className="h-3.5 w-3.5" aria-hidden="true" />
               <span>Sound off</span>
             </>
           ) : (
             <>
-              <Volume2 className="h-4 w-4" aria-hidden="true" />
+              <Volume2 className="h-3.5 w-3.5" aria-hidden="true" />
               <span>Sound on</span>
             </>
           )}
         </button>
       </div>
 
-      {/* Main Container */}
-      <div className="w-full max-w-[640px] flex-1 flex flex-col justify-center my-8">
+      {/* Main Content Area */}
+      <div className="w-full my-auto py-8">
         {/* States 1, 2, 3: IDLE, LOADING, REVEAL */}
         {(state === "idle" || state === "loading" || state === "reveal") && (
-          <div className="space-y-8 animate-fade-in">
-            <header className="space-y-3">
-              <h1 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight leading-tight">
+          <div className="space-y-6 animate-fade-in">
+            <header className="space-y-2">
+              <h1 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight leading-snug font-normal">
                 Take a deep breath. Reflect on the light in your life.
               </h1>
-              <p className="text-base text-muted-foreground leading-relaxed">
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                 What brought you genuine peace or pride today?
               </p>
             </header>
@@ -248,7 +248,7 @@ export default function Home() {
                     onChange={handleInputChange}
                     placeholder="Today I felt grateful for..."
                     aria-label="What brought you genuine peace or pride today?"
-                    className="w-full resize-none rounded-lg border border-border bg-card p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition disabled:opacity-85"
+                    className="w-full resize-none rounded-xl border border-border bg-white p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition shadow-sm disabled:opacity-90 disabled:bg-neutral-50"
                   />
                   <div className="mt-1.5 flex justify-between items-center text-xs text-muted-foreground">
                     <div>
@@ -266,15 +266,15 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Mood Faces Row */}
+                {/* Mood Emoji Buttons */}
                 {state === "idle" && (
-                  <div className="flex items-center gap-2 pt-1" aria-label="Select mood">
-                    <span className="text-xs text-muted-foreground pr-1">Mood:</span>
+                  <div className="flex items-center gap-1.5 pt-1" aria-label="Select mood">
+                    <span className="text-xs text-muted-foreground mr-1">Mood:</span>
                     <button
                       type="button"
                       aria-label="Joyful mood"
                       onClick={() => handleMoodClick(0, false)}
-                      className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 0 ? "text-foreground bg-muted" : ""}`}
+                      className={`p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-neutral-200/50 transition inline-flex items-center justify-center ${selectedMood === 0 ? "text-foreground bg-neutral-200/70" : ""}`}
                     >
                       <Laugh className="h-4 w-4" />
                     </button>
@@ -282,7 +282,7 @@ export default function Home() {
                       type="button"
                       aria-label="Happy mood"
                       onClick={() => handleMoodClick(1, false)}
-                      className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 1 ? "text-foreground bg-muted" : ""}`}
+                      className={`p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-neutral-200/50 transition inline-flex items-center justify-center ${selectedMood === 1 ? "text-foreground bg-neutral-200/70" : ""}`}
                     >
                       <Smile className="h-4 w-4" />
                     </button>
@@ -290,7 +290,7 @@ export default function Home() {
                       type="button"
                       aria-label="Neutral mood"
                       onClick={() => handleMoodClick(2, false)}
-                      className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 2 ? "text-foreground bg-muted" : ""}`}
+                      className={`p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-neutral-200/50 transition inline-flex items-center justify-center ${selectedMood === 2 ? "text-foreground bg-neutral-200/70" : ""}`}
                     >
                       <Meh className="h-4 w-4" />
                     </button>
@@ -298,7 +298,7 @@ export default function Home() {
                       type="button"
                       aria-label="Somber mood"
                       onClick={() => handleMoodClick(3, true)}
-                      className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 3 ? "text-foreground bg-muted" : ""}`}
+                      className={`p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-neutral-200/50 transition inline-flex items-center justify-center ${selectedMood === 3 ? "text-foreground bg-neutral-200/70" : ""}`}
                     >
                       <Frown className="h-4 w-4" />
                     </button>
@@ -306,7 +306,7 @@ export default function Home() {
                       type="button"
                       aria-label="Distressed mood"
                       onClick={() => handleMoodClick(4, true)}
-                      className={`p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition min-h-[44px] min-w-[44px] inline-flex items-center justify-center ${selectedMood === 4 ? "text-foreground bg-muted" : ""}`}
+                      className={`p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-neutral-200/50 transition inline-flex items-center justify-center ${selectedMood === 4 ? "text-foreground bg-neutral-200/70" : ""}`}
                     >
                       <Annoyed className="h-4 w-4" />
                     </button>
@@ -329,7 +329,7 @@ export default function Home() {
                   id="save-to-heart-btn"
                   type="submit"
                   disabled={input.trim().length === 0}
-                  className="w-full sm:w-auto min-w-[160px] font-medium"
+                  className="rounded-lg bg-[#1F1B16] text-[#FAF8F5] hover:bg-black/90 font-medium px-6 py-2.5 transition active:scale-[0.99]"
                 >
                   Save to Heart
                 </Button>
@@ -339,33 +339,33 @@ export default function Home() {
             {/* State: LOADING */}
             {state === "loading" && (
               <div
-                className="flex flex-col items-center justify-center space-y-4 py-8 text-center animate-fade-in"
+                className="flex flex-col items-center justify-center space-y-3 py-8 text-center animate-fade-in"
                 aria-live="polite"
               >
-                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" aria-hidden="true" />
-                <p className="text-base text-foreground font-serif tracking-wide">{loadingText}</p>
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" aria-hidden="true" />
+                <p className="text-sm text-foreground font-serif tracking-wide">{loadingText}</p>
               </div>
             )}
 
-            {/* State: REVEAL (UNDER THE INPUT AREA WITH UNDERSTATED BURN BADGE) */}
+            {/* State: REVEAL (POLISHED SUBTLE CARD BENEATH TEXTAREA) */}
             {state === "reveal" && roastData && (
               <div
                 id="roast-reveal-container"
-                className="space-y-5 rounded-xl border border-border bg-card p-6 shadow-sm animate-fade-in"
+                className="mt-6 space-y-5 rounded-xl border border-border bg-white p-6 sm:p-7 shadow-sm animate-fade-in"
                 aria-live="polite"
               >
                 <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-200/80 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-800">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 border border-neutral-200/80 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-700">
                     The Burn
                   </span>
                   <span className="text-xs text-muted-foreground font-serif italic">
-                    What your journal actually thought
+                    A moment of brutal honesty
                   </span>
                 </div>
 
-                <p className="font-serif text-xl sm:text-2xl text-foreground leading-snug">
+                <blockquote className="font-serif text-xl sm:text-2xl text-[#1F1B16] leading-snug tracking-tight border-l-2 border-[#1F1B16] pl-4 my-2">
                   &ldquo;{roastData.text}&rdquo;
-                </p>
+                </blockquote>
 
                 {/* Actions: Reflect again, Share on X, Download Card, and feedback */}
                 <RoastActions
@@ -403,7 +403,7 @@ export default function Home() {
         {state === "gentle" && roastData && (
           <div className="space-y-6 animate-fade-in" aria-live="polite">
             <div className="space-y-3">
-              <h2 className="font-serif text-2xl text-foreground">A gentle moment</h2>
+              <h2 className="font-serif text-2xl text-foreground font-normal">A gentle moment</h2>
               <p className="text-base text-muted-foreground leading-relaxed">
                 {roastData.text}
               </p>
@@ -441,7 +441,7 @@ export default function Home() {
         {state === "error" && (
           <div className="space-y-6 animate-fade-in" aria-live="assertive">
             <div className="space-y-2">
-              <h2 className="font-serif text-2xl text-foreground">Notice</h2>
+              <h2 className="font-serif text-2xl text-foreground font-normal">Notice</h2>
               <p className="text-base text-muted-foreground">
                 {errorMessage || "The universe is buffering. Try again in a moment."}
               </p>

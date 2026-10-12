@@ -6,7 +6,7 @@ import { FakeButton } from "@/components/FakeButton";
 
 export function WittyFooter() {
   return (
-    <footer className="w-full max-w-[640px] pt-8 pb-12 mt-12 text-xs text-muted-foreground border-t border-border/60 space-y-4">
+    <footer className="w-full pt-8 pb-4 text-xs text-muted-foreground border-t border-border/70 space-y-3">
       {/* Utility Real & Fake Links */}
       <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-center">
         <Link
