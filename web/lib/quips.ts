@@ -6,20 +6,31 @@
 
 export const QUIPS: Record<string, string[]> = {
   report: [
+    "Reporting this? Cry to the authorities.",
     "Crying to the referee won't make you any cooler.",
     "{salt} people cried to the ref. Still won't make you any cooler.",
     "Your report has been escalated to nobody.",
     "Have you considered a hobby?",
   ],
   meh: [
+    "Truth hurts. Buy a helmet.",
+    "Cope, seethe, and try again.",
+    "Your denial has been noted and discarded.",
     "Cry about it in your diary.",
-    "Still crying about it in your diary?",
-    "We have noted your disappointment. It joins the others.",
   ],
   funny: [
+    "Glad to be of service to your downfall.",
+    "Clicking it twice won't make it hurt less.",
+    "Validation accepted, your pride declined.",
     "Bro actually enjoyed getting trashed. Respect.",
-    "Easy. You rated this {n} times. Still respect.",
-    "Bro actually enjoyed getting trashed. Respect.",
+  ],
+  shareX: [
+    "Broadcasting your own public humiliation? Bold strategy.",
+    "Tweeting your shame won't get you followers.",
+  ],
+  downloadCard: [
+    "Saving receipts of your own execution? Frame it on your wall.",
+    "Downloaded. Keep it as a reminder of where you stand.",
   ],
   camouflagedEnter: [
     "Type something first before trying to press Enter.",
@@ -85,7 +96,10 @@ export const QUIPS: Record<string, string[]> = {
     "Thanks for your {stars} stars. We rounded it to 3.",
   ],
   mood: [
-    "Mood logged. Shared with no one. Not even you.",
+    "Mood noted. The universe remains entirely indifferent.",
+    "Logging your feelings won't fix your personality.",
+    "Recorded. Even your therapist would charge double for this.",
+    "Your mood has been filed directly into /dev/null.",
   ],
   moodSad: [
     "Take care today. No jokes from us.",

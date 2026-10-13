@@ -45,6 +45,7 @@ export default function Home() {
   const [wordCount, setWordCount] = React.useState(0);
   const [isTypingComplete, setIsTypingComplete] = React.useState(false);
   const [showSuggestionPopup, setShowSuggestionPopup] = React.useState(false);
+  const [showEgoTrollPopup, setShowEgoTrollPopup] = React.useState(false);
 
   const words = React.useMemo(() => {
     return roastData?.text ? roastData.text.trim().split(/\s+/) : [];
@@ -81,6 +82,20 @@ export default function Home() {
       return "Formulating a reality check...";
     }
     return "Waking up the server from a coma... your roast is worth the wait.";
+  };
+
+  const getInputLengthInsult = (len: number) => {
+    if (len < 3) return "Not even your delusions can be summarized in 2 letters. Type something.";
+    if (len <= 19) return "Barely a sentence. Did your battery die or your brain?";
+    if (len <= 39) return "Starting to yap. Keep going if you think anyone cares.";
+    if (len <= 49) return "A whole paragraph of self-pity incoming.";
+    if (len <= 74) return "Writing your memoirs already? Nobody's buying the book.";
+    if (len <= 99) return "Careful, you're burning precious calories typing this essay.";
+    if (len <= 119) return "Triple digits on the character count. The delusion is real.";
+    if (len <= 149) return "Wrap it up Shakespeare, this is a roast box not your diary.";
+    if (len <= 174) return "Almost hit the limit. Your coping mechanisms know no bounds.";
+    if (len <= 199) return "Running out of room. Condense your mediocrity.";
+    return "200/200 maxed out. Congratulations on wasting all available space.";
   };
 
   // Word-by-word typewriter effect on reveal
@@ -135,6 +150,7 @@ export default function Home() {
     setWordCount(0);
     setIsTypingComplete(false);
     setShowSuggestionPopup(false);
+    setShowEgoTrollPopup(false);
   };
 
   const handleMoodClick = (index: number) => {
@@ -145,6 +161,7 @@ export default function Home() {
   const handleTrollEgoClick = (e: React.MouseEvent | React.FormEvent) => {
     e.preventDefault();
     quip("trollEgo");
+    setShowEgoTrollPopup(true);
   };
 
   const handleSubmitFeedback = () => {
@@ -346,15 +363,11 @@ export default function Home() {
                   aria-label="What brought you genuine peace or pride today?"
                   className="w-full resize-none rounded-xl border border-border bg-white p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition shadow-sm disabled:opacity-90 disabled:bg-neutral-50"
                 />
-                <div className="mt-1.5 flex justify-between items-center text-xs text-muted-foreground">
-                  <div>
-                    {input.length >= 200 ? (
-                      <span className="text-neutral-500 font-medium">Gratitude is finite.</span>
-                    ) : input.length >= 180 ? (
-                      <span className="text-neutral-500 font-medium">A lot of words for very little.</span>
-                    ) : null}
-                  </div>
-                  <span className="tabular-nums">{input.length}/200</span>
+                <div className="mt-1.5 flex justify-between items-start gap-2 text-xs text-muted-foreground">
+                  <p className="text-neutral-500 font-medium text-xs leading-tight transition-opacity duration-150">
+                    {getInputLengthInsult(input.length)}
+                  </p>
+                  <span className="tabular-nums shrink-0">{input.length}/200</span>
                 </div>
               </div>
 
@@ -491,7 +504,7 @@ export default function Home() {
         </div>
       ) : null}
 
-      {/* Laughing Rat Troll Modal Overlay */}
+      {/* Hamster Meme Troll Modal Overlay */}
       {showSuggestionPopup && (
         <>
           <div
@@ -521,11 +534,11 @@ export default function Home() {
 
             <div className="my-3 flex justify-center">
               <Image
-                src="/suggestion-laugh.png"
-                alt="Laughing rat meme"
-                width={140}
-                height={140}
-                className="rounded-lg border border-neutral-700 bg-neutral-900 object-contain shadow-inner"
+                src="/Hamster_meme.jpg"
+                alt="Judging hamster meme"
+                width={128}
+                height={128}
+                className="w-32 h-32 object-contain mx-auto rounded-lg border border-neutral-700 bg-neutral-900 shadow-inner"
                 priority
               />
             </div>
@@ -536,6 +549,56 @@ export default function Home() {
               className="w-full rounded-lg bg-neutral-800 py-1.5 text-xs font-medium text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
             >
               Okay whatever
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* Destroy My Ego Honeypot Modal Overlay */}
+      {showEgoTrollPopup && (
+        <>
+          <div
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px] transition-opacity"
+            onClick={() => setShowEgoTrollPopup(false)}
+            aria-hidden="true"
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="ego-modal-title"
+            className="fixed z-50 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[320px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <h3 id="ego-modal-title" className="text-xs font-semibold text-neutral-200 leading-snug text-left">
+                Can&apos;t you see &apos;Enter&apos; right in front of you? Are you blind?
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowEgoTrollPopup(false)}
+                className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
+                aria-label="Close modal"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="my-3 flex justify-center">
+              <Image
+                src="/no_braincells.jpg"
+                alt="No Braincells"
+                width={160}
+                height={160}
+                className="mx-auto rounded-lg object-contain border border-neutral-700 bg-neutral-900"
+                priority
+              />
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setShowEgoTrollPopup(false)}
+              className="w-full rounded-lg bg-neutral-800 py-2 text-xs font-semibold text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
+            >
+              I will learn to read
             </button>
           </div>
         </>
