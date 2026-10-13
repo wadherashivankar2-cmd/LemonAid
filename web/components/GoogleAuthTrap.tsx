@@ -83,10 +83,10 @@ export function GoogleAuthTrap() {
             <div className="flex items-start justify-between gap-2">
               <div>
                 <h3 id="google-auth-trap-title" className="text-sm font-semibold text-neutral-200 leading-snug">
-                  OAuth 2.0 Error: Google Refuses to Associate
+                  Google Login Error
                 </h3>
                 <span className="text-[10px] text-red-400 font-mono tracking-wide mt-1 block">
-                  HTTP 403: PREVENTATIVE_SELF_PRESERVATION
+                  ACCESS DENIED
                 </span>
               </div>
               <button
@@ -101,7 +101,7 @@ export function GoogleAuthTrap() {
 
             <div className="my-4 rounded-xl border border-neutral-800 bg-neutral-900/60 p-4 text-center">
               <p className="font-mono text-sm text-red-400 py-1">
-                Error: Zero dignity credentials found.
+                Error: No dignity found.
               </p>
             </div>
 

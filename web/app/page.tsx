@@ -33,14 +33,6 @@ const MOODS = [
 
 const URL_REGEX = /(https?:\/\/|www\.|\.[a-z]{2,}(\/|\s|$))/i;
 
-const calculateWordCount = (text: string): number => {
-  const trimmed = text.trim();
-  if (!trimmed) return 0;
-  const rawWords = trimmed.split(/\s+/).filter(Boolean).length;
-  // Estimate words from character length (1 word ~= 5 characters) to prevent single-string spam:
-  const charEquivalentWords = Math.floor(trimmed.length / 5);
-  return Math.max(rawWords, charEquivalentWords);
-};
 
 export default function Home() {
   const [state, setState] = React.useState<AppState>("idle");
@@ -97,23 +89,14 @@ export default function Home() {
     return "Waking up the server from a coma... your roast is worth the wait.";
   };
 
-  const inputWordCount = React.useMemo(() => {
-    return calculateWordCount(input);
-  }, [input]);
-
-  const getInputWordCountInsult = (count: number) => {
-    if (count === 0) return "Not even your delusions can be summarized in 0 words. Type something.";
-    if (count >= 200) return "200 words maxed. Shut up already.";
-    if (count >= 175) return "Running out of oxygen just watching you cope.";
-    if (count >= 150) return "Pure unadulterated yapping. Stop embarrassing yourself.";
-    if (count >= 125) return "Wrap it up, Shakespeare. Nobody asked for your life story.";
-    if (count >= 100) return "A whole essay just to cope with your mediocre existence.";
-    if (count >= 75) return "Still typing? Even your therapist wouldn't listen to this much.";
-    if (count >= 50) return "The yap is astronomical. Wrap it up before we fall asleep.";
-    if (count >= 35) return "Are you drafting an autobiography? Wrap it up.";
-    if (count >= 20) return "Nobody is reading all this yapping.";
-    if (count >= 10) return "Look at you typing whole sentences. Who cares?";
-    if (count >= 3) return "Already boring. Get to the point.";
+  const getInputLengthInsult = (len: number) => {
+    if (len >= 200) return "200 characters maxed. Stop typing and click proceed.";
+    if (len >= 160) return "Pure unadulterated yapping. Almost at the cap.";
+    if (len >= 120) return "Are you drafting an autobiography? Wrap it up.";
+    if (len >= 80) return "Nobody is reading all this yapping.";
+    if (len >= 40) return "Look at you typing whole sentences. Who cares?";
+    if (len >= 15) return "Already boring. Get to the point.";
+    if (len === 0) return "Not even your delusions can fit in 0 characters. Type something.";
     return "Already boring. Get to the point.";
   };
 
@@ -168,14 +151,10 @@ export default function Home() {
       e.target.value = input;
       return;
     }
-    const wordsInVal = calculateWordCount(val);
-    if (wordsInVal > 200) {
-      if (Math.floor(val.trim().length / 5) > 200) {
-        val = val.slice(0, 1000);
-      }
-      const trimmedWords = val.trim().split(/\s+/).slice(0, 200).join(" ");
-      setInput(trimmedWords);
-      setValidationError("200 words maxed. Shut up already.");
+    if (val.length > 200) {
+      val = val.slice(0, 200);
+      setInput(val);
+      setValidationError("200 characters maxed. Stop typing and click proceed.");
       return;
     }
 
@@ -305,9 +284,8 @@ export default function Home() {
       setValidationError("Even a humblebrag needs at least 3 characters.");
       return;
     }
-    const wordsInTrimmed = calculateWordCount(trimmed);
-    if (wordsInTrimmed > 200) {
-      setValidationError("200 words maxed. Shut up already.");
+    if (trimmed.length > 200) {
+      setValidationError("200 characters maxed. Stop typing and click proceed.");
       return;
     }
 
@@ -494,6 +472,7 @@ export default function Home() {
                   id="gratitude-entry"
                   rows={4}
                   value={input}
+                  maxLength={200}
                   disabled={state === "loading"}
                   onChange={handleInputChange}
                   onPaste={handlePaste}
@@ -516,9 +495,9 @@ export default function Home() {
                 />
                 <div className="mt-1.5 flex justify-between items-start gap-2 text-xs text-muted-foreground">
                   <p className="text-neutral-500 font-medium text-xs leading-tight transition-opacity duration-150">
-                    {getInputWordCountInsult(inputWordCount)}
+                    {getInputLengthInsult(input.length)}
                   </p>
-                  <span className="tabular-nums shrink-0">{inputWordCount}/200 words</span>
+                  <span className="tabular-nums shrink-0">{input.length}/200 characters</span>
                 </div>
               </div>
 

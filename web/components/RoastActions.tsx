@@ -49,8 +49,8 @@ const FEEDBACK_MODAL_DATA = {
   },
   tribute_rejected: {
     title: "TRIBUTE REJECTED",
-    image: "/how_bro_felt.jpg",
-    alt: "Tribute rejected",
+    image: "/Superman.jpg",
+    alt: "Tribute Rejected",
     message: "Bro thinks paying respect fixes his personality. Denied.",
     dismiss: "Fair enough",
   },
@@ -355,14 +355,22 @@ export function RoastActions({
             </div>
 
             <div className="my-3 flex justify-center">
-              <Image
-                src={FEEDBACK_MODAL_DATA[activeFeedbackModal].image}
-                alt={FEEDBACK_MODAL_DATA[activeFeedbackModal].alt}
-                width={180}
-                height={180}
-                className="max-h-48 w-auto object-contain mx-auto rounded-xl border border-neutral-700 bg-neutral-900 shadow-inner"
-                priority
-              />
+              {activeFeedbackModal === "tribute_rejected" ? (
+                <img
+                  src="/Superman.jpg"
+                  alt="Tribute Rejected"
+                  className="w-full rounded-lg object-cover"
+                />
+              ) : (
+                <Image
+                  src={FEEDBACK_MODAL_DATA[activeFeedbackModal].image}
+                  alt={FEEDBACK_MODAL_DATA[activeFeedbackModal].alt}
+                  width={180}
+                  height={180}
+                  className="max-h-48 w-auto object-contain mx-auto rounded-xl border border-neutral-700 bg-neutral-900 shadow-inner"
+                  priority
+                />
+              )}
             </div>
 
             <p className="text-sm font-medium text-neutral-200 my-2 leading-relaxed px-1">
