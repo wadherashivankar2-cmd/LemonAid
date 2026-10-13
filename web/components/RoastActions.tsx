@@ -1,8 +1,10 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { quip, getClickCount } from "@/lib/quips";
+import { quip } from "@/lib/quips";
 
 interface RoastActionsProps {
   roastId?: string;
@@ -16,6 +18,38 @@ interface RoastActionsProps {
   onCharity?: () => void;
 }
 
+type FeedbackModalType = "helpful" | "unhelpful" | "report" | null;
+
+const COOK_AGAIN_MESSAGES = [
+  "Masochist detected. Back for another round of humiliation?",
+  "Addicted to emotional damage, aren't you?",
+  "Your ego didn't learn the first time?",
+];
+
+const FEEDBACK_MODAL_DATA = {
+  helpful: {
+    title: "Opinion Registered",
+    image: "/how_bro_felt.jpg",
+    alt: "How bro felt",
+    message: "Look at bro thinking his opinion matters. Nobody asked, chief.",
+    dismiss: "I will keep quiet",
+  },
+  unhelpful: {
+    title: "Feedback Logged",
+    image: "/cartoon_bean.jpg",
+    alt: "Cartoon bean",
+    message: "Cope and seethe. Your tears have been filed directly into the trash.",
+    dismiss: "I will cope harder",
+  },
+  report: {
+    title: "Report Status",
+    image: "/womp_womp.jpg",
+    alt: "Womp womp",
+    message: "Womp womp. Go cry to your mommy, because we don't care.",
+    dismiss: "Understood, womp womp",
+  },
+};
+
 export function RoastActions({
   roastId,
   onReset,
@@ -25,6 +59,26 @@ export function RoastActions({
   onPaywall,
   onCharity,
 }: RoastActionsProps) {
+  const [activeFeedbackModal, setActiveFeedbackModal] = React.useState<FeedbackModalType>(null);
+
+  // Modal ESC key listener & body scroll lock
+  React.useEffect(() => {
+    if (!activeFeedbackModal) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setActiveFeedbackModal(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow || "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [activeFeedbackModal]);
+
   const vote = async (kind: "funny" | "meh" | "salt"): Promise<{ salt?: number; n?: number } | void> => {
     if (!roastId) return;
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
@@ -49,26 +103,24 @@ export function RoastActions({
   };
 
   const handleAgain = () => {
-    const againCount = getClickCount("again") + 1;
-    if (againCount % 5 === 0) {
-      quip("againSpam");
-    }
+    const randomMsg = COOK_AGAIN_MESSAGES[Math.floor(Math.random() * COOK_AGAIN_MESSAGES.length)];
+    quip(randomMsg, undefined, { duration: 5000 });
     onReset();
   };
 
   const handleHelpful = () => {
     void vote("funny");
-    quip("funny");
+    setActiveFeedbackModal("helpful");
   };
 
   const handleUnhelpful = () => {
     void vote("meh");
-    quip("meh");
+    setActiveFeedbackModal("unhelpful");
   };
 
   const handleReport = () => {
     void vote("salt");
-    quip("report");
+    setActiveFeedbackModal("report");
     if (onReport) onReport();
   };
 
@@ -198,7 +250,7 @@ export function RoastActions({
           onClick={onPaywall}
           className="w-full py-2.5 px-4 text-xs font-semibold cursor-pointer border border-amber-500/50 dark:border-amber-500/60 bg-amber-50 dark:bg-amber-950/30 text-amber-900 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-900/50 hover:border-amber-600 dark:hover:border-amber-400 hover:text-amber-950 dark:hover:text-amber-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out text-center"
         >
-          Pay $4.99 to Erase from History 💳
+          Pay ₹499 to Erase from History 💳
         </Button>
       </div>
 
@@ -270,6 +322,74 @@ export function RoastActions({
           </button>
         </div>
       </div>
+
+      {/* Discreet Rickroll Know More Link */}
+      <div className="flex items-center justify-end w-full pt-1">
+        <a
+          id="know-more-rickroll-link"
+          href="https://youtu.be/Aq5WXmQQooo"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[11px] font-medium text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 inline-flex items-center gap-1 transition-colors select-none"
+          title="How this works"
+        >
+          <span>Know More</span>
+          <span className="text-xs">ℹ️</span>
+        </a>
+      </div>
+
+      {/* Interactive Feedback Meme Modal */}
+      {activeFeedbackModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="feedback-meme-title"
+          onClick={() => setActiveFeedbackModal(null)}
+          className="fixed inset-0 z-[100] w-screen h-screen bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-[340px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <h3 id="feedback-meme-title" className="text-xs font-semibold text-neutral-300 uppercase tracking-wider text-left">
+                {FEEDBACK_MODAL_DATA[activeFeedbackModal].title}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setActiveFeedbackModal(null)}
+                className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
+                aria-label="Close modal"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="my-3 flex justify-center">
+              <Image
+                src={FEEDBACK_MODAL_DATA[activeFeedbackModal].image}
+                alt={FEEDBACK_MODAL_DATA[activeFeedbackModal].alt}
+                width={180}
+                height={180}
+                className="max-h-48 w-auto object-contain mx-auto rounded-xl border border-neutral-700 bg-neutral-900 shadow-inner"
+                priority
+              />
+            </div>
+
+            <p className="text-sm font-medium text-neutral-200 my-2 leading-relaxed px-1">
+              {FEEDBACK_MODAL_DATA[activeFeedbackModal].message}
+            </p>
+
+            <button
+              type="button"
+              onClick={() => setActiveFeedbackModal(null)}
+              className="w-full py-2.5 px-4 text-xs font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
+            >
+              {FEEDBACK_MODAL_DATA[activeFeedbackModal].dismiss}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

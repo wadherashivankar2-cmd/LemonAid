@@ -24,11 +24,11 @@ interface RoastResponse {
 }
 
 const MOODS = [
-  { emoji: "😆", label: "Joyful", reaction: "Delusional confidence detected." },
-  { emoji: "🙂", label: "Happy", reaction: "Enjoy it before reality kicks in." },
-  { emoji: "😐", label: "Neutral", reaction: "Dead inside already, perfect." },
-  { emoji: "🙁", label: "Somber", reaction: "Pre-ordering sympathy won't save you." },
-  { emoji: "😶", label: "Speechless", reaction: "Zero thoughts, zero prospects." },
+  { emoji: "😆", label: "Ecstatic", reaction: "Laughing through the pain won't fix your hairline or your life." },
+  { emoji: "🙂", label: "Happy", reaction: "That fake smile is a desperate cry for psychiatric intervention." },
+  { emoji: "😐", label: "Neutral", reaction: "Numb and dead inside. Just like your personality." },
+  { emoji: "😟", label: "Anxious", reaction: "Anxious? Good. You should be, looking at where your life is heading." },
+  { emoji: "😳", label: "Embarrassed", reaction: "Embarrassed? You should be ashamed of your entire existence." },
 ];
 
 const REPORT_DISMISS_OPTIONS = [
@@ -54,7 +54,6 @@ export default function Home() {
   const [wordCount, setWordCount] = React.useState(0);
   const [isTypingComplete, setIsTypingComplete] = React.useState(false);
   const [showSuggestionPopup, setShowSuggestionPopup] = React.useState(false);
-  const [showEgoTrollPopup, setShowEgoTrollPopup] = React.useState(false);
   const [showReportModal, setShowReportModal] = React.useState(false);
   const [reportDismissIndex, setReportDismissIndex] = React.useState(0);
   const [showPaywallModal, setShowPaywallModal] = React.useState(false);
@@ -97,16 +96,24 @@ export default function Home() {
     return "Waking up the server from a coma... your roast is worth the wait.";
   };
 
-  const getInputLengthInsult = (len: number) => {
-    if (len === 0) return "Not even your delusions can be summarized in 0 letters. Type something.";
-    if (len < 3) return "Not even your delusions can be summarized in 2 letters. Type something.";
-    if (len < 50) return "Spit it out.";
-    if (len < 100) return "Is that all your fragile ego could muster?";
-    if (len < 250) return "Writing your memoirs already? Nobody's buying the book.";
-    if (len <= 400) return "Triple digits on the character count. The coping is real.";
-    if (len < 700) return "Writing a LinkedIn manifesto? Wrap it up.";
-    if (len < 750) return "Almost maxed out. Your self-absorption knows no bounds.";
-    return "750/750. You wrote an entire essay just to cope.";
+  const inputWordCount = React.useMemo(() => {
+    return input.trim() ? input.trim().split(/\s+/).length : 0;
+  }, [input]);
+
+  const getInputWordCountInsult = (count: number) => {
+    if (count === 0) return "Not even your delusions can be summarized in 0 words. Type something.";
+    if (count >= 200) return "200 words maxed. Shut up already.";
+    if (count >= 175) return "Running out of oxygen just watching you cope.";
+    if (count >= 150) return "Pure unadulterated yapping. Stop embarrassing yourself.";
+    if (count >= 125) return "Wrap it up, Shakespeare. Nobody asked for your life story.";
+    if (count >= 100) return "A whole essay just to cope with your mediocre existence.";
+    if (count >= 75) return "Still typing? Even your therapist wouldn't listen to this much.";
+    if (count >= 50) return "The yap is astronomical. Wrap it up before we fall asleep.";
+    if (count >= 35) return "Are you drafting an autobiography? Wrap it up.";
+    if (count >= 20) return "Nobody is reading all this yapping.";
+    if (count >= 10) return "Look at you typing whole sentences. Who cares?";
+    if (count >= 3) return "Already boring. Get to the point.";
+    return "Already boring. Get to the point.";
   };
 
   // Word-by-word typewriter effect on reveal
@@ -160,6 +167,14 @@ export default function Home() {
       e.target.value = input;
       return;
     }
+    const wordsInVal = val.trim() ? val.trim().split(/\s+/).length : 0;
+    if (wordsInVal > 200) {
+      const trimmedWords = val.trim().split(/\s+/).slice(0, 200).join(" ");
+      setInput(trimmedWords);
+      setValidationError("200 words maxed. Shut up already.");
+      return;
+    }
+
     setInput(val);
     if (validationError) {
       setValidationError(null);
@@ -181,7 +196,6 @@ export default function Home() {
     setWordCount(0);
     setIsTypingComplete(false);
     setShowSuggestionPopup(false);
-    setShowEgoTrollPopup(false);
     setShowReportModal(false);
     setShowPaywallModal(false);
     setShowCharityModal(false);
@@ -190,12 +204,6 @@ export default function Home() {
   const handleMoodClick = (index: number) => {
     setSelectedMood(index);
     quip("mood");
-  };
-
-  const handleTrollEgoClick = (e: React.MouseEvent | React.FormEvent) => {
-    e.preventDefault();
-    quip("trollEgo");
-    setShowEgoTrollPopup(true);
   };
 
   const handleSubmitFeedback = () => {
@@ -239,7 +247,6 @@ export default function Home() {
   // Modal Body Scroll Lock & Esc Key Listener
   const isAnyModalOpen =
     showSuggestionPopup ||
-    showEgoTrollPopup ||
     showReportModal ||
     showPaywallModal ||
     showCharityModal;
@@ -254,8 +261,6 @@ export default function Home() {
       if (e.key === "Escape") {
         if (showSuggestionPopup) {
           handleCloseSuggestionPopup();
-        } else if (showEgoTrollPopup) {
-          setShowEgoTrollPopup(false);
         } else if (showReportModal) {
           handleCloseReportModal();
         } else if (showPaywallModal) {
@@ -274,7 +279,6 @@ export default function Home() {
   }, [
     isAnyModalOpen,
     showSuggestionPopup,
-    showEgoTrollPopup,
     showReportModal,
     showPaywallModal,
     showCharityModal,
@@ -312,8 +316,9 @@ export default function Home() {
       setValidationError("Even a humblebrag needs at least 3 characters.");
       return;
     }
-    if (trimmed.length > 750) {
-      setValidationError("Gratitude is finite. Keep it under 750 characters.");
+    const wordsInTrimmed = trimmed.split(/\s+/).length;
+    if (wordsInTrimmed > 200) {
+      setValidationError("200 words maxed. Shut up already.");
       return;
     }
 
@@ -447,7 +452,7 @@ export default function Home() {
           </header>
 
           {/* Input Form */}
-          <form onSubmit={handleTrollEgoClick} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-3">
               {/* Interactive Witty Mood Emojis Above Textarea */}
               {state === "idle" && (
@@ -499,7 +504,6 @@ export default function Home() {
                 <textarea
                   id="gratitude-entry"
                   rows={4}
-                  maxLength={750}
                   value={input}
                   disabled={state === "loading"}
                   onChange={handleInputChange}
@@ -523,9 +527,9 @@ export default function Home() {
                 />
                 <div className="mt-1.5 flex justify-between items-start gap-2 text-xs text-muted-foreground">
                   <p className="text-neutral-500 font-medium text-xs leading-tight transition-opacity duration-150">
-                    {getInputLengthInsult(input.length)}
+                    {getInputWordCountInsult(inputWordCount)}
                   </p>
-                  <span className="tabular-nums shrink-0">{input.length}/750</span>
+                  <span className="tabular-nums shrink-0">{inputWordCount}/200 words</span>
                 </div>
               </div>
 
@@ -538,13 +542,13 @@ export default function Home() {
 
             {state === "idle" && (
               <Button
-                id="destroy-my-ego-btn"
-                type="button"
-                onClick={handleTrollEgoClick}
+                id="preserve-reflection-btn"
+                type="submit"
+                onClick={handleSubmit}
                 disabled={input.trim().length === 0}
-                className="rounded-lg bg-[#1F1B16] text-[#FAF8F5] border border-neutral-800 font-medium px-6 py-2.5 cursor-pointer shadow-sm hover:shadow-lg hover:-translate-y-1 hover:bg-neutral-700 hover:border-neutral-600 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out animate-float"
+                className="rounded-xl bg-[#2D2823] hover:bg-[#3D3630] text-[#FAF8F5] border border-[#433B33] font-medium px-6 py-2.5 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out select-none"
               >
-                Destroy My Ego
+                Preserve Reflection ✨
               </Button>
             )}
           </form>
@@ -623,9 +627,22 @@ export default function Home() {
                     The Burn
                   </span>
                 </div>
-                <span className="text-xs text-muted-foreground font-serif italic">
-                  Nobody asked, but here we are.
-                </span>
+                <div className="flex items-center gap-3">
+                  <a
+                    id="roast-header-know-more"
+                    href="https://youtu.be/Aq5WXmQQooo"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[11px] font-medium text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors inline-flex items-center gap-1 cursor-pointer select-none"
+                    title="How this works"
+                  >
+                    <span>Know More</span>
+                    <span className="text-xs">ℹ️</span>
+                  </a>
+                  <span className="text-xs text-muted-foreground font-serif italic hidden sm:inline">
+                    Nobody asked, but here we are.
+                  </span>
+                </div>
               </div>
 
               <blockquote className="font-serif text-xl sm:text-2xl text-[#1F1B16] leading-snug tracking-tight border-l-2 border-[#1F1B16] pl-4 my-2 min-h-[3rem]">
@@ -720,54 +737,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* Full-Screen Root Modal: Destroy My Ego Honeypot */}
-      {showEgoTrollPopup && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="ego-modal-title"
-          onClick={() => setShowEgoTrollPopup(false)}
-          className="fixed inset-0 z-[100] w-screen h-screen bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity"
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="relative w-[320px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
-          >
-            <div className="flex items-start justify-between gap-2">
-              <h3 id="ego-modal-title" className="text-xs font-semibold text-neutral-200 leading-snug text-left">
-                Can&apos;t you see &apos;Enter&apos; right in front of you? Are you blind?
-              </h3>
-              <button
-                type="button"
-                onClick={() => setShowEgoTrollPopup(false)}
-                className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
-                aria-label="Close modal"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
 
-            <div className="my-3 flex justify-center">
-              <Image
-                src="/no_braincells.jpg"
-                alt="No Braincells"
-                width={160}
-                height={160}
-                className="mx-auto rounded-lg object-contain border border-neutral-700 bg-neutral-900"
-                priority
-              />
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setShowEgoTrollPopup(false)}
-              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
-            >
-              I will learn to read
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Full-Screen Root Modal: Troll Report with Meow.jpg */}
       {showReportModal && (
@@ -862,7 +832,7 @@ export default function Home() {
 
             <div className="my-3 rounded-xl border border-amber-900/40 bg-amber-950/20 p-3 text-left">
               <p className="text-xs text-neutral-300 leading-relaxed">
-                Your bank blocked this charge under suspicion of pure desperation. You can&apos;t bribe your way out of reality with $4.99. This roast has already been filed into the permanent record.
+                Your bank blocked this charge under suspicion of pure desperation. You can&apos;t bribe your way out of reality with ₹499. This roast has already been filed into the permanent record.
               </p>
             </div>
 
