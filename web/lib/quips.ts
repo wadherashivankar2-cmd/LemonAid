@@ -33,14 +33,14 @@ export const QUIPS: Record<string, string[]> = {
     "Downloaded. Hang it right next to your participation trophies.",
   ],
   paywallDismiss: [
-    "Crying won't issue a refund.",
+    "Zero dollars deducted. 100% pride destroyed.",
   ],
   humiliateFriend: [
     "Misery loves company. Dragging your friends into the mud?",
     "Spreading trauma like it's your full-time job. Respect.",
   ],
   charityDismiss: [
-    "Your good deed has been permanently discarded.",
+    "Your karmic debt remains unpaid.",
   ],
   camouflagedEnter: [
     "Type something first before trying to press Enter.",

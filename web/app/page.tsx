@@ -643,7 +643,7 @@ export default function Home() {
             <button
               type="button"
               onClick={handleCloseSuggestionPopup}
-              className="w-full rounded-lg bg-neutral-800 py-1.5 text-xs font-medium text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
+              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 active:scale-95 transition-all bg-neutral-800 text-neutral-200 hover:bg-neutral-700 cursor-pointer text-center"
             >
               Okay whatever
             </button>
@@ -692,7 +692,7 @@ export default function Home() {
             <button
               type="button"
               onClick={() => setShowEgoTrollPopup(false)}
-              className="w-full rounded-lg bg-neutral-800 py-2 text-xs font-semibold text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
+              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 active:scale-95 transition-all bg-neutral-800 text-neutral-200 hover:bg-neutral-700 cursor-pointer text-center"
             >
               I will learn to read
             </button>
@@ -745,7 +745,7 @@ export default function Home() {
             <button
               type="button"
               onClick={handleCloseReportModal}
-              className="w-full rounded-lg bg-neutral-800 py-1.5 text-xs font-semibold text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
+              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 active:scale-95 transition-all bg-neutral-800 text-neutral-200 hover:bg-neutral-700 cursor-pointer text-center"
             >
               {REPORT_DISMISS_OPTIONS[reportDismissIndex]}
             </button>
@@ -753,7 +753,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* Full-Screen Root Modal: Pay $4.99 to Erase Paywall Honeypot */}
+      {/* Full-Screen Root Modal: Pay $4.99 to Erase Paywall Honeypot with mewing-hamster.jpg */}
       {showPaywallModal && (
         <div
           role="dialog"
@@ -764,11 +764,11 @@ export default function Home() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative w-[340px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
+            className="relative w-[350px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
           >
             <div className="flex items-start justify-between gap-2">
               <h3 id="paywall-modal-title" className="text-sm font-semibold text-neutral-200 leading-snug text-left">
-                Transaction Failed: Payment Declined by Reality.
+                Card Declined: Insufficient Humility.
               </h3>
               <button
                 type="button"
@@ -780,24 +780,35 @@ export default function Home() {
               </button>
             </div>
 
-            <div className="my-4 rounded-xl border border-amber-900/40 bg-amber-950/20 p-3.5 text-left">
+            <div className="my-2 flex justify-center">
+              <Image
+                src="/mewing-hamster.jpg"
+                alt="Mewing hamster"
+                width={144}
+                height={144}
+                className="w-36 h-36 object-contain mx-auto rounded-xl my-2 border border-neutral-800 bg-neutral-900 shadow-inner"
+                priority
+              />
+            </div>
+
+            <div className="my-3 rounded-xl border border-amber-900/40 bg-amber-950/20 p-3 text-left">
               <p className="text-xs text-neutral-300 leading-relaxed">
-                Your bank flagged this transaction for severe emotional fraud. Money can buy a lot of things, but it can&apos;t un-embarrass you. This roast is permanently etched into memory.
+                Your bank blocked this charge under suspicion of pure desperation. You can&apos;t bribe your way out of reality with $4.99. This roast has already been filed into the permanent record.
               </p>
             </div>
 
             <button
               type="button"
               onClick={handleClosePaywallModal}
-              className="w-full rounded-lg bg-neutral-800 py-2 text-xs font-semibold text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
+              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 active:scale-95 transition-all bg-neutral-800 text-neutral-200 hover:bg-neutral-700 cursor-pointer text-center"
             >
-              I will live with my shame
+              Take my dignity, keep the change
             </button>
           </div>
         </div>
       )}
 
-      {/* Full-Screen Root Modal: Fake Charity Honeypot */}
+      {/* Full-Screen Root Modal: Fake Charity Honeypot with hamster-reaction.jpg */}
       {showCharityModal && (
         <div
           role="dialog"
@@ -808,11 +819,11 @@ export default function Home() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative w-[340px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
+            className="relative w-[350px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
           >
             <div className="flex items-start justify-between gap-2">
               <h3 id="charity-modal-title" className="text-sm font-semibold text-neutral-200 leading-snug text-left">
-                Charity? Look in the mirror.
+                Charity? You&apos;re the one in need of aid.
               </h3>
               <button
                 type="button"
@@ -824,40 +835,75 @@ export default function Home() {
               </button>
             </div>
 
-            <div className="my-4 rounded-xl border border-neutral-800 bg-neutral-900/50 p-3.5 text-left">
+            <div className="my-2 flex justify-center">
+              <Image
+                src="/hamster-reaction.jpg"
+                alt="Hamster reaction"
+                width={144}
+                height={144}
+                className="w-36 h-36 object-contain mx-auto rounded-xl my-2 border border-neutral-800 bg-neutral-900 shadow-inner"
+                priority
+              />
+            </div>
+
+            <div className="my-3 rounded-xl border border-neutral-800 bg-neutral-900/50 p-3 text-left">
               <p className="text-xs text-neutral-300 leading-relaxed">
-                Charity starts at home, and right now your self-awareness is operating at a 99% deficit. You ARE the charity case. The only nonprofit that can help you is a therapist working overtime.
+                Charity starts where self-awareness ends, and right now your ego is in a trillion-dollar deficit. Even a GoFundMe couldn&apos;t subsidize the sheer lack of shame on display here.
               </p>
             </div>
 
             <button
               type="button"
               onClick={handleCloseCharityModal}
-              className="w-full rounded-lg bg-neutral-800 py-2 text-xs font-semibold text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
+              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 active:scale-95 transition-all bg-neutral-800 text-neutral-200 hover:bg-neutral-700 cursor-pointer text-center"
             >
-              I remain emotionally bankrupt
+              I will remain emotionally destitute
             </button>
           </div>
         </div>
       )}
 
-      {/* Ambient Mocking Side Borders / Margins (Desktop 2xl+) */}
+      {/* Satirical Left Side Panel: Clinical Ego Quarantine Clipboard (Visible on Desktop xl+) */}
       <aside
         aria-hidden="true"
-        className="hidden 2xl:flex fixed left-0 top-0 bottom-0 w-16 border-r border-dashed border-neutral-200 items-center justify-center select-none pointer-events-none z-10"
+        className="hidden xl:flex fixed left-4 top-1/2 -translate-y-1/2 w-48 border border-dashed border-neutral-300 dark:border-neutral-800 p-3.5 rounded-xl bg-neutral-50/80 dark:bg-neutral-900/60 backdrop-blur-xs text-[11px] text-neutral-500 font-mono shadow-sm flex-col gap-2.5 select-none pointer-events-none z-10"
       >
-        <span className="text-[10px] tracking-widest text-neutral-300 uppercase font-mono [writing-mode:vertical-rl] rotate-180 select-none opacity-40 pointer-events-none">
-          [ EGO REHABILITATION WARD // DO NOT FEED THE NARCISSIST ]
-        </span>
+        <div className="flex items-center gap-1.5 font-bold tracking-tight text-neutral-800 dark:text-neutral-300 text-[11px]">
+          <span>⚠️</span>
+          <span>EGO QUARANTINE ZONE</span>
+        </div>
+        <p className="text-[10px] leading-relaxed text-neutral-600 dark:text-neutral-400 font-sans">
+          &ldquo;Subject shows elevated levels of delusion. Do not administer sympathy.&rdquo;
+        </p>
+        <div className="rounded-md border border-neutral-200/80 dark:border-neutral-800/80 bg-white/70 dark:bg-black/30 p-2 space-y-1 text-[10px] font-mono">
+          <div className="flex justify-between text-neutral-600 dark:text-neutral-400">
+            <span>DELUSION INDEX:</span>
+            <span className="font-bold text-red-600 dark:text-red-400">99.8%</span>
+          </div>
+          <div className="flex justify-between text-neutral-600 dark:text-neutral-400">
+            <span>RECOVERY CHANCE:</span>
+            <span className="font-bold text-neutral-700 dark:text-neutral-300">0.0%</span>
+          </div>
+        </div>
       </aside>
 
+      {/* Satirical Right Side Panel: Victim Support Advisory Ticket (Visible on Desktop xl+) */}
       <aside
         aria-hidden="true"
-        className="hidden 2xl:flex fixed right-0 top-0 bottom-0 w-16 border-l border-dashed border-neutral-200 items-center justify-center select-none pointer-events-none z-10"
+        className="hidden xl:flex fixed right-4 top-1/2 -translate-y-1/2 w-48 border border-dashed border-neutral-300 dark:border-neutral-800 p-3.5 rounded-xl bg-neutral-50/80 dark:bg-neutral-900/60 backdrop-blur-xs text-[11px] text-neutral-500 font-mono shadow-sm flex-col gap-2.5 select-none pointer-events-none z-10"
       >
-        <span className="text-[10px] tracking-widest text-neutral-300 uppercase font-mono [writing-mode:vertical-rl] select-none opacity-40 pointer-events-none">
-          [ DELUSION LEVEL: CRITICAL // ZERO SYMPATHY GUARANTEED ]
-        </span>
+        <div className="flex items-center gap-1.5 font-bold tracking-tight text-neutral-800 dark:text-neutral-300 text-[11px]">
+          <span>📋</span>
+          <span>VICTIM SUPPORT UNIT</span>
+        </div>
+        <p className="text-[10px] leading-relaxed text-neutral-600 dark:text-neutral-400 font-sans">
+          If this roast caused emotional damage, please consult a mirror.
+        </p>
+        <div className="rounded-md border border-neutral-200/80 dark:border-neutral-800/80 bg-white/70 dark:bg-black/30 p-2 space-y-0.5 text-[10px] font-mono text-neutral-600 dark:text-neutral-400">
+          <div>• Step 1: Log off</div>
+          <div>• Step 2: Touch grass</div>
+          <div>• Step 3: Accept it</div>
+        </div>
       </aside>
 
       {/* Off-screen RoastCard for PNG Export */}

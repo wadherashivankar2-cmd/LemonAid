@@ -93,14 +93,14 @@ export function RoastActions({
   };
 
   return (
-    <div className="pt-6 space-y-4">
-      {/* Primary Action Row */}
-      <div className="flex flex-wrap items-center gap-2.5">
+    <div className="pt-6 my-4 space-y-5">
+      {/* Primary Action Cluster with spacious padding and gap */}
+      <div className="flex flex-wrap items-center gap-3">
         <Button
           id="reflect-again-btn"
           variant="default"
           onClick={handleAgain}
-          className="font-medium cursor-pointer"
+          className="py-2.5 px-4 text-xs font-semibold cursor-pointer active:scale-95 transition-all"
         >
           Cook Me Again
         </Button>
@@ -110,7 +110,7 @@ export function RoastActions({
             id="share-x-btn"
             variant="outline"
             onClick={handleShare}
-            className="cursor-pointer"
+            className="py-2.5 px-4 text-xs font-semibold cursor-pointer active:scale-95 transition-all"
           >
             Share on X
           </Button>
@@ -120,18 +120,9 @@ export function RoastActions({
           id="humiliate-friend-btn"
           variant="outline"
           onClick={handleHumiliateFriend}
-          className="cursor-pointer text-xs"
+          className="py-2.5 px-4 text-xs font-semibold cursor-pointer active:scale-95 transition-all"
         >
           Humiliate a Friend 🤝
-        </Button>
-
-        <Button
-          id="paywall-erase-btn"
-          variant="outline"
-          onClick={onPaywall}
-          className="cursor-pointer border-amber-500/50 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10 hover:border-amber-500 active:scale-95 transition-all text-xs font-semibold"
-        >
-          Pay $4.99 to Erase from History 💳
         </Button>
 
         {onDownloadCard && (
@@ -139,22 +130,34 @@ export function RoastActions({
             id="download-card-btn"
             variant="outline"
             onClick={handleDownload}
-            className="cursor-pointer text-xs"
+            className="py-2.5 px-4 text-xs font-semibold cursor-pointer active:scale-95 transition-all"
           >
             Claim Certificate of Failure 📜
           </Button>
         )}
       </div>
 
+      {/* Paywall Honeypot: Dedicated Comfortable Row with Gold Accent */}
+      <div className="pt-1">
+        <Button
+          id="paywall-erase-btn"
+          variant="outline"
+          onClick={onPaywall}
+          className="w-full sm:w-auto py-2.5 px-4.5 text-xs font-semibold cursor-pointer border-amber-500/60 bg-amber-500/5 text-amber-800 dark:text-amber-300 hover:bg-amber-500/15 hover:border-amber-500 active:scale-95 transition-all shadow-xs"
+        >
+          Pay $4.99 to Erase from History 💳
+        </Button>
+      </div>
+
       {/* Deadpan Feedback Controls (Never Disabled) */}
-      <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-border">
+      <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-border">
         <Button
           id="vote-helpful-btn"
           variant="ghost"
           size="sm"
           type="button"
           onClick={handleHelpful}
-          className="text-muted-foreground hover:text-foreground hover:bg-muted text-xs cursor-pointer"
+          className="py-2 px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer active:scale-95 transition-all"
         >
           Helpful
         </Button>
@@ -165,7 +168,7 @@ export function RoastActions({
           size="sm"
           type="button"
           onClick={handleUnhelpful}
-          className="text-muted-foreground hover:text-foreground hover:bg-muted text-xs cursor-pointer"
+          className="py-2 px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-muted cursor-pointer active:scale-95 transition-all"
         >
           Not helpful
         </Button>
@@ -176,14 +179,14 @@ export function RoastActions({
           size="sm"
           type="button"
           onClick={handleReport}
-          className="text-muted-foreground hover:text-[#C62828] hover:bg-muted text-xs cursor-pointer"
+          className="py-2 px-3 text-xs text-muted-foreground hover:text-[#C62828] hover:bg-muted cursor-pointer active:scale-95 transition-all"
         >
           Report
         </Button>
       </div>
 
-      {/* Fake Charity Honeypot Link */}
-      <div className="pt-1 text-left">
+      {/* Fake Charity Honeypot Link with generous spacing */}
+      <div className="mt-5 pt-1 text-left">
         <button
           id="donate-charity-btn"
           type="button"
