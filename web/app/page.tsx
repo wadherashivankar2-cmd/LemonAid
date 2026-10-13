@@ -52,10 +52,10 @@ export default function Home() {
 
   const abortControllerRef = React.useRef<AbortController | null>(null);
 
-  // Initialize sound mute preference and wake backend
+  // Initialize sound mute preference and wake backend (pre-warm Render container)
   React.useEffect(() => {
     setMutedState(isMuted());
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:7860";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
     fetch(`${apiUrl}/health`, { mode: "cors" }).catch(() => { });
   }, []);
 
@@ -152,6 +152,11 @@ export default function Home() {
     setShowSuggestionPopup(true);
   };
 
+  const handleCloseSuggestionPopup = () => {
+    setShowSuggestionPopup(false);
+    quip("closeSuggestion");
+  };
+
   const handleCamouflagedEnter = () => {
     if (!input.trim()) {
       quip("camouflagedEnter");
@@ -182,7 +187,7 @@ export default function Home() {
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:7860";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
 
     try {
       const response = await fetch(`${apiUrl}/roast`, {
@@ -403,21 +408,21 @@ export default function Home() {
           </div>
         )}
 
-        {/* Floating Side-Docked Suggestions Widget (Output / Reveal Only) */}
+        {/* Suggestions Widget (Docked cleanly below card, or pinned to right margin on >=1400px) */}
         {state === "reveal" && roastData && (
           <aside
             id="suggestions-side-widget"
             aria-label="Suggestions box"
-            className="md:fixed md:right-6 md:top-1/2 md:-translate-y-1/2 md:z-40 md:w-60 w-full mt-3 md:mt-0 animate-fade-in"
+            className="w-full mt-4 min-[1400px]:fixed min-[1400px]:right-8 min-[1400px]:top-1/2 min-[1400px]:-translate-y-1/2 min-[1400px]:z-40 min-[1400px]:w-60 min-[1400px]:mt-0 animate-fade-in"
           >
-            <div className="flex flex-row md:flex-col items-center md:items-start justify-between md:justify-center gap-2.5 p-3 sm:p-3.5 rounded-xl border border-neutral-800 bg-[#14120E] text-[#FAF8F5] shadow-lg">
+            <div className="flex flex-row min-[1400px]:flex-col items-center min-[1400px]:items-start justify-between min-[1400px]:justify-center gap-2.5 p-3 sm:p-3.5 rounded-xl border border-neutral-800 bg-[#14120E] text-[#FAF8F5] shadow-lg">
               <div className="flex items-center gap-2.5 min-w-0">
                 <span className="text-base shrink-0" role="img" aria-label="suggestion box">💡</span>
                 <div>
                   <p className="text-xs font-medium text-neutral-200">
                     Have a suggestion?
                   </p>
-                  <p className="text-[11px] text-neutral-400 hidden md:block">
+                  <p className="text-[11px] text-neutral-400 hidden min-[1400px]:block">
                     Reviewed with zero care.
                   </p>
                 </div>
@@ -426,7 +431,7 @@ export default function Home() {
                 id="suggestions-widget-btn"
                 type="button"
                 onClick={handleSubmitFeedback}
-                className="w-auto md:w-full px-3 py-1.5 text-xs font-semibold text-neutral-900 bg-[#FAF8F5] hover:bg-neutral-200 active:scale-95 rounded-lg transition shrink-0 cursor-pointer text-center shadow-xs"
+                className="w-auto min-[1400px]:w-full px-3 py-1.5 text-xs font-semibold text-neutral-900 bg-[#FAF8F5] hover:bg-neutral-200 active:scale-95 rounded-lg transition shrink-0 cursor-pointer text-center shadow-xs"
               >
                 Submit Feedback
               </button>
@@ -438,23 +443,23 @@ export default function Home() {
         {showSuggestionPopup && (
           <>
             <div
-              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px] transition-opacity"
-              onClick={() => setShowSuggestionPopup(false)}
+              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-[2px] transition-opacity"
+              onClick={handleCloseSuggestionPopup}
               aria-hidden="true"
             />
             <div
               role="dialog"
               aria-modal="true"
               aria-labelledby="suggestion-modal-title"
-              className="fixed z-50 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-6 w-[280px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-4 text-[#FAF8F5] shadow-2xl animate-fade-in"
+              className="fixed z-50 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[280px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-4 text-[#FAF8F5] shadow-2xl animate-fade-in"
             >
               <div className="flex items-start justify-between gap-2">
                 <p id="suggestion-modal-title" className="text-xs font-semibold text-neutral-200 leading-snug">
-                  Bold of you to assume anyone cares about your opinion.
+                  Bold of you to assume anyone cares about your suggestion.
                 </p>
                 <button
                   type="button"
-                  onClick={() => setShowSuggestionPopup(false)}
+                  onClick={handleCloseSuggestionPopup}
                   className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
                   aria-label="Close modal"
                 >
@@ -475,7 +480,7 @@ export default function Home() {
 
               <button
                 type="button"
-                onClick={() => setShowSuggestionPopup(false)}
+                onClick={handleCloseSuggestionPopup}
                 className="w-full rounded-lg bg-neutral-800 py-1.5 text-xs font-medium text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
               >
                 Okay whatever

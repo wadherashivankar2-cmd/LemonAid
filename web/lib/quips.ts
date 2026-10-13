@@ -25,15 +25,20 @@ export const QUIPS: Record<string, string[]> = {
     "Type something first before trying to press Enter.",
   ],
   trollEgo: [
-    "You really thought clicking the giant obvious button would work? Go find 'Enter' in the text above, genius.",
-    "Imagine clicking a giant button like an NPC. Look closely at the text above.",
-    "Button clicked. Ego intact. Find 'Enter' in the instructions above to actually get roasted.",
+    "Can't you see 'Enter' right in front of you? Open your eyes.",
+    "It literally says 'Enter' right above. Are you blind?",
+    "Imagine clicking a giant button like an NPC. It literally says 'Enter' right above.",
   ],
   suggestions: [
     "The suggestion box is located in your nearest trash bin.",
     "Bold of you to assume anyone asked for your input.",
     "Your opinion has been successfully forwarded to /dev/null.",
     "Keep your suggestions in the drafts where they belong.",
+  ],
+  closeSuggestion: [
+    "Glad we agree your idea was trash.",
+    "Cope harder.",
+    "Don't let the door hit your ego on the way out.",
   ],
   human: [
     "All of our humans are in standups. Estimated wait: 6 to 8 business years.",
