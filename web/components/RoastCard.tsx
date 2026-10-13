@@ -39,10 +39,10 @@ export function RoastCard({ brag, roast, className = "" }: RoastCardProps) {
       >
         <div className="flex items-center justify-between mb-2">
           <span
-            className="text-xs font-bold tracking-wider uppercase"
+            className="text-[11px] font-bold tracking-wider uppercase"
             style={{ color: "#C62828" }}
           >
-            The burn
+            OFFICIAL CERTIFICATE OF MEDIOCRE EXISTENCE
           </span>
           <span className="text-[11px] text-neutral-400 font-serif italic">
             Nobody asked, but here we are.

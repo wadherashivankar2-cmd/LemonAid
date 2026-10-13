@@ -12,6 +12,8 @@ interface RoastActionsProps {
   onShareX?: () => void;
   onDownloadCard?: () => void;
   onReport?: () => void;
+  onPaywall?: () => void;
+  onCharity?: () => void;
 }
 
 export function RoastActions({
@@ -20,6 +22,8 @@ export function RoastActions({
   onShareX,
   onDownloadCard,
   onReport,
+  onPaywall,
+  onCharity,
 }: RoastActionsProps) {
   const vote = async (kind: "funny" | "meh" | "salt"): Promise<{ salt?: number; n?: number } | void> => {
     if (!roastId) return;
@@ -73,6 +77,16 @@ export function RoastActions({
     if (onShareX) onShareX();
   };
 
+  const handleHumiliateFriend = () => {
+    quip("humiliateFriend");
+    const text = encodeURIComponent(
+      "I thought I was doing something with my life until Mr. Roast completely destroyed me. Go get humbled: https://mr-roast-ten.vercel.app"
+    );
+    if (typeof window !== "undefined") {
+      window.open(`https://api.whatsapp.com/send?text=${text}`, "_blank", "noopener,noreferrer");
+    }
+  };
+
   const handleDownload = () => {
     quip("downloadCard");
     if (onDownloadCard) onDownloadCard();
@@ -102,14 +116,32 @@ export function RoastActions({
           </Button>
         )}
 
+        <Button
+          id="humiliate-friend-btn"
+          variant="outline"
+          onClick={handleHumiliateFriend}
+          className="cursor-pointer text-xs"
+        >
+          Humiliate a Friend 🤝
+        </Button>
+
+        <Button
+          id="paywall-erase-btn"
+          variant="outline"
+          onClick={onPaywall}
+          className="cursor-pointer border-amber-500/50 text-amber-700 dark:text-amber-300 hover:bg-amber-500/10 hover:border-amber-500 active:scale-95 transition-all text-xs font-semibold"
+        >
+          Pay $4.99 to Erase from History 💳
+        </Button>
+
         {onDownloadCard && (
           <Button
             id="download-card-btn"
             variant="outline"
             onClick={handleDownload}
-            className="cursor-pointer"
+            className="cursor-pointer text-xs"
           >
-            Download Card
+            Claim Certificate of Failure 📜
           </Button>
         )}
       </div>
@@ -148,6 +180,18 @@ export function RoastActions({
         >
           Report
         </Button>
+      </div>
+
+      {/* Fake Charity Honeypot Link */}
+      <div className="pt-1 text-left">
+        <button
+          id="donate-charity-btn"
+          type="button"
+          onClick={onCharity}
+          className="text-xs text-muted-foreground hover:text-foreground underline-offset-4 hover:underline transition-colors cursor-pointer select-none"
+        >
+          Donate to Charity (Offset Karmic Debt) 🕊️
+        </button>
       </div>
     </div>
   );

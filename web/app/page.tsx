@@ -54,6 +54,8 @@ export default function Home() {
   const [showEgoTrollPopup, setShowEgoTrollPopup] = React.useState(false);
   const [showReportModal, setShowReportModal] = React.useState(false);
   const [reportDismissIndex, setReportDismissIndex] = React.useState(0);
+  const [showPaywallModal, setShowPaywallModal] = React.useState(false);
+  const [showCharityModal, setShowCharityModal] = React.useState(false);
 
   const words = React.useMemo(() => {
     return roastData?.text ? roastData.text.trim().split(/\s+/) : [];
@@ -160,6 +162,8 @@ export default function Home() {
     setShowSuggestionPopup(false);
     setShowEgoTrollPopup(false);
     setShowReportModal(false);
+    setShowPaywallModal(false);
+    setShowCharityModal(false);
   };
 
   const handleMoodClick = (index: number) => {
@@ -191,6 +195,24 @@ export default function Home() {
     setShowReportModal(false);
     setReportDismissIndex((prev) => (prev + 1) % REPORT_DISMISS_OPTIONS.length);
     quip("reportDismiss");
+  };
+
+  const handleOpenPaywallModal = () => {
+    setShowPaywallModal(true);
+  };
+
+  const handleClosePaywallModal = () => {
+    setShowPaywallModal(false);
+    quip("paywallDismiss");
+  };
+
+  const handleOpenCharityModal = () => {
+    setShowCharityModal(true);
+  };
+
+  const handleCloseCharityModal = () => {
+    setShowCharityModal(false);
+    quip("charityDismiss");
   };
 
   const handleCamouflagedEnter = () => {
@@ -498,6 +520,8 @@ export default function Home() {
                   onDownloadCard={handleDownloadCard}
                   onShareX={handleShareX}
                   onReport={handleOpenReportModal}
+                  onPaywall={handleOpenPaywallModal}
+                  onCharity={handleOpenCharityModal}
                 />
               </div>
             </div>
@@ -670,6 +694,94 @@ export default function Home() {
               className="w-full rounded-lg bg-neutral-800 py-1.5 text-xs font-semibold text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
             >
               {REPORT_DISMISS_OPTIONS[reportDismissIndex]}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Full-Screen Root Modal: Pay $4.99 to Erase Paywall Honeypot */}
+      {showPaywallModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="paywall-modal-title"
+          onClick={handleClosePaywallModal}
+          className="fixed inset-0 z-[100] w-screen h-screen bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-[340px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <h3 id="paywall-modal-title" className="text-sm font-semibold text-neutral-200 leading-snug text-left">
+                Transaction Failed: Payment Declined by Reality.
+              </h3>
+              <button
+                type="button"
+                onClick={handleClosePaywallModal}
+                className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
+                aria-label="Close modal"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="my-4 rounded-xl border border-amber-900/40 bg-amber-950/20 p-3.5 text-left">
+              <p className="text-xs text-neutral-300 leading-relaxed">
+                Your bank flagged this transaction for severe emotional fraud. Money can buy a lot of things, but it can&apos;t un-embarrass you. This roast is permanently etched into memory.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleClosePaywallModal}
+              className="w-full rounded-lg bg-neutral-800 py-2 text-xs font-semibold text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
+            >
+              I will live with my shame
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Full-Screen Root Modal: Fake Charity Honeypot */}
+      {showCharityModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="charity-modal-title"
+          onClick={handleCloseCharityModal}
+          className="fixed inset-0 z-[100] w-screen h-screen bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-[340px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <h3 id="charity-modal-title" className="text-sm font-semibold text-neutral-200 leading-snug text-left">
+                Charity? Look in the mirror.
+              </h3>
+              <button
+                type="button"
+                onClick={handleCloseCharityModal}
+                className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
+                aria-label="Close modal"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="my-4 rounded-xl border border-neutral-800 bg-neutral-900/50 p-3.5 text-left">
+              <p className="text-xs text-neutral-300 leading-relaxed">
+                Charity starts at home, and right now your self-awareness is operating at a 99% deficit. You ARE the charity case. The only nonprofit that can help you is a therapist working overtime.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleCloseCharityModal}
+              className="w-full rounded-lg bg-neutral-800 py-2 text-xs font-semibold text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
+            >
+              I remain emotionally bankrupt
             </button>
           </div>
         </div>

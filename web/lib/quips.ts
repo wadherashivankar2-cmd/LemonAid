@@ -29,8 +29,18 @@ export const QUIPS: Record<string, string[]> = {
     "Tweeting your shame won't get you followers.",
   ],
   downloadCard: [
-    "Saving receipts of your own execution? Frame it on your wall.",
-    "Downloaded. Keep it as a reminder of where you stand.",
+    "Generating high-res proof of your disappointment. Print it out and show your parents.",
+    "Downloaded. Hang it right next to your participation trophies.",
+  ],
+  paywallDismiss: [
+    "Crying won't issue a refund.",
+  ],
+  humiliateFriend: [
+    "Misery loves company. Dragging your friends into the mud?",
+    "Spreading trauma like it's your full-time job. Respect.",
+  ],
+  charityDismiss: [
+    "Your good deed has been permanently discarded.",
   ],
   camouflagedEnter: [
     "Type something first before trying to press Enter.",
