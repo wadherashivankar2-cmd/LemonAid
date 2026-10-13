@@ -215,9 +215,56 @@ export default function Home() {
     quip("charityDismiss");
   };
 
+  // Modal Body Scroll Lock & Esc Key Listener
+  const isAnyModalOpen =
+    showSuggestionPopup ||
+    showEgoTrollPopup ||
+    showReportModal ||
+    showPaywallModal ||
+    showCharityModal;
+
+  React.useEffect(() => {
+    if (!isAnyModalOpen) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (showSuggestionPopup) {
+          handleCloseSuggestionPopup();
+        } else if (showEgoTrollPopup) {
+          setShowEgoTrollPopup(false);
+        } else if (showReportModal) {
+          handleCloseReportModal();
+        } else if (showPaywallModal) {
+          handleClosePaywallModal();
+        } else if (showCharityModal) {
+          handleCloseCharityModal();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow || "";
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [
+    isAnyModalOpen,
+    showSuggestionPopup,
+    showEgoTrollPopup,
+    showReportModal,
+    showPaywallModal,
+    showCharityModal,
+  ]);
+
   const handleCamouflagedEnter = () => {
-    if (!input.trim()) {
+    if (state === "loading") return;
+    const trimmed = input.trim();
+    if (trimmed.length < 3) {
       quip("camouflagedEnter");
+      setValidationError("Even a humblebrag needs at least 3 characters.");
     } else {
       handleSubmit();
     }
@@ -334,8 +381,9 @@ export default function Home() {
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
               <button
                 type="button"
+                disabled={state === "loading"}
                 onClick={handleCamouflagedEnter}
-                className="text-muted-foreground font-normal p-0 m-0 bg-transparent border-0 outline-none focus:outline-none cursor-pointer inline select-none"
+                className="text-muted-foreground font-normal p-0 m-0 bg-transparent border-0 outline-none focus:outline-none cursor-pointer inline select-none disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Enter
               </button>{" "}
@@ -400,6 +448,12 @@ export default function Home() {
                   value={input}
                   disabled={state === "loading"}
                   onChange={handleInputChange}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleCamouflagedEnter();
+                    }
+                  }}
                   placeholder="Today I felt grateful for..."
                   aria-label="What brought you genuine peace or pride today?"
                   className="w-full resize-none rounded-xl border border-border bg-white p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition shadow-sm disabled:opacity-90 disabled:bg-neutral-50"

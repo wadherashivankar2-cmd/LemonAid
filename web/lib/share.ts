@@ -17,7 +17,7 @@ export function getCurrentShare(): SharePayload | null {
   return activeShare;
 }
 
-export async function downloadCard(elementId = "roast-card"): Promise<void> {
+export async function downloadCard(elementId = "roast-card", filename = "Certificate_of_Failure.png"): Promise<void> {
   const node = document.getElementById(elementId);
   if (!node) {
     quip("help", { n: "Card element not found" });
@@ -36,7 +36,7 @@ export async function downloadCard(elementId = "roast-card"): Promise<void> {
     });
 
     const link = document.createElement("a");
-    link.download = "my-gratitude.png";
+    link.download = filename;
     link.href = dataUrl;
     document.body.appendChild(link);
     link.click();
