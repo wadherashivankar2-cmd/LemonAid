@@ -33,6 +33,15 @@ const MOODS = [
 
 const URL_REGEX = /(https?:\/\/|www\.|\.[a-z]{2,}(\/|\s|$))/i;
 
+const calculateWordCount = (text: string): number => {
+  const trimmed = text.trim();
+  if (!trimmed) return 0;
+  const rawWords = trimmed.split(/\s+/).filter(Boolean).length;
+  // Estimate words from character length (1 word ~= 5 characters) to prevent single-string spam:
+  const charEquivalentWords = Math.floor(trimmed.length / 5);
+  return Math.max(rawWords, charEquivalentWords);
+};
+
 export default function Home() {
   const [state, setState] = React.useState<AppState>("idle");
   const [input, setInput] = React.useState("");
@@ -89,7 +98,7 @@ export default function Home() {
   };
 
   const inputWordCount = React.useMemo(() => {
-    return input.trim() ? input.trim().split(/\s+/).length : 0;
+    return calculateWordCount(input);
   }, [input]);
 
   const getInputWordCountInsult = (count: number) => {
@@ -147,7 +156,7 @@ export default function Home() {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const val = e.target.value;
+    let val = e.target.value;
     const delta = val.length - input.length;
     // Fallback guard: reject sudden chunk insertions without normal keystroke cadence (>20 chars)
     // Allows mobile autocorrect, virtual keyboard suggestions, and swipe gestures
@@ -159,8 +168,11 @@ export default function Home() {
       e.target.value = input;
       return;
     }
-    const wordsInVal = val.trim() ? val.trim().split(/\s+/).length : 0;
+    const wordsInVal = calculateWordCount(val);
     if (wordsInVal > 200) {
+      if (Math.floor(val.trim().length / 5) > 200) {
+        val = val.slice(0, 1000);
+      }
       const trimmedWords = val.trim().split(/\s+/).slice(0, 200).join(" ");
       setInput(trimmedWords);
       setValidationError("200 words maxed. Shut up already.");
@@ -293,7 +305,7 @@ export default function Home() {
       setValidationError("Even a humblebrag needs at least 3 characters.");
       return;
     }
-    const wordsInTrimmed = trimmed.split(/\s+/).length;
+    const wordsInTrimmed = calculateWordCount(trimmed);
     if (wordsInTrimmed > 200) {
       setValidationError("200 words maxed. Shut up already.");
       return;
@@ -519,13 +531,13 @@ export default function Home() {
 
             {state === "idle" && (
               <Button
-                id="preserve-reflection-btn"
+                id="proceed-btn"
                 type="submit"
                 onClick={handleSubmit}
                 disabled={input.trim().length === 0}
                 className="rounded-xl bg-[#2D2823] hover:bg-[#3D3630] text-[#FAF8F5] border border-[#433B33] font-medium px-6 py-2.5 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out select-none"
               >
-                Preserve Reflection ✨
+                Proceed &rarr;
               </Button>
             )}
           </form>
