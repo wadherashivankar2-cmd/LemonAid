@@ -290,34 +290,47 @@ export default function Home() {
             <div className="space-y-3">
               {/* Interactive Witty Mood Emojis Above Textarea */}
               {state === "idle" && (
-                <div className="space-y-1.5 pb-0.5" aria-label="Select mood">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs text-muted-foreground mr-1">Mood:</span>
-                    {MOODS.map(({ emoji, label }, index) => {
-                      const isSelected = selectedMood === index;
-                      const isHovered = hoveredMood === index;
-                      return (
-                        <button
-                          key={label}
-                          type="button"
-                          aria-label={`${label} mood`}
-                          onMouseEnter={() => setHoveredMood(index)}
-                          onMouseLeave={() => setHoveredMood(null)}
-                          onClick={() => handleMoodClick(index)}
-                          className={`text-base p-1.5 rounded-lg transition inline-flex items-center justify-center hover:bg-neutral-200/60 active:scale-95 ${
-                            isSelected ? "bg-neutral-200/90 ring-1 ring-neutral-400" : isHovered ? "bg-neutral-100" : ""
-                          }`}
-                        >
-                          <span role="img" aria-label={label}>{emoji}</span>
-                        </button>
-                      );
-                    })}
+                <div className="flex flex-col items-start gap-1 my-2" aria-label="Select mood">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground">Mood:</span>
+                    <div className="flex items-center gap-1.5">
+                      {MOODS.map(({ emoji, label }, index) => {
+                        const isSelected = selectedMood === index;
+                        return (
+                          <button
+                            key={label}
+                            type="button"
+                            aria-label={`${label} mood`}
+                            onMouseEnter={() => setHoveredMood(index)}
+                            onMouseLeave={() => setHoveredMood(null)}
+                            onClick={() => handleMoodClick(index)}
+                            className={`p-1 rounded-md transition-transform hover:scale-125 focus:outline-none cursor-pointer inline-flex items-center justify-center ${
+                              isSelected ? "bg-neutral-200/90 ring-1 ring-neutral-400" : ""
+                            }`}
+                          >
+                            <span role="img" aria-label={label} className="text-base select-none">
+                              {emoji}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                  {(hoveredMood !== null || selectedMood !== null) && (
-                    <p className="text-xs text-neutral-600 font-mono tracking-tight animate-fade-in pl-0.5">
-                      {MOODS[hoveredMood !== null ? hoveredMood : (selectedMood as number)].reaction}
+
+                  {/* RESERVED HEIGHT CONTAINER: Prevents vertical layout jumping and infinite flutter loop */}
+                  <div className="h-5 flex items-center">
+                    <p
+                      className={`text-xs text-neutral-600 font-mono tracking-tight transition-opacity duration-150 pl-0.5 ${
+                        hoveredMood !== null || selectedMood !== null ? "opacity-100" : "opacity-0"
+                      }`}
+                    >
+                      {hoveredMood !== null
+                        ? MOODS[hoveredMood].reaction
+                        : selectedMood !== null
+                        ? MOODS[selectedMood].reaction
+                        : ""}
                     </p>
-                  )}
+                  </div>
                 </div>
               )}
 
