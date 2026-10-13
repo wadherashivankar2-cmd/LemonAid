@@ -37,6 +37,8 @@ const REPORT_DISMISS_OPTIONS = [
   "Go touch grass",
 ];
 
+const URL_REGEX = /(https?:\/\/|www\.|\.[a-z]{2,}(\/|\s|$))/i;
+
 export default function Home() {
   const [state, setState] = React.useState<AppState>("idle");
   const [input, setInput] = React.useState("");
@@ -96,17 +98,15 @@ export default function Home() {
   };
 
   const getInputLengthInsult = (len: number) => {
+    if (len === 0) return "Not even your delusions can be summarized in 0 letters. Type something.";
     if (len < 3) return "Not even your delusions can be summarized in 2 letters. Type something.";
-    if (len <= 19) return "Barely a sentence. Did your battery die or your brain?";
-    if (len <= 39) return "Starting to yap. Keep going if you think anyone cares.";
-    if (len <= 49) return "A whole paragraph of self-pity incoming.";
-    if (len <= 74) return "Writing your memoirs already? Nobody's buying the book.";
-    if (len <= 99) return "Careful, you're burning precious calories typing this essay.";
-    if (len <= 119) return "Triple digits on the character count. The delusion is real.";
-    if (len <= 149) return "Wrap it up Shakespeare, this is a roast box not your diary.";
-    if (len <= 174) return "Almost hit the limit. Your coping mechanisms know no bounds.";
-    if (len <= 199) return "Running out of room. Condense your mediocrity.";
-    return "200/200 maxed out. Congratulations on wasting all available space.";
+    if (len < 50) return "Spit it out.";
+    if (len < 100) return "Is that all your fragile ego could muster?";
+    if (len < 250) return "Writing your memoirs already? Nobody's buying the book.";
+    if (len <= 400) return "Triple digits on the character count. The coping is real.";
+    if (len < 700) return "Writing a LinkedIn manifesto? Wrap it up.";
+    if (len < 750) return "Almost maxed out. Your self-absorption knows no bounds.";
+    return "750/750. You wrote an entire essay just to cope.";
   };
 
   // Word-by-word typewriter effect on reveal
@@ -139,28 +139,24 @@ export default function Home() {
     setMutedState(next);
   };
 
-  const URL_REGEX = /(https?:\/\/|www\.|\.[a-z]{2,}(\/|\s|$))/i;
-
   const handlePaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-    const text = e.clipboardData.getData("text");
-    if (URL_REGEX.test(text)) {
-      e.preventDefault();
-      playTick();
-      const insult = "Nice try. We don't read your links or debug your profiles. Use your words.";
-      setValidationError(insult);
-      quip("urlBlock", undefined, { duration: 5000 });
-    }
+    e.preventDefault();
+    playTick();
+    const insult = "Type it out yourself, you lazy parasite. We don't accept copied delusions.";
+    setValidationError(insult);
+    quip(insult, undefined, { duration: 5000 });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
-    if (URL_REGEX.test(val)) {
+    const delta = val.length - input.length;
+    // Fallback guard: reject sudden chunk insertions without normal keystroke cadence
+    if (delta > 2) {
       playTick();
-      const insult = "Nice try. We don't read your links or debug your profiles. Use your words.";
+      const insult = "Type it out yourself, you lazy parasite. We don't accept copied delusions.";
       setValidationError(insult);
-      quip("urlBlock", undefined, { duration: 5000 });
-      const cleaned = val.replace(/(https?:\/\/[^\s]+|www\.[^\s]+|\b\w+\.[a-z]{2,}(\/[^\s]*)?)/gi, "").trim();
-      setInput(cleaned);
+      quip(insult, undefined, { duration: 5000 });
+      e.target.value = input;
       return;
     }
     setInput(val);
@@ -315,8 +311,8 @@ export default function Home() {
       setValidationError("Even a humblebrag needs at least 3 characters.");
       return;
     }
-    if (trimmed.length > 200) {
-      setValidationError("Gratitude is finite. Keep it under 200 characters.");
+    if (trimmed.length > 750) {
+      setValidationError("Gratitude is finite. Keep it under 750 characters.");
       return;
     }
 
@@ -389,17 +385,17 @@ export default function Home() {
           onClick={toggleSound}
           type="button"
           aria-label={muted ? "Unmute sounds" : "Mute sounds"}
-          className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-all duration-300 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground bg-white/80 dark:bg-black/60 backdrop-blur-xs border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:bg-neutral-200/60 dark:hover:bg-neutral-800 active:translate-y-0 active:scale-95 cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all shadow-sm cursor-pointer select-none"
         >
           {muted ? (
             <>
-              <VolumeX className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>Sound off</span>
+              <VolumeX className="h-3.5 w-3.5 text-neutral-700 dark:text-neutral-200 shrink-0" aria-hidden="true" />
+              <span className="text-neutral-700 dark:text-neutral-200">Sound off</span>
             </>
           ) : (
             <>
-              <Volume2 className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>Sound on</span>
+              <Volume2 className="h-3.5 w-3.5 text-neutral-700 dark:text-neutral-200 shrink-0" aria-hidden="true" />
+              <span className="text-neutral-700 dark:text-neutral-200">Sound on</span>
             </>
           )}
         </button>
@@ -484,11 +480,18 @@ export default function Home() {
                 <textarea
                   id="gratitude-entry"
                   rows={4}
-                  maxLength={200}
+                  maxLength={750}
                   value={input}
                   disabled={state === "loading"}
                   onChange={handleInputChange}
                   onPaste={handlePaste}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    playTick();
+                    const insult = "Type it out yourself, you lazy parasite. We don't accept copied delusions.";
+                    setValidationError(insult);
+                    quip(insult, undefined, { duration: 5000 });
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
@@ -503,7 +506,7 @@ export default function Home() {
                   <p className="text-neutral-500 font-medium text-xs leading-tight transition-opacity duration-150">
                     {getInputLengthInsult(input.length)}
                   </p>
-                  <span className="tabular-nums shrink-0">{input.length}/200</span>
+                  <span className="tabular-nums shrink-0">{input.length}/750</span>
                 </div>
               </div>
 
