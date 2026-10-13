@@ -354,7 +354,7 @@ export default function Home() {
           onClick={toggleSound}
           type="button"
           aria-label={muted ? "Unmute sounds" : "Mute sounds"}
-          className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground bg-white/80 dark:bg-black/60 backdrop-blur-xs border border-neutral-200 dark:border-neutral-800"
+          className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-all duration-300 ease-in-out focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground bg-white/80 dark:bg-black/60 backdrop-blur-xs border border-neutral-200 dark:border-neutral-800 shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:bg-neutral-200/60 dark:hover:bg-neutral-800 active:translate-y-0 active:scale-95 cursor-pointer"
         >
           {muted ? (
             <>
@@ -481,7 +481,7 @@ export default function Home() {
                 type="button"
                 onClick={handleTrollEgoClick}
                 disabled={input.trim().length === 0}
-                className="rounded-lg bg-[#1F1B16] text-[#FAF8F5] hover:bg-black/90 font-medium px-6 py-2.5 transition active:scale-[0.99] cursor-pointer"
+                className="rounded-lg bg-[#1F1B16] text-[#FAF8F5] border border-neutral-800 font-medium px-6 py-2.5 cursor-pointer shadow-sm hover:shadow-lg hover:-translate-y-1 hover:bg-neutral-700 hover:border-neutral-600 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out animate-float"
               >
                 Destroy My Ego
               </Button>
@@ -595,7 +595,7 @@ export default function Home() {
                 id="suggestions-widget-btn"
                 type="button"
                 onClick={handleSubmitFeedback}
-                className="w-full py-2 px-3 text-xs font-semibold rounded-lg bg-white text-black hover:bg-neutral-200 active:scale-95 transition-colors cursor-pointer text-center"
+                className="w-full py-2.5 px-3 text-xs font-semibold rounded-lg bg-white text-black hover:bg-neutral-200 border border-neutral-200 hover:border-neutral-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
               >
                 Submit Feedback
               </button>
@@ -646,7 +646,7 @@ export default function Home() {
             <button
               type="button"
               onClick={handleCloseSuggestionPopup}
-              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 active:scale-95 transition-all bg-neutral-800 text-neutral-200 hover:bg-neutral-700 cursor-pointer text-center"
+              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
             >
               Okay whatever
             </button>
@@ -695,7 +695,7 @@ export default function Home() {
             <button
               type="button"
               onClick={() => setShowEgoTrollPopup(false)}
-              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 active:scale-95 transition-all bg-neutral-800 text-neutral-200 hover:bg-neutral-700 cursor-pointer text-center"
+              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
             >
               I will learn to read
             </button>
@@ -748,7 +748,7 @@ export default function Home() {
             <button
               type="button"
               onClick={handleCloseReportModal}
-              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 active:scale-95 transition-all bg-neutral-800 text-neutral-200 hover:bg-neutral-700 cursor-pointer text-center"
+              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
             >
               {REPORT_DISMISS_OPTIONS[reportDismissIndex]}
             </button>
@@ -803,7 +803,7 @@ export default function Home() {
             <button
               type="button"
               onClick={handleClosePaywallModal}
-              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 active:scale-95 transition-all bg-neutral-800 text-neutral-200 hover:bg-neutral-700 cursor-pointer text-center"
+              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
             >
               Take my dignity, keep the change
             </button>
@@ -858,7 +858,7 @@ export default function Home() {
             <button
               type="button"
               onClick={handleCloseCharityModal}
-              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 active:scale-95 transition-all bg-neutral-800 text-neutral-200 hover:bg-neutral-700 cursor-pointer text-center"
+              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
             >
               I will hold this L in silence
             </button>

@@ -44,7 +44,7 @@ export function GoogleAuthTrap() {
         type="button"
         onClick={handleOpen}
         aria-label="Sign in with Google"
-        className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white text-neutral-700 text-xs font-medium shadow-sm hover:bg-neutral-50 hover:shadow active:scale-95 transition-all cursor-pointer select-none"
+        className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white text-neutral-800 text-xs font-medium shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:bg-neutral-100 hover:border-neutral-400 hover:text-black active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer select-none"
       >
         <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
           <path
@@ -109,7 +109,7 @@ export function GoogleAuthTrap() {
               id="dismiss-google-trap-btn"
               type="button"
               onClick={handleClose}
-              className="w-full py-2.5 px-4 text-xs font-semibold rounded-lg bg-white text-black hover:bg-neutral-200 active:scale-95 transition-all cursor-pointer text-center"
+              className="w-full py-3 px-5 text-xs font-semibold rounded-lg bg-white text-black hover:bg-neutral-200 border border-neutral-200 hover:border-neutral-300 shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
             >
               Keep me anonymous and pathetic
             </button>
