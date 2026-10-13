@@ -139,6 +139,11 @@ export default function Home() {
     quip("mood");
   };
 
+  const handleTrollEgoClick = (e: React.MouseEvent | React.FormEvent) => {
+    e.preventDefault();
+    quip("trollEgo");
+  };
+
   const handleCamouflagedEnter = () => {
     if (!input.trim()) {
       quip("camouflagedEnter");
@@ -254,21 +259,20 @@ export default function Home() {
           <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
             What brought you genuine peace or pride today?
           </p>
-          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed flex items-center gap-1.5 pt-0.5">
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
             <button
               type="button"
               onClick={handleCamouflagedEnter}
-              className="inline-flex items-center justify-center px-1.5 py-0.5 text-[11px] font-mono font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200 active:bg-neutral-300 border border-neutral-300 rounded shadow-xs active:translate-y-0.5 transition cursor-pointer select-none"
-              title="Click or press Enter"
+              className="text-muted-foreground font-normal p-0 m-0 bg-transparent border-0 outline-none focus:outline-none cursor-pointer inline select-none"
             >
               Enter
-            </button>
-            <span>your achievement or whatever.</span>
+            </button>{" "}
+            your achievement or whatever.
           </p>
         </header>
 
         {/* Input Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleTrollEgoClick} className="space-y-4">
           <div className="space-y-2">
             <div className="relative">
               <textarea
@@ -337,9 +341,10 @@ export default function Home() {
           {state === "idle" && (
             <Button
               id="destroy-my-ego-btn"
-              type="submit"
+              type="button"
+              onClick={handleTrollEgoClick}
               disabled={input.trim().length === 0}
-              className="rounded-lg bg-[#1F1B16] text-[#FAF8F5] hover:bg-black/90 font-medium px-6 py-2.5 transition active:scale-[0.99]"
+              className="rounded-lg bg-[#1F1B16] text-[#FAF8F5] hover:bg-black/90 font-medium px-6 py-2.5 transition active:scale-[0.99] cursor-pointer"
             >
               Destroy My Ego
             </Button>
@@ -368,7 +373,7 @@ export default function Home() {
                 The Burn
               </span>
               <span className="text-xs text-muted-foreground font-serif italic">
-                Emotional damage included
+                Nobody asked, but here we are.
               </span>
             </div>
 

@@ -45,7 +45,7 @@ export function RoastCard({ brag, roast, className = "" }: RoastCardProps) {
             The burn
           </span>
           <span className="text-[11px] text-neutral-400 font-serif italic">
-            Emotional damage included
+            Nobody asked, but here we are.
           </span>
         </div>
         <p className="text-xl sm:text-2xl font-bold leading-snug pr-12 pb-6">

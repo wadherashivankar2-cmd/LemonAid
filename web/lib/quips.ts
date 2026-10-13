@@ -24,6 +24,16 @@ export const QUIPS: Record<string, string[]> = {
   camouflagedEnter: [
     "Type something first before trying to press Enter.",
   ],
+  trollEgo: [
+    "You really thought clicking the giant obvious button would work? Go find 'Enter' in the text above, genius.",
+    "Imagine clicking a giant button like an NPC. Look closely at the text above.",
+    "Button clicked. Ego intact. Find 'Enter' in the instructions above to actually get roasted.",
+  ],
+  suggestions: [
+    "The suggestion box is located in your nearest dustbin.",
+    "Nobody asked for your feedback, keep it to yourself.",
+    "Bold of you to assume anyone cares about your opinion.",
+  ],
   human: [
     "All of our humans are in standups. Estimated wait: 6 to 8 business years.",
     "You are now number 48,213 in the queue.",
@@ -119,7 +129,7 @@ export function quip(key: string, vars?: Record<string, string | number>): strin
     "Action acknowledged. Absolutely nothing happened.",
   ];
 
-  const index = Math.min(count - 1, list.length - 1);
+  const index = (count - 1) % list.length;
   let template = list[index];
 
   // Placeholder substitution
