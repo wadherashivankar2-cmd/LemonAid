@@ -61,7 +61,7 @@ export function RoastActions({
           onClick={handleAgain}
           className="font-medium"
         >
-          Burn Me Again
+          Cook Me Again
         </Button>
 
         {onShareX && (

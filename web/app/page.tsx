@@ -273,34 +273,10 @@ export default function Home() {
 
         {/* Input Form */}
         <form onSubmit={handleTrollEgoClick} className="space-y-4">
-          <div className="space-y-2">
-            <div className="relative">
-              <textarea
-                id="gratitude-entry"
-                rows={4}
-                maxLength={200}
-                value={input}
-                disabled={state === "loading" || state === "reveal"}
-                onChange={handleInputChange}
-                placeholder="Today I felt grateful for..."
-                aria-label="What brought you genuine peace or pride today?"
-                className="w-full resize-none rounded-xl border border-border bg-white p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition shadow-sm disabled:opacity-90 disabled:bg-neutral-50"
-              />
-              <div className="mt-1.5 flex justify-between items-center text-xs text-muted-foreground">
-                <div>
-                  {input.length >= 200 ? (
-                    <span className="text-neutral-500 font-medium">Gratitude is finite.</span>
-                  ) : input.length >= 180 ? (
-                    <span className="text-neutral-500 font-medium">A lot of words for very little.</span>
-                  ) : null}
-                </div>
-                <span className="tabular-nums">{input.length}/200</span>
-              </div>
-            </div>
-
-            {/* Interactive Witty Mood Emojis */}
+          <div className="space-y-3">
+            {/* Interactive Witty Mood Emojis Above Textarea */}
             {state === "idle" && (
-              <div className="space-y-1.5 pt-1" aria-label="Select mood">
+              <div className="space-y-1.5 pb-0.5" aria-label="Select mood">
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs text-muted-foreground mr-1">Mood:</span>
                   {MOODS.map(({ emoji, label }, index) => {
@@ -330,6 +306,30 @@ export default function Home() {
                 )}
               </div>
             )}
+
+            <div className="relative">
+              <textarea
+                id="gratitude-entry"
+                rows={4}
+                maxLength={200}
+                value={input}
+                disabled={state === "loading" || state === "reveal"}
+                onChange={handleInputChange}
+                placeholder="Today I felt grateful for..."
+                aria-label="What brought you genuine peace or pride today?"
+                className="w-full resize-none rounded-xl border border-border bg-white p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition shadow-sm disabled:opacity-90 disabled:bg-neutral-50"
+              />
+              <div className="mt-1.5 flex justify-between items-center text-xs text-muted-foreground">
+                <div>
+                  {input.length >= 200 ? (
+                    <span className="text-neutral-500 font-medium">Gratitude is finite.</span>
+                  ) : input.length >= 180 ? (
+                    <span className="text-neutral-500 font-medium">A lot of words for very little.</span>
+                  ) : null}
+                </div>
+                <span className="tabular-nums">{input.length}/200</span>
+              </div>
+            </div>
 
             {validationError && (
               <p id="validation-error" className="text-xs text-neutral-600 font-medium pt-1" role="alert">
@@ -391,28 +391,39 @@ export default function Home() {
                 onDownloadCard={handleDownloadCard}
                 onShareX={handleShareX}
               />
-
-              {/* Output-Only Compact Suggestions Widget */}
-              <div className="mt-3 pt-3 border-t border-border/70">
-                <div className="flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg border border-neutral-800 bg-[#14120E] text-[#FAF8F5]">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <span className="text-sm shrink-0" role="img" aria-label="suggestion box">💡</span>
-                    <p className="text-[11px] sm:text-xs font-medium text-neutral-200 truncate">
-                      Have a suggestion to improve Mr. Roast?
-                    </p>
-                  </div>
-                  <button
-                    id="suggestions-widget-btn"
-                    type="button"
-                    onClick={() => quip("suggestions")}
-                    className="px-2.5 py-1 text-[11px] font-semibold text-neutral-900 bg-[#FAF8F5] hover:bg-neutral-200 active:scale-95 rounded-md transition shrink-0 cursor-pointer shadow-xs"
-                  >
-                    Submit Feedback
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
+        )}
+
+        {/* Floating Side-Docked Suggestions Widget (Output / Reveal Only) */}
+        {state === "reveal" && roastData && (
+          <aside
+            id="suggestions-side-widget"
+            aria-label="Suggestions box"
+            className="md:fixed md:right-6 md:top-1/2 md:-translate-y-1/2 md:z-40 md:w-60 w-full mt-3 md:mt-0 animate-fade-in"
+          >
+            <div className="flex flex-row md:flex-col items-center md:items-start justify-between md:justify-center gap-2.5 p-3 sm:p-3.5 rounded-xl border border-neutral-800 bg-[#14120E] text-[#FAF8F5] shadow-lg">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span className="text-base shrink-0" role="img" aria-label="suggestion box">💡</span>
+                <div>
+                  <p className="text-xs font-medium text-neutral-200">
+                    Have a suggestion?
+                  </p>
+                  <p className="text-[11px] text-neutral-400 hidden md:block">
+                    Reviewed with zero care.
+                  </p>
+                </div>
+              </div>
+              <button
+                id="suggestions-widget-btn"
+                type="button"
+                onClick={() => quip("suggestions")}
+                className="w-auto md:w-full px-3 py-1.5 text-xs font-semibold text-neutral-900 bg-[#FAF8F5] hover:bg-neutral-200 active:scale-95 rounded-lg transition shrink-0 cursor-pointer text-center shadow-xs"
+              >
+                Submit Feedback
+              </button>
+            </div>
+          </aside>
         )}
 
         {/* Inline Gentle Crisis Intervention Card */}
