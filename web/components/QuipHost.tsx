@@ -13,13 +13,13 @@ export function QuipHost() {
   const idCounter = React.useRef(0);
 
   React.useEffect(() => {
-    const unsubscribe = onQuip((message) => {
+    const unsubscribe = onQuip((message, duration = 3500) => {
       const id = ++idCounter.current;
       setToasts((prev) => [...prev.slice(-2), { id, text: message }]);
 
       setTimeout(() => {
         setToasts((current) => current.filter((t) => t.id !== id));
-      }, 4500);
+      }, duration);
     });
 
     return unsubscribe;

@@ -40,7 +40,11 @@ export const QUIPS: Record<string, string[]> = {
     "Spreading trauma like it's your full-time job. Respect.",
   ],
   charityDismiss: [
-    "Moral redemption: Denied.",
+    "Donation rejected: Guilt remains fully intact.",
+  ],
+  urlBlock: [
+    "Nice try. We don't read your links or debug your profiles. Use your words.",
+    "URL detected. Summarize your own delusions—we aren't your web crawler.",
   ],
   creatorTribute: [
     "The Creator acknowledges your tribute. Don't let it go to your head.",
@@ -157,8 +161,21 @@ export const QUIPS: Record<string, string[]> = {
   ],
 };
 
+export interface QuipOptions {
+  duration?: number;
+}
+
+const LONG_DURATION_KEYS = new Set([
+  "shareX",
+  "humiliateFriend",
+  "downloadCard",
+  "twitterReturn",
+  "shareFriend",
+  "urlBlock",
+]);
+
 const clickCounts: Record<string, number> = {};
-type QuipListener = (message: string) => void;
+type QuipListener = (message: string, duration: number) => void;
 const listeners = new Set<QuipListener>();
 
 export function onQuip(listener: QuipListener): () => void {
@@ -168,7 +185,11 @@ export function onQuip(listener: QuipListener): () => void {
   };
 }
 
-export function quip(key: string, vars?: Record<string, string | number>): string {
+export function quip(
+  key: string,
+  vars?: Record<string, string | number>,
+  options?: QuipOptions
+): string {
   const count = (clickCounts[key] || 0) + 1;
   clickCounts[key] = count;
 
@@ -195,7 +216,8 @@ export function quip(key: string, vars?: Record<string, string | number>): strin
     }
   }
 
-  listeners.forEach((fn) => fn(template));
+  const duration = options?.duration ?? (LONG_DURATION_KEYS.has(key) ? 5000 : 3000);
+  listeners.forEach((fn) => fn(template, duration));
   return template;
 }
 

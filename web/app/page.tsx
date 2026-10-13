@@ -139,8 +139,31 @@ export default function Home() {
     setMutedState(next);
   };
 
+  const URL_REGEX = /(https?:\/\/|www\.|\.[a-z]{2,}(\/|\s|$))/i;
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const text = e.clipboardData.getData("text");
+    if (URL_REGEX.test(text)) {
+      e.preventDefault();
+      playTick();
+      const insult = "Nice try. We don't read your links or debug your profiles. Use your words.";
+      setValidationError(insult);
+      quip("urlBlock", undefined, { duration: 5000 });
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setInput(e.target.value);
+    const val = e.target.value;
+    if (URL_REGEX.test(val)) {
+      playTick();
+      const insult = "Nice try. We don't read your links or debug your profiles. Use your words.";
+      setValidationError(insult);
+      quip("urlBlock", undefined, { duration: 5000 });
+      const cleaned = val.replace(/(https?:\/\/[^\s]+|www\.[^\s]+|\b\w+\.[a-z]{2,}(\/[^\s]*)?)/gi, "").trim();
+      setInput(cleaned);
+      return;
+    }
+    setInput(val);
     if (validationError) {
       setValidationError(null);
     }
@@ -263,6 +286,12 @@ export default function Home() {
   const handleCamouflagedEnter = () => {
     if (state === "loading") return;
     const trimmed = input.trim();
+    if (URL_REGEX.test(trimmed)) {
+      playTick();
+      setValidationError("Nice try. We don't read your links or debug your profiles. Use your words.");
+      quip("urlBlock", undefined, { duration: 5000 });
+      return;
+    }
     if (trimmed.length < 3) {
       quip("camouflagedEnter");
       setValidationError("Even a humblebrag needs at least 3 characters.");
@@ -276,6 +305,12 @@ export default function Home() {
     if (state === "loading") return;
 
     const trimmed = input.trim();
+    if (URL_REGEX.test(trimmed)) {
+      playTick();
+      setValidationError("Nice try. We don't read your links or debug your profiles. Use your words.");
+      quip("urlBlock", undefined, { duration: 5000 });
+      return;
+    }
     if (trimmed.length < 3) {
       setValidationError("Even a humblebrag needs at least 3 characters.");
       return;
@@ -374,9 +409,12 @@ export default function Home() {
         /* Main Container for Idle / Loading / Gentle / Error */
         <div className="w-full max-w-xl mx-auto my-auto py-8 space-y-6 animate-fade-in">
           <header className="space-y-2">
-            <h1 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight leading-snug font-normal">
-              Take a deep breath. Reflect on the light in your life.
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-rose-600 dark:text-rose-500 drop-shadow-sm mb-2 select-none">
+              LoveBite
             </h1>
+            <h2 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight leading-snug font-normal">
+              Take a deep breath. Reflect on the light in your life.
+            </h2>
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
               What brought you genuine peace or pride today?
             </p>
@@ -450,6 +488,7 @@ export default function Home() {
                   value={input}
                   disabled={state === "loading"}
                   onChange={handleInputChange}
+                  onPaste={handlePaste}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
@@ -554,9 +593,14 @@ export default function Home() {
               aria-live="polite"
             >
               <div className="flex items-center justify-between">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 border border-neutral-200/80 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-700">
-                  The Burn
-                </span>
+                <div className="flex items-center gap-2.5">
+                  <span className="text-base font-black tracking-tight text-rose-600 dark:text-rose-500 select-none">
+                    LoveBite
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 border border-neutral-200/80 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-700">
+                    The Burn
+                  </span>
+                </div>
                 <span className="text-xs text-muted-foreground font-serif italic">
                   Nobody asked, but here we are.
                 </span>
@@ -567,7 +611,7 @@ export default function Home() {
                 {!isTypingComplete && <span className="inline-block w-1.5 h-5 bg-[#1F1B16] ml-1 animate-pulse align-middle" />}
               </blockquote>
 
-              <div className={`transition-opacity duration-300 ${isTypingComplete ? "opacity-100" : "opacity-40 pointer-events-none"}`}>
+              <div className="transition-opacity duration-300 opacity-100">
                 <RoastActions
                   roastId={roastData.id}
                   roastText={roastData.text}
@@ -826,7 +870,7 @@ export default function Home() {
           >
             <div className="flex items-start justify-between gap-2">
               <h3 id="charity-modal-title" className="text-sm font-semibold text-neutral-200 leading-snug text-left">
-                Charity? You&apos;re the one that needs saving.
+                Moral Laundering: Denied.
               </h3>
               <button
                 type="button"
@@ -851,7 +895,7 @@ export default function Home() {
 
             <div className="my-3 rounded-xl border border-neutral-800 bg-neutral-900/50 p-3 text-left">
               <p className="text-xs text-neutral-300 leading-relaxed">
-                Nice deflection. Did you really think a fake donation would cleanse your soul after getting incinerated? Save your money, invest in some thicker skin, and learn to take an L in silence.
+                You can&apos;t bribe karma to undo emotional damage. Keep your money—you need it more than they do.
               </p>
             </div>
 
@@ -860,7 +904,7 @@ export default function Home() {
               onClick={handleCloseCharityModal}
               className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
             >
-              I will hold this L in silence
+              I will suffer for free
             </button>
           </div>
         </div>

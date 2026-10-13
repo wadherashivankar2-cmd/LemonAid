@@ -98,7 +98,7 @@ export function shareX(roastText: string): void {
     window.open(tweetUrl, "_blank", "noopener,noreferrer");
 
     const onWindowFocus = () => {
-      quip("twitterReturn");
+      quip("twitterReturn", undefined, { duration: 5000 });
       window.removeEventListener("focus", onWindowFocus);
     };
     window.addEventListener("focus", onWindowFocus);
