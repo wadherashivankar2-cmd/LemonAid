@@ -137,6 +137,14 @@ export default function Home() {
     quip("mood");
   };
 
+  const handleCamouflagedEnter = () => {
+    if (!input.trim()) {
+      quip("camouflagedEnter");
+    } else {
+      handleSubmit();
+    }
+  };
+
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (state === "loading") return;
@@ -243,6 +251,17 @@ export default function Home() {
           </h1>
           <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
             What brought you genuine peace or pride today?
+          </p>
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            <span
+              onClick={handleCamouflagedEnter}
+              role="button"
+              tabIndex={-1}
+              className="cursor-default select-none focus:outline-none"
+            >
+              Enter
+            </span>{" "}
+            your achievement or whatever.
           </p>
         </header>
 

@@ -181,17 +181,56 @@
     "id": "fitness-005",
     "category": "fitness",
     "anchors": [
-      "My favorite football club won the derby today",
-      "Arsenal won their match 3-0 today",
-      "Manchester United finally won a game today",
-      "Real Madrid won the match tonight"
+      "Watched my favorite football club win the derby today",
+      "Arsenal won their match on TV today",
+      "Manchester United finally won a game on television",
+      "Watched Real Madrid win the match on screen tonight"
     ],
     "paraphrases": [
-      "my team won the match",
-      "celebrating our football victory",
-      "we won the big game"
+      "watched my team win on TV",
+      "celebrating a football club victory on television",
+      "watched the club win while sitting on the couch"
     ],
     "roast": "You sat on a couch while eleven strangers did cardio.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-020",
+    "category": "fitness",
+    "anchors": [
+      "I won a match today",
+      "Won my tournament today",
+      "We won our sports match today",
+      "Won the final match today"
+    ],
+    "paraphrases": [
+      "I won a match",
+      "won my tournament",
+      "clutched the win in our match today",
+      "won our competitive game"
+    ],
+    "roast": "Carried by your teammates and acting like you were the MVP.",
+    "slots": [],
+    "tone": "deadpan",
+    "status": "draft"
+  },
+  {
+    "id": "fitness-021",
+    "category": "fitness",
+    "anchors": [
+      "Won our ranked game today",
+      "Won our competitive gaming match",
+      "Sweated and won the match today",
+      "First place in the gaming tournament"
+    ],
+    "paraphrases": [
+      "won the ranked gaming match",
+      "clutched the tournament game",
+      "won my esports match"
+    ],
+    "roast": "Sweating in casual lobbies against bots does not make you an athlete.",
     "slots": [],
     "tone": "deadpan",
     "status": "draft"
