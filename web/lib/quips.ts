@@ -40,14 +40,15 @@ export const QUIPS: Record<string, string[]> = {
     "Spreading trauma like it's your full-time job. Respect.",
   ],
   charityDismiss: [
-    "Your karmic debt remains unpaid.",
+    "Moral redemption: Denied.",
   ],
-  supportFounder: [
-    "Your pity like has been logged. Founder remains broke.",
-    "Clicking heart won't pay the Groq API bill, but thanks.",
-    "Moral support noted. Financial support still zero.",
-    "Founder feels 0.001% better about life choices.",
-    "Another pity like. We're printing it out to burn for warmth.",
+  creatorTribute: [
+    "The Creator acknowledges your tribute. Don't let it go to your head.",
+    "Your digital nod has been noted. You still got cooked.",
+    "Tribute logged. The Creator remains entirely unbothered by your existence.",
+  ],
+  creatorTributeGreedy: [
+    "Greedy. You already paid your respect for today.",
   ],
   camouflagedEnter: [
     "Type something first before trying to press Enter.",

@@ -9,8 +9,6 @@ import { RoastCard } from "@/components/RoastCard";
 import { isMuted, setMuted, playTick, playBoom } from "@/lib/sound";
 import { quip } from "@/lib/quips";
 import { downloadCard, shareX, setCurrentShare } from "@/lib/share";
-import { SupportFounder } from "@/components/SupportFounder";
-import { WittyFooter } from "@/components/WittyFooter";
 
 type AppState = "idle" | "loading" | "reveal" | "gentle" | "error";
 
@@ -348,8 +346,7 @@ export default function Home() {
   return (
     <main className="w-full max-w-5xl mx-auto px-4 min-h-screen flex flex-col justify-between py-12 selection:bg-neutral-200">
       {/* Top Utility Bar */}
-      <div className="w-full flex items-center justify-between">
-        <SupportFounder />
+      <div className="w-full flex justify-end">
         <button
           id="sound-toggle-btn"
           onClick={toggleSound}
@@ -605,8 +602,6 @@ export default function Home() {
         </div>
       ) : null}
 
-      {/* Witty Footer */}
-      <WittyFooter />
 
       {/* Full-Screen Root Modal: Hamster Meme Suggestion Troll */}
       {showSuggestionPopup && (
@@ -829,7 +824,7 @@ export default function Home() {
           >
             <div className="flex items-start justify-between gap-2">
               <h3 id="charity-modal-title" className="text-sm font-semibold text-neutral-200 leading-snug text-left">
-                Charity? You&apos;re the one in need of aid.
+                Charity? You&apos;re the one that needs saving.
               </h3>
               <button
                 type="button"
@@ -854,7 +849,7 @@ export default function Home() {
 
             <div className="my-3 rounded-xl border border-neutral-800 bg-neutral-900/50 p-3 text-left">
               <p className="text-xs text-neutral-300 leading-relaxed">
-                Charity starts where self-awareness ends, and right now your ego is in a trillion-dollar deficit. Even a GoFundMe couldn&apos;t subsidize the sheer lack of shame on display here.
+                Nice deflection. Did you really think a fake donation would cleanse your soul after getting incinerated? Save your money, invest in some thicker skin, and learn to take an L in silence.
               </p>
             </div>
 
@@ -863,54 +858,13 @@ export default function Home() {
               onClick={handleCloseCharityModal}
               className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 active:scale-95 transition-all bg-neutral-800 text-neutral-200 hover:bg-neutral-700 cursor-pointer text-center"
             >
-              I will remain emotionally destitute
+              I will hold this L in silence
             </button>
           </div>
         </div>
       )}
 
-      {/* Satirical Left Side Panel: Clinical Ego Quarantine Clipboard (Visible on Desktop xl+) */}
-      <aside
-        aria-hidden="true"
-        className="hidden xl:flex fixed left-4 top-1/2 -translate-y-1/2 w-48 border border-dashed border-neutral-300 dark:border-neutral-800 p-3.5 rounded-xl bg-neutral-50/80 dark:bg-neutral-900/60 backdrop-blur-xs text-[11px] text-neutral-500 font-mono shadow-sm flex-col gap-2.5 select-none pointer-events-none z-10"
-      >
-        <div className="flex items-center gap-1.5 font-bold tracking-tight text-neutral-800 dark:text-neutral-300 text-[11px]">
-          <span>⚠️</span>
-          <span>EGO QUARANTINE ZONE</span>
-        </div>
-        <p className="text-[10px] leading-relaxed text-neutral-600 dark:text-neutral-400 font-sans">
-          &ldquo;Subject shows elevated levels of delusion. Do not administer sympathy.&rdquo;
-        </p>
-        <div className="rounded-md border border-neutral-200/80 dark:border-neutral-800/80 bg-white/70 dark:bg-black/30 p-2 space-y-1 text-[10px] font-mono">
-          <div className="flex justify-between text-neutral-600 dark:text-neutral-400">
-            <span>DELUSION INDEX:</span>
-            <span className="font-bold text-red-600 dark:text-red-400">99.8%</span>
-          </div>
-          <div className="flex justify-between text-neutral-600 dark:text-neutral-400">
-            <span>RECOVERY CHANCE:</span>
-            <span className="font-bold text-neutral-700 dark:text-neutral-300">0.0%</span>
-          </div>
-        </div>
-      </aside>
 
-      {/* Satirical Right Side Panel: Victim Support Advisory Ticket (Visible on Desktop xl+) */}
-      <aside
-        aria-hidden="true"
-        className="hidden xl:flex fixed right-4 top-1/2 -translate-y-1/2 w-48 border border-dashed border-neutral-300 dark:border-neutral-800 p-3.5 rounded-xl bg-neutral-50/80 dark:bg-neutral-900/60 backdrop-blur-xs text-[11px] text-neutral-500 font-mono shadow-sm flex-col gap-2.5 select-none pointer-events-none z-10"
-      >
-        <div className="flex items-center gap-1.5 font-bold tracking-tight text-neutral-800 dark:text-neutral-300 text-[11px]">
-          <span>📋</span>
-          <span>VICTIM SUPPORT UNIT</span>
-        </div>
-        <p className="text-[10px] leading-relaxed text-neutral-600 dark:text-neutral-400 font-sans">
-          If this roast caused emotional damage, please consult a mirror.
-        </p>
-        <div className="rounded-md border border-neutral-200/80 dark:border-neutral-800/80 bg-white/70 dark:bg-black/30 p-2 space-y-0.5 text-[10px] font-mono text-neutral-600 dark:text-neutral-400">
-          <div>• Step 1: Log off</div>
-          <div>• Step 2: Touch grass</div>
-          <div>• Step 3: Accept it</div>
-        </div>
-      </aside>
 
       {/* Off-screen RoastCard for PNG Export */}
       {state === "reveal" && roastData && (

@@ -92,6 +92,55 @@ export function RoastActions({
     if (onDownloadCard) onDownloadCard();
   };
 
+  const [likeCount, setLikeCount] = React.useState<number>(1420);
+  const [hasPaidTribute, setHasPaidTribute] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("mr_roast_creator_tribute_paid");
+      if (stored === "true") {
+        setHasPaidTribute(true);
+      }
+    }
+
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
+    fetch(`${apiUrl}/likes`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch likes");
+        return res.json();
+      })
+      .then((data: { count?: number }) => {
+        if (data && typeof data.count === "number") {
+          setLikeCount(data.count);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleTribute = () => {
+    if (hasPaidTribute) {
+      quip("creatorTributeGreedy");
+      return;
+    }
+
+    setLikeCount((prev) => prev + 1);
+    setHasPaidTribute(true);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("mr_roast_creator_tribute_paid", "true");
+    }
+    quip("creatorTribute");
+
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
+    fetch(`${apiUrl}/like`, { method: "POST" })
+      .then((res) => res.json())
+      .then((data: { count?: number }) => {
+        if (data && typeof data.count === "number") {
+          setLikeCount(data.count);
+        }
+      })
+      .catch(() => {});
+  };
+
   return (
     <div className="pt-6 my-4 space-y-5">
       {/* Primary Action Cluster with spacious padding and gap */}
@@ -137,8 +186,8 @@ export function RoastActions({
         )}
       </div>
 
-      {/* Paywall Honeypot: Dedicated Comfortable Row with Gold Accent */}
-      <div className="pt-1">
+      {/* Paywall Honeypot & Creator Tribute Cluster */}
+      <div className="flex flex-wrap items-center gap-3 pt-1">
         <Button
           id="paywall-erase-btn"
           variant="outline"
@@ -146,6 +195,21 @@ export function RoastActions({
           className="w-full sm:w-auto py-2.5 px-4.5 text-xs font-semibold cursor-pointer border-amber-500/60 bg-amber-500/5 text-amber-800 dark:text-amber-300 hover:bg-amber-500/15 hover:border-amber-500 active:scale-95 transition-all shadow-xs"
         >
           Pay $4.99 to Erase from History 💳
+        </Button>
+
+        <Button
+          id="acknowledge-creator-btn"
+          variant="outline"
+          onClick={handleTribute}
+          className={`w-full sm:w-auto py-2.5 px-4 text-xs font-semibold cursor-pointer active:scale-95 transition-all ${
+            hasPaidTribute
+              ? "border-neutral-800 bg-neutral-900/60 text-neutral-400"
+              : "border-neutral-700 bg-neutral-900/30 hover:bg-neutral-800 text-neutral-200"
+          }`}
+        >
+          {hasPaidTribute
+            ? "❤️ Tribute Paid (1 per soul)"
+            : `Acknowledge the Creator ❤️ [${likeCount.toLocaleString()}]`}
         </Button>
       </div>
 
@@ -193,7 +257,7 @@ export function RoastActions({
           onClick={onCharity}
           className="text-xs text-muted-foreground hover:text-foreground underline-offset-4 hover:underline transition-colors cursor-pointer select-none"
         >
-          Donate to Charity (Offset Karmic Debt) 🕊️
+          Pretend You&apos;re a Good Person (Charity Honeypot) 🕊️
         </button>
       </div>
     </div>
