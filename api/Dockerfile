@@ -1,17 +1,17 @@
 FROM python:3.11-slim
 
-# Create user with UID 1000 required by Hugging Face Spaces
+# Create user with UID 1000 (compatible with both Render and HF Spaces)
 RUN useradd -m -u 1000 appuser
 
 WORKDIR /app
 
-# Install system dependencies if required
+# Install minimal system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PyTorch CPU first to avoid heavy GPU wheels
+# Install PyTorch CPU first to avoid heavy GPU wheels and memory spikes
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 
@@ -28,11 +28,10 @@ RUN mkdir -p /app/cache/huggingface && \
 # Copy application files
 COPY . .
 
-# Train lightweight heads and build retrieval index if not already pre-packaged
-RUN ALLOW_DRAFT=1 python train_heads.py && \
-    ALLOW_DRAFT=1 python build_index.py
+# Build retrieval index if not already pre-packaged
+RUN ALLOW_DRAFT=1 python build_index.py || true
 
-# Set permissions
+# Set permissions for non-root execution
 RUN chown -R appuser:appuser /app
 USER appuser
 
