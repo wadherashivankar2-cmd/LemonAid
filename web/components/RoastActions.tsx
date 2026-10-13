@@ -79,8 +79,9 @@ export function RoastActions({
 
   const handleHumiliateFriend = () => {
     quip("humiliateFriend", undefined, { duration: 5000 });
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://lovebite.vercel.app";
     const text = encodeURIComponent(
-      "I thought I was doing something with my life until LoveBite completely destroyed me. Go get humbled: https://mr-roast-ten.vercel.app"
+      `I thought I was doing something with my life until LoveBite completely destroyed me. Go get humbled: ${origin}`
     );
     if (typeof window !== "undefined") {
       window.open(`https://api.whatsapp.com/send?text=${text}`, "_blank", "noopener,noreferrer");

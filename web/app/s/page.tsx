@@ -15,7 +15,7 @@ interface SharePageProps {
 
 export async function generateMetadata({ searchParams }: SharePageProps): Promise<Metadata> {
   const { b, r, sig } = searchParams;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mrroast.app";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lovebite.vercel.app";
 
   let title = "LoveBite Roast";
   let description = "A private moment of reflection and its inevitable burn.";

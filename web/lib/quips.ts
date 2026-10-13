@@ -46,6 +46,9 @@ export const QUIPS: Record<string, string[]> = {
     "Nice try. We don't read your links or debug your profiles. Use your words.",
     "URL detected. Summarize your own delusions—we aren't your web crawler.",
   ],
+  pasteBlock: [
+    "Type it out yourself, you lazy parasite. We don't accept copied delusions.",
+  ],
   creatorTribute: [
     "The Creator acknowledges your tribute. Don't let it go to your head.",
     "Your digital nod has been noted. You still got cooked.",
@@ -172,6 +175,7 @@ const LONG_DURATION_KEYS = new Set([
   "twitterReturn",
   "shareFriend",
   "urlBlock",
+  "pasteBlock",
 ]);
 
 const clickCounts: Record<string, number> = {};
@@ -193,9 +197,9 @@ export function quip(
   const count = (clickCounts[key] || 0) + 1;
   clickCounts[key] = count;
 
-  const list = QUIPS[key] || [
+  const list = QUIPS[key] || (key.includes(" ") ? [key] : [
     "Action acknowledged. Absolutely nothing happened.",
-  ];
+  ]);
 
   const index = (count - 1) % list.length;
   let template = list[index];
