@@ -80,7 +80,7 @@ export function RoastActions({
   const handleHumiliateFriend = () => {
     quip("humiliateFriend");
     const text = encodeURIComponent(
-      "I thought I was doing something with my life until Mr. Roast completely destroyed me. Go get humbled: https://mr-roast-ten.vercel.app"
+      "I thought I was doing something with my life until LoveBite completely destroyed me. Go get humbled: https://mr-roast-ten.vercel.app"
     );
     if (typeof window !== "undefined") {
       window.open(`https://api.whatsapp.com/send?text=${text}`, "_blank", "noopener,noreferrer");

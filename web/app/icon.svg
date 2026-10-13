@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <mask id="bite-mask">
+      <!-- White base heart -->
+      <path d="M16 28S3 20 3 10.5A7.5 7.5 0 0 1 16 6a7.5 7.5 0 0 1 13 4.5c0 3.2-1.9 6.5-4.2 9.2L16 28z" fill="#ffffff" />
+      <!-- Black circular bite cutouts taking a chunk out of the upper right -->
+      <circle cx="23" cy="8" r="3.2" fill="#000000" />
+      <circle cx="25.5" cy="11.5" r="3.5" fill="#000000" />
+      <circle cx="23.5" cy="15" r="3" fill="#000000" />
+    </mask>
+  </defs>
+  <!-- Heart filled with rich crimson / coral gradient or bold red -->
+  <path d="M16 28S3 20 3 10.5A7.5 7.5 0 0 1 16 6a7.5 7.5 0 0 1 13 4.5c0 3.2-1.9 6.5-4.2 9.2L16 28z" fill="#E11D48" mask="url(#bite-mask)" />
+  <!-- Subtle mouth / tooth accent drop (optional small puncture dot) -->
+  <circle cx="20.5" cy="11" r="0.75" fill="#BE123C" />
+</svg>

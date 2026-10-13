@@ -5,8 +5,16 @@ import { cn } from "@/lib/utils";
 import { Chrome } from "@/components/Chrome";
 
 export const metadata: Metadata = {
-  title: "Gratitude Journal",
+  title: "LoveBite",
   description: "Reflect on what brought you genuine peace or pride today.",
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({

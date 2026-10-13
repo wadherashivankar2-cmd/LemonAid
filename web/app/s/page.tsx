@@ -17,7 +17,7 @@ export async function generateMetadata({ searchParams }: SharePageProps): Promis
   const { b, r, sig } = searchParams;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mrroast.app";
 
-  let title = "Gratitude Journal Roast";
+  let title = "LoveBite Roast";
   let description = "A private moment of reflection and its inevitable burn.";
 
   if (b && r && sig) {
@@ -26,7 +26,7 @@ export async function generateMetadata({ searchParams }: SharePageProps): Promis
       const roast = base64UrlDecode(r);
       const isValid = await verifySig(brag, roast, sig);
       if (isValid) {
-        title = `"${roast.slice(0, 60)}..." | Mr.Roast`;
+        title = `"${roast.slice(0, 60)}..." | LoveBite`;
         description = `In response to: "${brag}"`;
       }
     } catch {

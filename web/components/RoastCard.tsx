@@ -54,7 +54,7 @@ export function RoastCard({ brag, roast, className = "" }: RoastCardProps) {
 
         {/* Watermark Bottom Right */}
         <div className="absolute bottom-4 right-5 text-[11px] font-medium tracking-wide text-neutral-500">
-          mrroast.app
+          lovebite.app
         </div>
       </div>
     </div>
