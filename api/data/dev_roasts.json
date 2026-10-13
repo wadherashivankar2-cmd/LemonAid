@@ -162,15 +162,15 @@
     "id": "fitness-004",
     "category": "fitness",
     "anchors": [
-      "My football team won the championship match",
-      "Scored the winning goal in our soccer game",
-      "We won the five a side football league",
-      "Played football with friends and scored two goals"
+      "I played in our Sunday league football game and won",
+      "I scored the winning goal in our local soccer match",
+      "We won our amateur rec league five a side match",
+      "I played amateur football with friends and scored two goals"
     ],
     "paraphrases": [
-      "Sunday league football victory",
-      "scored a hat trick in soccer",
-      "won our weekend football match"
+      "I played in our amateur Sunday league football match",
+      "scored in my local rec soccer game",
+      "I won our amateur pickup football game"
     ],
     "roast": "Sunday league glory. Monday morning back pain.",
     "slots": [],
@@ -181,15 +181,15 @@
     "id": "fitness-005",
     "category": "fitness",
     "anchors": [
-      "Watched my favorite football club win the derby today",
-      "Arsenal won their match on TV today",
-      "Manchester United finally won a game on television",
-      "Watched Real Madrid win the match on screen tonight"
+      "Watched my favorite football club win the derby on the couch today",
+      "Sat on the couch and watched Arsenal win on TV today",
+      "Watched my club win on television from my living room",
+      "Watched Real Madrid win the match on screen while sitting down"
     ],
     "paraphrases": [
-      "watched my team win on TV",
-      "celebrating a football club victory on television",
-      "watched the club win while sitting on the couch"
+      "watched my team win on TV from the couch",
+      "celebrating a football club victory while sitting on the sofa",
+      "watched the club win while sitting on the couch all evening"
     ],
     "roast": "You sat on a couch while eleven strangers did cardio.",
     "slots": [],
@@ -1194,10 +1194,10 @@
     "id": "fitness-009",
     "category": "fitness",
     "anchors": [
-      "Scored the winning goal in soccer today",
-      "Our football team won the championship",
-      "Won our weekend five a side league",
-      "Scored twice in our pickup soccer match"
+      "I played in our pickup soccer match and scored",
+      "Our amateur rec league football team won the final",
+      "Won our local amateur five a side rec league",
+      "I scored twice playing in our pickup soccer match"
     ],
     "paraphrases": [],
     "roast": "Sunday league glory is just tomorrow morning's knee brace.",

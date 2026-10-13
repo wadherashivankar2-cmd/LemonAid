@@ -122,16 +122,6 @@ export function RoastActions({
         >
           Report
         </FakeButton>
-
-        <Button
-          id="suggestions-btn"
-          variant="ghost"
-          size="sm"
-          onClick={() => quip("suggestions")}
-          className="text-muted-foreground hover:text-foreground hover:bg-muted text-xs font-normal cursor-pointer"
-        >
-          Suggestions
-        </Button>
       </div>
     </div>
   );

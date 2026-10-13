@@ -30,9 +30,10 @@ export const QUIPS: Record<string, string[]> = {
     "Button clicked. Ego intact. Find 'Enter' in the instructions above to actually get roasted.",
   ],
   suggestions: [
-    "The suggestion box is located in your nearest dustbin.",
-    "Nobody asked for your feedback, keep it to yourself.",
-    "Bold of you to assume anyone cares about your opinion.",
+    "The suggestion box is located in your nearest trash bin.",
+    "Bold of you to assume anyone asked for your input.",
+    "Your opinion has been successfully forwarded to /dev/null.",
+    "Keep your suggestions in the drafts where they belong.",
   ],
   human: [
     "All of our humans are in standups. Estimated wait: 6 to 8 business years.",

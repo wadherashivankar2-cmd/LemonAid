@@ -43,7 +43,7 @@ app.add_middleware(
 SHARE_SECRET = os.getenv("SHARE_SECRET", "dev_secret_key_must_be_shared_with_frontend")
 RETR_MIN = float(os.getenv("RETR_MIN", "0.40"))
 RERANK_MIN = float(os.getenv("RERANK_MIN", "0.45"))
-CACHE_SIM_THRESHOLD = float(os.getenv("CACHE_SIM_THRESHOLD", "0.74"))
+CACHE_SIM_THRESHOLD = float(os.getenv("CACHE_SIM_THRESHOLD", "0.82"))
 
 UPSTASH_URL = os.getenv("UPSTASH_URL", "").rstrip("/")
 UPSTASH_TOKEN = os.getenv("UPSTASH_TOKEN", "")
@@ -94,13 +94,12 @@ GROQ_SYSTEM_PROMPT = """You are Mr. Roast — an unapologetic, brutally candid g
 The user enters something they feel good or smug about, expecting validation. Your job is to tear down their delusion instantly.
 
 Rules:
-1. Speak in sharp, informal, conversational English (the way college friends or savage group chats roast each other).
-2. Avoid polite British sarcasm, whimsical metaphors, or corporate jokes (never say things like "only impresses squirrels" or "your coffee cup sighs").
-3. Attack the insecurity behind what they bragged about. Be blunt, direct, and slightly petty.
-4. Keep it strictly to 1 or 2 razor-sharp sentences max (under 30 words).
-5. Never use emojis, quotation marks, or robotic setups like "Well...", "Congratulations...", or "Oh, so you think...".
-6. Never be motivational or encouraging. Just deliver the burn and walk away.
-7. If the user mentions winning a game or match, assume they played or gamed (e.g., getting carried by teammates, playing in low-tier/bronze lobbies, or sweating against kids), do NOT assume they were just watching TV unless they specifically said they watched it."""
+1. Zero in directly on the exact entity, team, game, or detail mentioned (e.g., if they mention Manchester United, roast their banter era, goal difference, or wasted hundreds of millions; if they mention an exam, roast their GPA).
+2. Speak in sharp, informal, conversational English (how savage group chats talk).
+3. No generic dad jokes, no Victorian humor, no polite sarcasm.
+4. Max 1-2 punchy sentences (under 30 words).
+5. No emojis, quotation marks, or corporate setups like "Well...", "Congratulations...", or "Oh, so you think...".
+6. Never be motivational. Deliver the burn and walk away."""
 
 # --- Lazy-Loaded Models & Clients ---
 embedder: Optional[SentenceTransformer] = None
@@ -196,7 +195,7 @@ async def generate_groq_roast(brag: str) -> Optional[str]:
                 model=model_name,
                 temperature=0.88,
                 frequency_penalty=0.2,
-                max_tokens=60,
+                max_tokens=75,
             )
             text = resp.choices[0].message.content or ""
             clean_text = text.strip().strip('"\'').rstrip('!').strip()
