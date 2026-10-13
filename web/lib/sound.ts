@@ -64,7 +64,7 @@ export function playTick(): void {
     osc.frequency.setValueAtTime(520, t);
     osc.frequency.exponentialRampToValueAtTime(700, t + 0.12);
 
-    gain.gain.setValueAtTime(0.04, t);
+    gain.gain.setValueAtTime(0.4, t);
     gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
 
     osc.connect(gain);
@@ -79,7 +79,7 @@ export function playTick(): void {
 
 /**
  * Dramatic roast reveal:
- * 140 Hz to 40 Hz sine drop over 0.6s (gain 0.9, 0.9s decay) plus 0.25s noise burst (gain 0.25).
+ * 140 Hz to 40 Hz sine drop over 0.6s (gain 1.0, 0.9s decay) plus 0.25s noise burst (gain 0.75).
  */
 export function playBoom(): void {
   if (isMuted()) return;
@@ -98,7 +98,7 @@ export function playBoom(): void {
     osc.frequency.setValueAtTime(140, t);
     osc.frequency.exponentialRampToValueAtTime(40, t + 0.6);
 
-    gain.gain.setValueAtTime(0.9, t);
+    gain.gain.setValueAtTime(1.0, t);
     gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.9);
 
     osc.connect(gain);
@@ -123,7 +123,7 @@ export function playBoom(): void {
     noiseFilter.frequency.setValueAtTime(300, t);
 
     const noiseGain = ctx.createGain();
-    noiseGain.gain.setValueAtTime(0.25, t);
+    noiseGain.gain.setValueAtTime(0.75, t);
     noiseGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.25);
 
     noise.connect(noiseFilter);

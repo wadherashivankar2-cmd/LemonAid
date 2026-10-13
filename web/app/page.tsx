@@ -30,6 +30,12 @@ const MOODS = [
   { emoji: "😶", label: "Speechless", reaction: "Zero thoughts, zero prospects." },
 ];
 
+const REPORT_DISMISS_OPTIONS = [
+  "Cry about it",
+  "I accept my insignificance",
+  "Go touch grass",
+];
+
 export default function Home() {
   const [state, setState] = React.useState<AppState>("idle");
   const [input, setInput] = React.useState("");
@@ -46,6 +52,8 @@ export default function Home() {
   const [isTypingComplete, setIsTypingComplete] = React.useState(false);
   const [showSuggestionPopup, setShowSuggestionPopup] = React.useState(false);
   const [showEgoTrollPopup, setShowEgoTrollPopup] = React.useState(false);
+  const [showReportModal, setShowReportModal] = React.useState(false);
+  const [reportDismissIndex, setReportDismissIndex] = React.useState(0);
 
   const words = React.useMemo(() => {
     return roastData?.text ? roastData.text.trim().split(/\s+/) : [];
@@ -151,6 +159,7 @@ export default function Home() {
     setIsTypingComplete(false);
     setShowSuggestionPopup(false);
     setShowEgoTrollPopup(false);
+    setShowReportModal(false);
   };
 
   const handleMoodClick = (index: number) => {
@@ -172,6 +181,16 @@ export default function Home() {
   const handleCloseSuggestionPopup = () => {
     setShowSuggestionPopup(false);
     quip("closeSuggestion");
+  };
+
+  const handleOpenReportModal = () => {
+    setShowReportModal(true);
+  };
+
+  const handleCloseReportModal = () => {
+    setShowReportModal(false);
+    setReportDismissIndex((prev) => (prev + 1) % REPORT_DISMISS_OPTIONS.length);
+    quip("reportDismiss");
   };
 
   const handleCamouflagedEnter = () => {
@@ -251,7 +270,7 @@ export default function Home() {
 
   const handleShareX = () => {
     if (roastData) {
-      shareX(roastData.text, roastData.brag, roastData.sig);
+      shareX(roastData.text);
     }
   };
 
@@ -478,6 +497,7 @@ export default function Home() {
                   onReset={handleReset}
                   onDownloadCard={handleDownloadCard}
                   onShareX={handleShareX}
+                  onReport={handleOpenReportModal}
                 />
               </div>
             </div>
@@ -504,19 +524,18 @@ export default function Home() {
         </div>
       ) : null}
 
-      {/* Hamster Meme Troll Modal Overlay */}
+      {/* Full-Screen Root Modal: Hamster Meme Suggestion Troll */}
       {showSuggestionPopup && (
-        <>
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="suggestion-modal-title"
+          onClick={handleCloseSuggestionPopup}
+          className="fixed inset-0 z-[100] w-screen h-screen bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity"
+        >
           <div
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px] transition-opacity"
-            onClick={handleCloseSuggestionPopup}
-            aria-hidden="true"
-          />
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="suggestion-modal-title"
-            className="fixed z-50 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[280px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-4 text-[#FAF8F5] shadow-2xl animate-fade-in"
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-[280px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-4 text-[#FAF8F5] shadow-2xl animate-fade-in"
           >
             <div className="flex items-start justify-between gap-2">
               <p id="suggestion-modal-title" className="text-xs font-semibold text-neutral-200 leading-snug">
@@ -551,22 +570,21 @@ export default function Home() {
               Okay whatever
             </button>
           </div>
-        </>
+        </div>
       )}
 
-      {/* Destroy My Ego Honeypot Modal Overlay */}
+      {/* Full-Screen Root Modal: Destroy My Ego Honeypot */}
       {showEgoTrollPopup && (
-        <>
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="ego-modal-title"
+          onClick={() => setShowEgoTrollPopup(false)}
+          className="fixed inset-0 z-[100] w-screen h-screen bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity"
+        >
           <div
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px] transition-opacity"
-            onClick={() => setShowEgoTrollPopup(false)}
-            aria-hidden="true"
-          />
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="ego-modal-title"
-            className="fixed z-50 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[320px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-[320px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
           >
             <div className="flex items-start justify-between gap-2">
               <h3 id="ego-modal-title" className="text-xs font-semibold text-neutral-200 leading-snug text-left">
@@ -601,8 +619,80 @@ export default function Home() {
               I will learn to read
             </button>
           </div>
-        </>
+        </div>
       )}
+
+      {/* Full-Screen Root Modal: Troll Report with Meow.jpg */}
+      {showReportModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="report-modal-title"
+          onClick={handleCloseReportModal}
+          className="fixed inset-0 z-[100] w-screen h-screen bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-[300px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-4 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <h3 id="report-modal-title" className="text-xs font-semibold text-neutral-200 leading-snug text-left">
+                Reporting this? Cry to the authorities.
+              </h3>
+              <button
+                type="button"
+                onClick={handleCloseReportModal}
+                className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
+                aria-label="Close modal"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="my-3 flex justify-center">
+              <Image
+                src="/Meow.jpg"
+                alt="Meow"
+                width={160}
+                height={160}
+                className="mx-auto rounded-lg object-contain border border-neutral-700 bg-neutral-900"
+                priority
+              />
+            </div>
+
+            <p className="text-xs text-neutral-400 mb-3 leading-relaxed">
+              Our moderation department is taking this very seriously.
+            </p>
+
+            <button
+              type="button"
+              onClick={handleCloseReportModal}
+              className="w-full rounded-lg bg-neutral-800 py-1.5 text-xs font-semibold text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
+            >
+              {REPORT_DISMISS_OPTIONS[reportDismissIndex]}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Ambient Mocking Side Borders / Margins (Desktop 2xl+) */}
+      <aside
+        aria-hidden="true"
+        className="hidden 2xl:flex fixed left-0 top-0 bottom-0 w-16 border-r border-dashed border-neutral-200 items-center justify-center select-none pointer-events-none z-10"
+      >
+        <span className="text-[10px] tracking-widest text-neutral-300 uppercase font-mono [writing-mode:vertical-rl] rotate-180 select-none opacity-40 pointer-events-none">
+          [ EGO REHABILITATION WARD // DO NOT FEED THE NARCISSIST ]
+        </span>
+      </aside>
+
+      <aside
+        aria-hidden="true"
+        className="hidden 2xl:flex fixed right-0 top-0 bottom-0 w-16 border-l border-dashed border-neutral-200 items-center justify-center select-none pointer-events-none z-10"
+      >
+        <span className="text-[10px] tracking-widest text-neutral-300 uppercase font-mono [writing-mode:vertical-rl] select-none opacity-40 pointer-events-none">
+          [ DELUSION LEVEL: CRITICAL // ZERO SYMPATHY GUARANTEED ]
+        </span>
+      </aside>
 
       {/* Off-screen RoastCard for PNG Export */}
       {state === "reveal" && roastData && (

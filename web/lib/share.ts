@@ -1,5 +1,4 @@
 import { toPng, toBlob } from "html-to-image";
-import { base64UrlEncode } from "@/lib/sig";
 import { quip } from "@/lib/quips";
 
 interface SharePayload {
@@ -91,22 +90,17 @@ export async function shareCard(elementId = "roast-card"): Promise<void> {
   await downloadCard(elementId);
 }
 
-export function shareX(roastText: string, bragText?: string, sig?: string): void {
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    (typeof window !== "undefined" ? window.location.origin : "https://mrroast.app");
-
-  let shareLink = siteUrl;
-  if (bragText && sig) {
-    const b = base64UrlEncode(bragText);
-    const r = base64UrlEncode(roastText);
-    shareLink = `${siteUrl}/s?b=${b}&r=${r}&sig=${sig}`;
-  }
-
-  const tweetText = `I logged my gratitude and got this instead:\n\n"${roastText}"\n\n${shareLink}`;
+export function shareX(roastText: string): void {
+  const tweetText = `I logged my gratitude and Mr. Roast destroyed me:\n\n"${roastText}"\n\nGet cooked: https://mr-roast-ten.vercel.app`;
   const tweetUrl = `https://x.com/intent/post?text=${encodeURIComponent(tweetText)}`;
 
   if (typeof window !== "undefined") {
     window.open(tweetUrl, "_blank", "noopener,noreferrer");
+
+    const onWindowFocus = () => {
+      quip("twitterReturn");
+      window.removeEventListener("focus", onWindowFocus);
+    };
+    window.addEventListener("focus", onWindowFocus);
   }
 }

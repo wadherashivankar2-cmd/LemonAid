@@ -1,8 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
-import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { quip, getClickCount } from "@/lib/quips";
 
@@ -13,6 +11,7 @@ interface RoastActionsProps {
   onReset: () => void;
   onShareX?: () => void;
   onDownloadCard?: () => void;
+  onReport?: () => void;
 }
 
 export function RoastActions({
@@ -20,9 +19,8 @@ export function RoastActions({
   onReset,
   onShareX,
   onDownloadCard,
+  onReport,
 }: RoastActionsProps) {
-  const [showReportModal, setShowReportModal] = React.useState(false);
-
   const vote = async (kind: "funny" | "meh" | "salt"): Promise<{ salt?: number; n?: number } | void> => {
     if (!roastId) return;
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
@@ -67,7 +65,7 @@ export function RoastActions({
   const handleReport = () => {
     void vote("salt");
     quip("report");
-    setShowReportModal(true);
+    if (onReport) onReport();
   };
 
   const handleShare = () => {
@@ -151,60 +149,6 @@ export function RoastActions({
           Report
         </Button>
       </div>
-
-      {/* Troll Report Modal with Meow.jpg */}
-      {showReportModal && (
-        <>
-          <div
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px] transition-opacity"
-            onClick={() => setShowReportModal(false)}
-            aria-hidden="true"
-          />
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="report-modal-title"
-            className="fixed z-50 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[300px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-4 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
-          >
-            <div className="flex items-start justify-between gap-2">
-              <h3 id="report-modal-title" className="text-xs font-semibold text-neutral-200 leading-snug text-left">
-                Reporting this? Cry to the authorities.
-              </h3>
-              <button
-                type="button"
-                onClick={() => setShowReportModal(false)}
-                className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
-                aria-label="Close modal"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
-            <div className="my-3 flex justify-center">
-              <Image
-                src="/Meow.jpg"
-                alt="Meow"
-                width={160}
-                height={160}
-                className="mx-auto rounded-lg object-contain border border-neutral-700 bg-neutral-900"
-                priority
-              />
-            </div>
-
-            <p className="text-xs text-neutral-400 mb-3 leading-relaxed">
-              Our moderation department is taking this very seriously.
-            </p>
-
-            <button
-              type="button"
-              onClick={() => setShowReportModal(false)}
-              className="w-full rounded-lg bg-neutral-800 py-1.5 text-xs font-semibold text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
-            >
-              Understood
-            </button>
-          </div>
-        </>
-      )}
     </div>
   );
 }

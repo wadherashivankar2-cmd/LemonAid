@@ -51,6 +51,12 @@ export const QUIPS: Record<string, string[]> = {
     "Cope harder.",
     "Don't let the door hit your ego on the way out.",
   ],
+  reportDismiss: [
+    "Report saved directly to our spam folder.",
+  ],
+  twitterReturn: [
+    "Back already? Did Twitter ratio you that fast?",
+  ],
   human: [
     "All of our humans are in standups. Estimated wait: 6 to 8 business years.",
     "You are now number 48,213 in the queue.",
