@@ -22,7 +22,7 @@ export const QUIPS: Record<string, string[]> = {
     "Bro actually enjoyed getting trashed. Respect.",
   ],
   camouflagedEnter: [
-    "You really clicked a random word expecting a shortcut? Type something first.",
+    "Type something first before trying to press Enter.",
   ],
   human: [
     "All of our humans are in standups. Estimated wait: 6 to 8 business years.",

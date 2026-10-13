@@ -37,12 +37,17 @@ export function RoastCard({ brag, roast, className = "" }: RoastCardProps) {
         className="p-6 sm:p-8 relative"
         style={{ backgroundColor: "#000000", color: "#FFFFFF" }}
       >
-        <span
-          className="text-xs font-bold tracking-wider uppercase block mb-2"
-          style={{ color: "#C62828" }}
-        >
-          The burn
-        </span>
+        <div className="flex items-center justify-between mb-2">
+          <span
+            className="text-xs font-bold tracking-wider uppercase"
+            style={{ color: "#C62828" }}
+          >
+            The burn
+          </span>
+          <span className="text-[11px] text-neutral-400 font-serif italic">
+            Emotional damage included
+          </span>
+        </div>
         <p className="text-xl sm:text-2xl font-bold leading-snug pr-12 pb-6">
           {roast}
         </p>

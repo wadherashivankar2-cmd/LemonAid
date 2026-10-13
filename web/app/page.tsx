@@ -41,8 +41,12 @@ export default function Home() {
   const [hoveredMood, setHoveredMood] = React.useState<number | null>(null);
 
   // Typewriter effect state
-  const [displayedWords, setDisplayedWords] = React.useState<string[]>([]);
+  const [wordCount, setWordCount] = React.useState(0);
   const [isTypingComplete, setIsTypingComplete] = React.useState(false);
+
+  const words = React.useMemo(() => {
+    return roastData?.text ? roastData.text.trim().split(/\s+/) : [];
+  }, [roastData?.text]);
 
   const abortControllerRef = React.useRef<AbortController | null>(null);
 
@@ -79,29 +83,27 @@ export default function Home() {
 
   // Word-by-word typewriter effect on reveal
   React.useEffect(() => {
-    if (state !== "reveal" || !roastData?.text) {
-      setDisplayedWords([]);
+    if (state !== "reveal" || words.length === 0) {
+      setWordCount(0);
       setIsTypingComplete(false);
       return;
     }
 
-    const words = roastData.text.split(" ");
-    setDisplayedWords([]);
-    setIsTypingComplete(false);
+    setWordCount(1);
+    setIsTypingComplete(words.length <= 1);
 
-    let currentIndex = 0;
+    let count = 1;
     const interval = setInterval(() => {
-      if (currentIndex < words.length) {
-        setDisplayedWords((prev) => [...prev, words[currentIndex]]);
-        currentIndex++;
-      } else {
+      count++;
+      setWordCount(count);
+      if (count >= words.length) {
         setIsTypingComplete(true);
         clearInterval(interval);
       }
-    }, 40);
+    }, 45);
 
     return () => clearInterval(interval);
-  }, [state, roastData]);
+  }, [state, words]);
 
   const toggleSound = () => {
     const next = !muted;
@@ -128,7 +130,7 @@ export default function Home() {
     setErrorMessage(null);
     setSelectedMood(null);
     setHoveredMood(null);
-    setDisplayedWords([]);
+    setWordCount(0);
     setIsTypingComplete(false);
   };
 
@@ -252,16 +254,16 @@ export default function Home() {
           <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
             What brought you genuine peace or pride today?
           </p>
-          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-            <span
+          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed flex items-center gap-1.5 pt-0.5">
+            <button
+              type="button"
               onClick={handleCamouflagedEnter}
-              role="button"
-              tabIndex={-1}
-              className="cursor-default select-none focus:outline-none"
+              className="inline-flex items-center justify-center px-1.5 py-0.5 text-[11px] font-mono font-medium text-neutral-700 bg-neutral-100 hover:bg-neutral-200 active:bg-neutral-300 border border-neutral-300 rounded shadow-xs active:translate-y-0.5 transition cursor-pointer select-none"
+              title="Click or press Enter"
             >
               Enter
-            </span>{" "}
-            your achievement or whatever.
+            </button>
+            <span>your achievement or whatever.</span>
           </p>
         </header>
 
@@ -366,12 +368,12 @@ export default function Home() {
                 The Burn
               </span>
               <span className="text-xs text-muted-foreground font-serif italic">
-                A moment of brutal honesty
+                Emotional damage included
               </span>
             </div>
 
             <blockquote className="font-serif text-xl sm:text-2xl text-[#1F1B16] leading-snug tracking-tight border-l-2 border-[#1F1B16] pl-4 my-2 min-h-[3rem]">
-              &ldquo;{displayedWords.join(" ")}&rdquo;
+              &ldquo;{words.slice(0, wordCount).join(" ")}&rdquo;
               {!isTypingComplete && <span className="inline-block w-1.5 h-5 bg-[#1F1B16] ml-1 animate-pulse align-middle" />}
             </blockquote>
 
