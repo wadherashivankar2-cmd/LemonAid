@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Volume2, VolumeX, Loader2, ArrowLeft, HeartHandshake } from "lucide-react";
+import Image from "next/image";
+import { Volume2, VolumeX, Loader2, ArrowLeft, HeartHandshake, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RoastActions } from "@/components/RoastActions";
 import { RoastCard } from "@/components/RoastCard";
@@ -43,6 +44,7 @@ export default function Home() {
   // Typewriter effect state
   const [wordCount, setWordCount] = React.useState(0);
   const [isTypingComplete, setIsTypingComplete] = React.useState(false);
+  const [showSuggestionPopup, setShowSuggestionPopup] = React.useState(false);
 
   const words = React.useMemo(() => {
     return roastData?.text ? roastData.text.trim().split(/\s+/) : [];
@@ -132,6 +134,7 @@ export default function Home() {
     setHoveredMood(null);
     setWordCount(0);
     setIsTypingComplete(false);
+    setShowSuggestionPopup(false);
   };
 
   const handleMoodClick = (index: number) => {
@@ -142,6 +145,11 @@ export default function Home() {
   const handleTrollEgoClick = (e: React.MouseEvent | React.FormEvent) => {
     e.preventDefault();
     quip("trollEgo");
+  };
+
+  const handleSubmitFeedback = () => {
+    quip("suggestions");
+    setShowSuggestionPopup(true);
   };
 
   const handleCamouflagedEnter = () => {
@@ -417,13 +425,63 @@ export default function Home() {
               <button
                 id="suggestions-widget-btn"
                 type="button"
-                onClick={() => quip("suggestions")}
+                onClick={handleSubmitFeedback}
                 className="w-auto md:w-full px-3 py-1.5 text-xs font-semibold text-neutral-900 bg-[#FAF8F5] hover:bg-neutral-200 active:scale-95 rounded-lg transition shrink-0 cursor-pointer text-center shadow-xs"
               >
                 Submit Feedback
               </button>
             </div>
           </aside>
+        )}
+
+        {/* Laughing Rat Troll Modal Overlay */}
+        {showSuggestionPopup && (
+          <>
+            <div
+              className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px] transition-opacity"
+              onClick={() => setShowSuggestionPopup(false)}
+              aria-hidden="true"
+            />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="suggestion-modal-title"
+              className="fixed z-50 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-6 w-[280px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-4 text-[#FAF8F5] shadow-2xl animate-fade-in"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <p id="suggestion-modal-title" className="text-xs font-semibold text-neutral-200 leading-snug">
+                  Bold of you to assume anyone cares about your opinion.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setShowSuggestionPopup(false)}
+                  className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
+                  aria-label="Close modal"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="my-3 flex justify-center">
+                <Image
+                  src="/suggestion-laugh.png"
+                  alt="Laughing rat meme"
+                  width={140}
+                  height={140}
+                  className="rounded-lg border border-neutral-700 bg-neutral-900 object-contain shadow-inner"
+                  priority
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setShowSuggestionPopup(false)}
+                className="w-full rounded-lg bg-neutral-800 py-1.5 text-xs font-medium text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
+              >
+                Okay whatever
+              </button>
+            </div>
+          </>
         )}
 
         {/* Inline Gentle Crisis Intervention Card */}
