@@ -99,9 +99,9 @@ export function GoogleAuthTrap() {
               </button>
             </div>
 
-            <div className="my-3 rounded-xl border border-neutral-800 bg-neutral-900/60 p-3 text-left">
-              <p className="text-xs text-neutral-300 leading-relaxed">
-                Why on earth would you tie your real name and work email to this humiliation? We just intervened and prevented you from permanently staining your Google account history. You&apos;re welcome.
+            <div className="my-4 rounded-xl border border-neutral-800 bg-neutral-900/60 p-4 text-center">
+              <p className="font-mono text-sm text-red-400 py-1">
+                Error: Zero dignity credentials found.
               </p>
             </div>
 
@@ -109,9 +109,9 @@ export function GoogleAuthTrap() {
               id="dismiss-google-trap-btn"
               type="button"
               onClick={handleClose}
-              className="w-full py-3 px-5 text-xs font-semibold rounded-lg bg-white text-black hover:bg-neutral-200 border border-neutral-200 hover:border-neutral-300 shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
+              className="w-full py-2 px-4 text-xs font-semibold rounded-lg bg-neutral-800 text-white hover:bg-neutral-700 shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
             >
-              Keep me anonymous and pathetic
+              Stay Anonymous
             </button>
           </div>
         </div>

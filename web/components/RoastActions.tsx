@@ -142,14 +142,14 @@ export function RoastActions({
   };
 
   return (
-    <div className="pt-6 my-4 space-y-5">
-      {/* Primary Action Cluster with spacious padding and gap */}
-      <div className="flex flex-wrap items-center gap-3">
+    <div className="pt-6 my-4 space-y-3">
+      {/* Primary Actions Row (Symmetrical 2-column grid) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
         <Button
           id="reflect-again-btn"
           variant="default"
           onClick={handleAgain}
-          className="py-2.5 px-4 text-xs font-semibold cursor-pointer border border-neutral-800 bg-neutral-900 text-white hover:bg-neutral-700 hover:border-neutral-600 hover:text-neutral-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out"
+          className="w-full py-2.5 px-4 text-xs font-semibold cursor-pointer border border-neutral-800 bg-neutral-900 text-white hover:bg-neutral-700 hover:border-neutral-600 hover:text-neutral-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out text-center"
         >
           Cook Me Again
         </Button>
@@ -159,17 +159,20 @@ export function RoastActions({
             id="share-x-btn"
             variant="outline"
             onClick={handleShare}
-            className="py-2.5 px-4 text-xs font-semibold cursor-pointer border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-500 hover:text-black dark:hover:text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out"
+            className="w-full py-2.5 px-4 text-xs font-semibold cursor-pointer border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-500 hover:text-black dark:hover:text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out text-center"
           >
             Broadcast My Shame on X 📢
           </Button>
         )}
+      </div>
 
+      {/* Secondary Viral / Trophy Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full mt-3">
         <Button
           id="humiliate-friend-btn"
           variant="outline"
           onClick={handleHumiliateFriend}
-          className="py-2.5 px-4 text-xs font-semibold cursor-pointer border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-500 hover:text-black dark:hover:text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out"
+          className="w-full py-2.5 px-4 text-xs font-semibold cursor-pointer border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-500 hover:text-black dark:hover:text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out text-center"
         >
           Humiliate a Friend 🤝
         </Button>
@@ -179,20 +182,20 @@ export function RoastActions({
             id="download-card-btn"
             variant="outline"
             onClick={handleDownload}
-            className="py-2.5 px-4 text-xs font-semibold cursor-pointer border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-500 hover:text-black dark:hover:text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out"
+            className="w-full py-2.5 px-4 text-xs font-semibold cursor-pointer border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-neutral-400 dark:hover:border-neutral-500 hover:text-black dark:hover:text-white shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out text-center"
           >
             Claim Certificate of Failure 📜
           </Button>
         )}
       </div>
 
-      {/* Paywall Honeypot & Creator Tribute Cluster */}
-      <div className="flex flex-wrap items-center gap-3 pt-1">
+      {/* Troll / Honeypot Row */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full mt-3">
         <Button
           id="paywall-erase-btn"
           variant="outline"
           onClick={onPaywall}
-          className="w-full sm:w-auto py-2.5 px-4.5 text-xs font-semibold cursor-pointer border border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300 hover:bg-amber-500/25 hover:border-amber-500 hover:text-amber-900 dark:hover:text-amber-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out"
+          className="w-full py-2.5 px-4 text-xs font-semibold cursor-pointer border border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300 hover:bg-amber-500/25 hover:border-amber-500 hover:text-amber-900 dark:hover:text-amber-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out text-center"
         >
           Pay $4.99 to Erase from History 💳
         </Button>
@@ -201,7 +204,7 @@ export function RoastActions({
           id="acknowledge-creator-btn"
           variant="outline"
           onClick={handleTribute}
-          className={`w-full sm:w-auto py-2.5 px-4 text-xs font-semibold cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out border ${
+          className={`w-full py-2.5 px-4 text-xs font-semibold cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out border text-center ${
             hasPaidTribute
               ? "border-neutral-800 bg-neutral-900/60 text-neutral-400 hover:bg-neutral-900 hover:border-neutral-700 hover:text-neutral-300"
               : "border-amber-500/40 bg-amber-500/10 text-amber-700 dark:text-amber-300 hover:bg-amber-500/25 hover:border-amber-500 hover:text-amber-900 dark:hover:text-amber-100"
@@ -213,52 +216,55 @@ export function RoastActions({
         </Button>
       </div>
 
-      {/* Deadpan Feedback Controls (Never Disabled) */}
-      <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-border">
-        <Button
-          id="vote-helpful-btn"
-          variant="ghost"
-          size="sm"
-          type="button"
-          onClick={handleHelpful}
-          className="py-2 px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/80 border border-transparent hover:border-border shadow-xs hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer transition-all duration-300 ease-in-out rounded-lg"
-        >
-          Helpful
-        </Button>
+      {/* Divider & Utilities Row */}
+      <div className="border-t border-neutral-100 dark:border-neutral-800/80 my-5 pt-4 flex flex-wrap items-center justify-between gap-3">
+        {/* Deadpan Feedback Controls */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          <Button
+            id="vote-helpful-btn"
+            variant="ghost"
+            size="sm"
+            type="button"
+            onClick={handleHelpful}
+            className="py-2 px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/80 border border-transparent hover:border-border shadow-xs hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer transition-all duration-300 ease-in-out rounded-lg"
+          >
+            Helpful
+          </Button>
 
-        <Button
-          id="vote-unhelpful-btn"
-          variant="ghost"
-          size="sm"
-          type="button"
-          onClick={handleUnhelpful}
-          className="py-2 px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/80 border border-transparent hover:border-border shadow-xs hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer transition-all duration-300 ease-in-out rounded-lg"
-        >
-          Not helpful
-        </Button>
+          <Button
+            id="vote-unhelpful-btn"
+            variant="ghost"
+            size="sm"
+            type="button"
+            onClick={handleUnhelpful}
+            className="py-2 px-3 text-xs text-muted-foreground hover:text-foreground hover:bg-muted/80 border border-transparent hover:border-border shadow-xs hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer transition-all duration-300 ease-in-out rounded-lg"
+          >
+            Not helpful
+          </Button>
 
-        <Button
-          id="report-roast-btn"
-          variant="ghost"
-          size="sm"
-          type="button"
-          onClick={handleReport}
-          className="py-2 px-3 text-xs text-muted-foreground hover:text-[#C62828] hover:bg-muted/80 border border-transparent hover:border-red-500/30 shadow-xs hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer transition-all duration-300 ease-in-out rounded-lg"
-        >
-          Report
-        </Button>
-      </div>
+          <Button
+            id="report-roast-btn"
+            variant="ghost"
+            size="sm"
+            type="button"
+            onClick={handleReport}
+            className="py-2 px-3 text-xs text-muted-foreground hover:text-[#C62828] hover:bg-muted/80 border border-transparent hover:border-red-500/30 shadow-xs hover:shadow-sm hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer transition-all duration-300 ease-in-out rounded-lg"
+          >
+            Report
+          </Button>
+        </div>
 
-      {/* Fake Charity Honeypot Link with generous spacing */}
-      <div className="mt-5 pt-1 text-left">
-        <button
-          id="donate-charity-btn"
-          type="button"
-          onClick={onCharity}
-          className="inline-block text-xs text-muted-foreground hover:text-foreground underline-offset-4 hover:underline hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 ease-in-out cursor-pointer select-none"
-        >
-          Pretend You&apos;re a Good Person (Charity Honeypot) 🕊️
-        </button>
+        {/* Genuine Charity Button */}
+        <div>
+          <button
+            id="donate-charity-btn"
+            type="button"
+            onClick={onCharity}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/60 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:border-neutral-300 dark:hover:border-neutral-700 shadow-sm hover:shadow hover:-translate-y-0.5 active:scale-95 transition-all duration-300 cursor-pointer select-none"
+          >
+            Donate to Digital Wellness Foundation 🕊️
+          </button>
+        </div>
       </div>
     </div>
   );
