@@ -6,6 +6,7 @@ import os
 import random
 import re
 from collections import defaultdict, deque
+import threading
 from pathlib import Path
 from typing import Literal, Optional
 
@@ -517,3 +518,45 @@ def get_stats(roast_id: str):
         "salt": get_counter_sync(f"vote:{roast_id}:salt"),
         "served": get_counter_sync(f"served:{roast_id}"),
     }
+
+
+# --- Persistent Founder Like Counter ---
+LIKES_FILE = Path(__file__).resolve().parent / "likes.json"
+likes_lock = threading.Lock()
+
+
+def get_like_count() -> int:
+    with likes_lock:
+        if not LIKES_FILE.exists():
+            LIKES_FILE.write_text(json.dumps({"count": 1420}))
+        try:
+            data = json.loads(LIKES_FILE.read_text())
+            return data.get("count", 1420)
+        except Exception:
+            return 1420
+
+
+def increment_like_count() -> int:
+    with likes_lock:
+        count = 1420
+        if not LIKES_FILE.exists():
+            count = 1420
+        else:
+            try:
+                data = json.loads(LIKES_FILE.read_text())
+                count = data.get("count", 1420)
+            except Exception:
+                count = 1420
+        count += 1
+        LIKES_FILE.write_text(json.dumps({"count": count}))
+        return count
+
+
+@app.get("/likes")
+def get_likes():
+    return {"count": get_like_count()}
+
+
+@app.post("/like")
+def add_like():
+    return {"count": increment_like_count()}

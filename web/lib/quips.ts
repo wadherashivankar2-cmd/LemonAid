@@ -42,6 +42,13 @@ export const QUIPS: Record<string, string[]> = {
   charityDismiss: [
     "Your karmic debt remains unpaid.",
   ],
+  supportFounder: [
+    "Your pity like has been logged. Founder remains broke.",
+    "Clicking heart won't pay the Groq API bill, but thanks.",
+    "Moral support noted. Financial support still zero.",
+    "Founder feels 0.001% better about life choices.",
+    "Another pity like. We're printing it out to burn for warmth.",
+  ],
   camouflagedEnter: [
     "Type something first before trying to press Enter.",
   ],

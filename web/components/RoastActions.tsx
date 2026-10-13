@@ -112,7 +112,7 @@ export function RoastActions({
             onClick={handleShare}
             className="py-2.5 px-4 text-xs font-semibold cursor-pointer active:scale-95 transition-all"
           >
-            Share on X
+            Broadcast My Shame on X 📢
           </Button>
         )}
 

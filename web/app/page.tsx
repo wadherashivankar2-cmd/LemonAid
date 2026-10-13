@@ -9,6 +9,8 @@ import { RoastCard } from "@/components/RoastCard";
 import { isMuted, setMuted, playTick, playBoom } from "@/lib/sound";
 import { quip } from "@/lib/quips";
 import { downloadCard, shareX, setCurrentShare } from "@/lib/share";
+import { SupportFounder } from "@/components/SupportFounder";
+import { WittyFooter } from "@/components/WittyFooter";
 
 type AppState = "idle" | "loading" | "reveal" | "gentle" | "error";
 
@@ -346,7 +348,8 @@ export default function Home() {
   return (
     <main className="w-full max-w-5xl mx-auto px-4 min-h-screen flex flex-col justify-between py-12 selection:bg-neutral-200">
       {/* Top Utility Bar */}
-      <div className="w-full flex justify-end">
+      <div className="w-full flex items-center justify-between">
+        <SupportFounder />
         <button
           id="sound-toggle-btn"
           onClick={toggleSound}
@@ -601,6 +604,9 @@ export default function Home() {
           </div>
         </div>
       ) : null}
+
+      {/* Witty Footer */}
+      <WittyFooter />
 
       {/* Full-Screen Root Modal: Hamster Meme Suggestion Troll */}
       {showSuggestionPopup && (
