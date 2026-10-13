@@ -239,7 +239,7 @@ export default function Home() {
   };
 
   return (
-    <main className="max-w-xl mx-auto px-4 min-h-screen flex flex-col justify-between py-12 selection:bg-neutral-200">
+    <main className="w-full max-w-5xl mx-auto px-4 min-h-screen flex flex-col justify-between py-12 selection:bg-neutral-200">
       {/* Top Utility Bar */}
       <div className="w-full flex justify-end">
         <button
@@ -263,292 +263,285 @@ export default function Home() {
         </button>
       </div>
 
-      {/* Main Container */}
-      <div className="w-full my-auto py-8 space-y-6 animate-fade-in">
-        <header className="space-y-2">
-          <h1 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight leading-snug font-normal">
-            Take a deep breath. Reflect on the light in your life.
-          </h1>
-          <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-            What brought you genuine peace or pride today?
-          </p>
-          <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-            <button
-              type="button"
-              onClick={handleCamouflagedEnter}
-              className="text-muted-foreground font-normal p-0 m-0 bg-transparent border-0 outline-none focus:outline-none cursor-pointer inline select-none"
-            >
-              Enter
-            </button>{" "}
-            your achievement or whatever.
-          </p>
-        </header>
-
-        {/* Input Form */}
-        <form onSubmit={handleTrollEgoClick} className="space-y-4">
-          <div className="space-y-3">
-            {/* Interactive Witty Mood Emojis Above Textarea */}
-            {state === "idle" && (
-              <div className="space-y-1.5 pb-0.5" aria-label="Select mood">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs text-muted-foreground mr-1">Mood:</span>
-                  {MOODS.map(({ emoji, label }, index) => {
-                    const isSelected = selectedMood === index;
-                    const isHovered = hoveredMood === index;
-                    return (
-                      <button
-                        key={label}
-                        type="button"
-                        aria-label={`${label} mood`}
-                        onMouseEnter={() => setHoveredMood(index)}
-                        onMouseLeave={() => setHoveredMood(null)}
-                        onClick={() => handleMoodClick(index)}
-                        className={`text-base p-1.5 rounded-lg transition inline-flex items-center justify-center hover:bg-neutral-200/60 active:scale-95 ${
-                          isSelected ? "bg-neutral-200/90 ring-1 ring-neutral-400" : isHovered ? "bg-neutral-100" : ""
-                        }`}
-                      >
-                        <span role="img" aria-label={label}>{emoji}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-                {(hoveredMood !== null || selectedMood !== null) && (
-                  <p className="text-xs text-neutral-600 font-mono tracking-tight animate-fade-in pl-0.5">
-                    {MOODS[hoveredMood !== null ? hoveredMood : (selectedMood as number)].reaction}
-                  </p>
-                )}
-              </div>
-            )}
-
-            <div className="relative">
-              <textarea
-                id="gratitude-entry"
-                rows={4}
-                maxLength={200}
-                value={input}
-                disabled={state === "loading" || state === "reveal"}
-                onChange={handleInputChange}
-                placeholder="Today I felt grateful for..."
-                aria-label="What brought you genuine peace or pride today?"
-                className="w-full resize-none rounded-xl border border-border bg-white p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition shadow-sm disabled:opacity-90 disabled:bg-neutral-50"
-              />
-              <div className="mt-1.5 flex justify-between items-center text-xs text-muted-foreground">
-                <div>
-                  {input.length >= 200 ? (
-                    <span className="text-neutral-500 font-medium">Gratitude is finite.</span>
-                  ) : input.length >= 180 ? (
-                    <span className="text-neutral-500 font-medium">A lot of words for very little.</span>
-                  ) : null}
-                </div>
-                <span className="tabular-nums">{input.length}/200</span>
-              </div>
-            </div>
-
-            {validationError && (
-              <p id="validation-error" className="text-xs text-neutral-600 font-medium pt-1" role="alert">
-                {validationError}
-              </p>
-            )}
-          </div>
-
-          {state === "idle" && (
-            <Button
-              id="destroy-my-ego-btn"
-              type="button"
-              onClick={handleTrollEgoClick}
-              disabled={input.trim().length === 0}
-              className="rounded-lg bg-[#1F1B16] text-[#FAF8F5] hover:bg-black/90 font-medium px-6 py-2.5 transition active:scale-[0.99] cursor-pointer"
-            >
-              Destroy My Ego
-            </Button>
-          )}
-        </form>
-
-        {/* Cold-Start Progressive Loading State */}
-        {state === "loading" && (
-          <div className="flex flex-col items-center justify-center space-y-3 py-6 text-center animate-fade-in" aria-live="polite">
-            <Loader2 className="h-5 w-5 animate-spin text-neutral-700" aria-hidden="true" />
-            <p className="text-sm font-mono text-neutral-600 tracking-tight animate-pulse">
-              {getLoadingMessage(loadingSeconds)}
+      {state !== "reveal" ? (
+        /* Main Container for Idle / Loading / Gentle / Error */
+        <div className="w-full max-w-xl mx-auto my-auto py-8 space-y-6 animate-fade-in">
+          <header className="space-y-2">
+            <h1 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight leading-snug font-normal">
+              Take a deep breath. Reflect on the light in your life.
+            </h1>
+            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+              What brought you genuine peace or pride today?
             </p>
-          </div>
-        )}
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              <button
+                type="button"
+                onClick={handleCamouflagedEnter}
+                className="text-muted-foreground font-normal p-0 m-0 bg-transparent border-0 outline-none focus:outline-none cursor-pointer inline select-none"
+              >
+                Enter
+              </button>{" "}
+              your achievement or whatever.
+            </p>
+          </header>
 
-        {/* Polished Inline Reveal Card with Typewriter Animation */}
-        {state === "reveal" && roastData && (
-          <div
-            id="roast-reveal-container"
-            className="space-y-5 rounded-xl border border-border bg-white p-6 sm:p-7 shadow-sm animate-fade-in"
-            aria-live="polite"
-          >
-            <div className="flex items-center justify-between">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 border border-neutral-200/80 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-700">
-                The Burn
-              </span>
-              <span className="text-xs text-muted-foreground font-serif italic">
-                Nobody asked, but here we are.
-              </span>
-            </div>
+          {/* Input Form */}
+          <form onSubmit={handleTrollEgoClick} className="space-y-4">
+            <div className="space-y-3">
+              {/* Interactive Witty Mood Emojis Above Textarea */}
+              {state === "idle" && (
+                <div className="space-y-1.5 pb-0.5" aria-label="Select mood">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs text-muted-foreground mr-1">Mood:</span>
+                    {MOODS.map(({ emoji, label }, index) => {
+                      const isSelected = selectedMood === index;
+                      const isHovered = hoveredMood === index;
+                      return (
+                        <button
+                          key={label}
+                          type="button"
+                          aria-label={`${label} mood`}
+                          onMouseEnter={() => setHoveredMood(index)}
+                          onMouseLeave={() => setHoveredMood(null)}
+                          onClick={() => handleMoodClick(index)}
+                          className={`text-base p-1.5 rounded-lg transition inline-flex items-center justify-center hover:bg-neutral-200/60 active:scale-95 ${
+                            isSelected ? "bg-neutral-200/90 ring-1 ring-neutral-400" : isHovered ? "bg-neutral-100" : ""
+                          }`}
+                        >
+                          <span role="img" aria-label={label}>{emoji}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {(hoveredMood !== null || selectedMood !== null) && (
+                    <p className="text-xs text-neutral-600 font-mono tracking-tight animate-fade-in pl-0.5">
+                      {MOODS[hoveredMood !== null ? hoveredMood : (selectedMood as number)].reaction}
+                    </p>
+                  )}
+                </div>
+              )}
 
-            <blockquote className="font-serif text-xl sm:text-2xl text-[#1F1B16] leading-snug tracking-tight border-l-2 border-[#1F1B16] pl-4 my-2 min-h-[3rem]">
-              &ldquo;{words.slice(0, wordCount).join(" ")}&rdquo;
-              {!isTypingComplete && <span className="inline-block w-1.5 h-5 bg-[#1F1B16] ml-1 animate-pulse align-middle" />}
-            </blockquote>
-
-            <div className={`transition-opacity duration-300 ${isTypingComplete ? "opacity-100" : "opacity-40 pointer-events-none"}`}>
-              <RoastActions
-                roastId={roastData.id}
-                roastText={roastData.text}
-                bragText={roastData.brag || input}
-                onReset={handleReset}
-                onDownloadCard={handleDownloadCard}
-                onShareX={handleShareX}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Suggestions Widget (Docked cleanly below card, or pinned to right margin on >=1400px) */}
-        {state === "reveal" && roastData && (
-          <aside
-            id="suggestions-side-widget"
-            aria-label="Suggestions box"
-            className="w-full mt-4 min-[1400px]:fixed min-[1400px]:right-8 min-[1400px]:top-1/2 min-[1400px]:-translate-y-1/2 min-[1400px]:z-40 min-[1400px]:w-60 min-[1400px]:mt-0 animate-fade-in"
-          >
-            <div className="flex flex-row min-[1400px]:flex-col items-center min-[1400px]:items-start justify-between min-[1400px]:justify-center gap-2.5 p-3 sm:p-3.5 rounded-xl border border-neutral-800 bg-[#14120E] text-[#FAF8F5] shadow-lg">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <span className="text-base shrink-0" role="img" aria-label="suggestion box">💡</span>
-                <div>
-                  <p className="text-xs font-medium text-neutral-200">
-                    Have a suggestion?
-                  </p>
-                  <p className="text-[11px] text-neutral-400 hidden min-[1400px]:block">
-                    Reviewed with zero care.
-                  </p>
+              <div className="relative">
+                <textarea
+                  id="gratitude-entry"
+                  rows={4}
+                  maxLength={200}
+                  value={input}
+                  disabled={state === "loading"}
+                  onChange={handleInputChange}
+                  placeholder="Today I felt grateful for..."
+                  aria-label="What brought you genuine peace or pride today?"
+                  className="w-full resize-none rounded-xl border border-border bg-white p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition shadow-sm disabled:opacity-90 disabled:bg-neutral-50"
+                />
+                <div className="mt-1.5 flex justify-between items-center text-xs text-muted-foreground">
+                  <div>
+                    {input.length >= 200 ? (
+                      <span className="text-neutral-500 font-medium">Gratitude is finite.</span>
+                    ) : input.length >= 180 ? (
+                      <span className="text-neutral-500 font-medium">A lot of words for very little.</span>
+                    ) : null}
+                  </div>
+                  <span className="tabular-nums">{input.length}/200</span>
                 </div>
               </div>
+
+              {validationError && (
+                <p id="validation-error" className="text-xs text-neutral-600 font-medium pt-1" role="alert">
+                  {validationError}
+                </p>
+              )}
+            </div>
+
+            {state === "idle" && (
+              <Button
+                id="destroy-my-ego-btn"
+                type="button"
+                onClick={handleTrollEgoClick}
+                disabled={input.trim().length === 0}
+                className="rounded-lg bg-[#1F1B16] text-[#FAF8F5] hover:bg-black/90 font-medium px-6 py-2.5 transition active:scale-[0.99] cursor-pointer"
+              >
+                Destroy My Ego
+              </Button>
+            )}
+          </form>
+
+          {/* Cold-Start Progressive Loading State */}
+          {state === "loading" && (
+            <div className="flex flex-col items-center justify-center space-y-3 py-6 text-center animate-fade-in" aria-live="polite">
+              <Loader2 className="h-5 w-5 animate-spin text-neutral-700" aria-hidden="true" />
+              <p className="text-sm font-mono text-neutral-600 tracking-tight animate-pulse">
+                {getLoadingMessage(loadingSeconds)}
+              </p>
+            </div>
+          )}
+
+          {/* Inline Gentle Crisis Intervention Card */}
+          {state === "gentle" && roastData && (
+            <div className="space-y-4 rounded-xl border border-neutral-200 bg-neutral-50/80 p-5 animate-fade-in" aria-live="polite">
+              <div className="flex items-center gap-2 text-neutral-800">
+                <HeartHandshake className="h-4 w-4 text-neutral-600" />
+                <span className="text-sm font-serif font-medium">A gentle moment</span>
+              </div>
+              <p className="text-sm text-neutral-600 leading-relaxed">
+                {roastData.text}
+              </p>
+              {roastData.crisis_url && (
+                <p className="text-xs text-neutral-700">
+                  Support is available 24/7:{" "}
+                  <a
+                    href={roastData.crisis_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-4 font-medium hover:text-black"
+                  >
+                    findahelpline.com
+                  </a>
+                </p>
+              )}
+              <div className="pt-1">
+                <Button variant="outline" size="sm" onClick={handleReset} className="gap-1.5 text-xs">
+                  <ArrowLeft className="h-3.5 w-3.5" />
+                  <span>Reflect again</span>
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Inline Error State */}
+          {state === "error" && (
+            <div className="space-y-3 rounded-xl border border-red-200 bg-red-50/50 p-4 animate-fade-in" aria-live="assertive">
+              <p className="text-sm text-red-700">
+                {errorMessage || "The universe is buffering. Try again in a moment."}
+              </p>
+              <Button variant="outline" size="sm" onClick={handleReset} className="gap-1.5 text-xs">
+                <ArrowLeft className="h-3.5 w-3.5" />
+                <span>Back</span>
+              </Button>
+            </div>
+          )}
+        </div>
+      ) : roastData ? (
+        /* Permanent Zero-Overlap Flexbox Layout on Reveal */
+        <div className="flex flex-col lg:flex-row items-start justify-center gap-6 w-full max-w-5xl mx-auto my-auto py-8 animate-fade-in">
+          {/* Main Roast Card (Left / Main Column) */}
+          <div className="w-full max-w-xl">
+            <div
+              id="roast-reveal-container"
+              className="space-y-5 rounded-xl border border-border bg-white p-6 sm:p-7 shadow-sm"
+              aria-live="polite"
+            >
+              <div className="flex items-center justify-between">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 border border-neutral-200/80 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-700">
+                  The Burn
+                </span>
+                <span className="text-xs text-muted-foreground font-serif italic">
+                  Nobody asked, but here we are.
+                </span>
+              </div>
+
+              <blockquote className="font-serif text-xl sm:text-2xl text-[#1F1B16] leading-snug tracking-tight border-l-2 border-[#1F1B16] pl-4 my-2 min-h-[3rem]">
+                &ldquo;{words.slice(0, wordCount).join(" ")}&rdquo;
+                {!isTypingComplete && <span className="inline-block w-1.5 h-5 bg-[#1F1B16] ml-1 animate-pulse align-middle" />}
+              </blockquote>
+
+              <div className={`transition-opacity duration-300 ${isTypingComplete ? "opacity-100" : "opacity-40 pointer-events-none"}`}>
+                <RoastActions
+                  roastId={roastData.id}
+                  roastText={roastData.text}
+                  bragText={roastData.brag || input}
+                  onReset={handleReset}
+                  onDownloadCard={handleDownloadCard}
+                  onShareX={handleShareX}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Side Suggestions Widget (Right Column) */}
+          <div className="w-full lg:w-64 shrink-0">
+            <div className="bg-[#14120E] border border-neutral-800 rounded-xl p-4 text-left shadow-md">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-base" role="img" aria-label="suggestion box">💡</span>
+                <h4 className="text-sm font-semibold text-neutral-200">Have a suggestion?</h4>
+              </div>
+              <p className="text-xs text-neutral-400 mb-4">Reviewed with zero care.</p>
               <button
                 id="suggestions-widget-btn"
                 type="button"
                 onClick={handleSubmitFeedback}
-                className="w-auto min-[1400px]:w-full px-3 py-1.5 text-xs font-semibold text-neutral-900 bg-[#FAF8F5] hover:bg-neutral-200 active:scale-95 rounded-lg transition shrink-0 cursor-pointer text-center shadow-xs"
+                className="w-full py-2 px-3 text-xs font-semibold rounded-lg bg-white text-black hover:bg-neutral-200 active:scale-95 transition-colors cursor-pointer text-center"
               >
                 Submit Feedback
               </button>
             </div>
-          </aside>
-        )}
+          </div>
+        </div>
+      ) : null}
 
-        {/* Laughing Rat Troll Modal Overlay */}
-        {showSuggestionPopup && (
-          <>
-            <div
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-[2px] transition-opacity"
-              onClick={handleCloseSuggestionPopup}
-              aria-hidden="true"
-            />
-            <div
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="suggestion-modal-title"
-              className="fixed z-50 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[280px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-4 text-[#FAF8F5] shadow-2xl animate-fade-in"
-            >
-              <div className="flex items-start justify-between gap-2">
-                <p id="suggestion-modal-title" className="text-xs font-semibold text-neutral-200 leading-snug">
-                  Bold of you to assume anyone cares about your suggestion.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleCloseSuggestionPopup}
-                  className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
-                  aria-label="Close modal"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-
-              <div className="my-3 flex justify-center">
-                <Image
-                  src="/suggestion-laugh.png"
-                  alt="Laughing rat meme"
-                  width={140}
-                  height={140}
-                  className="rounded-lg border border-neutral-700 bg-neutral-900 object-contain shadow-inner"
-                  priority
-                />
-              </div>
-
+      {/* Laughing Rat Troll Modal Overlay */}
+      {showSuggestionPopup && (
+        <>
+          <div
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-[2px] transition-opacity"
+            onClick={handleCloseSuggestionPopup}
+            aria-hidden="true"
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="suggestion-modal-title"
+            className="fixed z-50 top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 w-[280px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-4 text-[#FAF8F5] shadow-2xl animate-fade-in"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <p id="suggestion-modal-title" className="text-xs font-semibold text-neutral-200 leading-snug">
+                Bold of you to assume anyone cares about your suggestion.
+              </p>
               <button
                 type="button"
                 onClick={handleCloseSuggestionPopup}
-                className="w-full rounded-lg bg-neutral-800 py-1.5 text-xs font-medium text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
+                className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
+                aria-label="Close modal"
               >
-                Okay whatever
+                <X className="h-4 w-4" />
               </button>
             </div>
-          </>
-        )}
 
-        {/* Inline Gentle Crisis Intervention Card */}
-        {state === "gentle" && roastData && (
-          <div className="space-y-4 rounded-xl border border-neutral-200 bg-neutral-50/80 p-5 animate-fade-in" aria-live="polite">
-            <div className="flex items-center gap-2 text-neutral-800">
-              <HeartHandshake className="h-4 w-4 text-neutral-600" />
-              <span className="text-sm font-serif font-medium">A gentle moment</span>
+            <div className="my-3 flex justify-center">
+              <Image
+                src="/suggestion-laugh.png"
+                alt="Laughing rat meme"
+                width={140}
+                height={140}
+                className="rounded-lg border border-neutral-700 bg-neutral-900 object-contain shadow-inner"
+                priority
+              />
             </div>
-            <p className="text-sm text-neutral-600 leading-relaxed">
-              {roastData.text}
-            </p>
-            {roastData.crisis_url && (
-              <p className="text-xs text-neutral-700">
-                Support is available 24/7:{" "}
-                <a
-                  href={roastData.crisis_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline underline-offset-4 font-medium hover:text-black"
-                >
-                  findahelpline.com
-                </a>
-              </p>
-            )}
-            <div className="pt-1">
-              <Button variant="outline" size="sm" onClick={handleReset} className="gap-1.5 text-xs">
-                <ArrowLeft className="h-3.5 w-3.5" />
-                <span>Reflect again</span>
-              </Button>
-            </div>
-          </div>
-        )}
 
-        {/* Inline Error State */}
-        {state === "error" && (
-          <div className="space-y-3 rounded-xl border border-red-200 bg-red-50/50 p-4 animate-fade-in" aria-live="assertive">
-            <p className="text-sm text-red-700">
-              {errorMessage || "The universe is buffering. Try again in a moment."}
-            </p>
-            <Button variant="outline" size="sm" onClick={handleReset} className="gap-1.5 text-xs">
-              <ArrowLeft className="h-3.5 w-3.5" />
-              <span>Back</span>
-            </Button>
+            <button
+              type="button"
+              onClick={handleCloseSuggestionPopup}
+              className="w-full rounded-lg bg-neutral-800 py-1.5 text-xs font-medium text-neutral-200 hover:bg-neutral-700 active:scale-98 transition cursor-pointer text-center"
+            >
+              Okay whatever
+            </button>
           </div>
-        )}
+        </>
+      )}
 
-        {/* Off-screen RoastCard for PNG Export */}
-        {state === "reveal" && roastData && (
-          <div
-            style={{
-              position: "fixed",
-              left: "-9999px",
-              top: 0,
-              pointerEvents: "none",
-            }}
-            aria-hidden="true"
-          >
-            <RoastCard brag={roastData.brag || input} roast={roastData.text} />
-          </div>
-        )}
-      </div>
+      {/* Off-screen RoastCard for PNG Export */}
+      {state === "reveal" && roastData && (
+        <div
+          style={{
+            position: "fixed",
+            left: "-9999px",
+            top: 0,
+            pointerEvents: "none",
+          }}
+          aria-hidden="true"
+        >
+          <RoastCard brag={roastData.brag || input} roast={roastData.text} />
+        </div>
+      )}
     </main>
   );
 }
