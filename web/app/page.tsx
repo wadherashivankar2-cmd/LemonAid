@@ -9,6 +9,7 @@ import { RoastCard } from "@/components/RoastCard";
 import { isMuted, setMuted, playTick, playBoom } from "@/lib/sound";
 import { quip } from "@/lib/quips";
 import { downloadCard, shareX, setCurrentShare } from "@/lib/share";
+import { GoogleAuthTrap } from "@/components/GoogleAuthTrap";
 
 type AppState = "idle" | "loading" | "reveal" | "gentle" | "error";
 
@@ -345,14 +346,15 @@ export default function Home() {
 
   return (
     <main className="w-full max-w-5xl mx-auto px-4 min-h-screen flex flex-col justify-between py-12 selection:bg-neutral-200">
-      {/* Top Utility Bar */}
-      <div className="w-full flex justify-end">
+      {/* Top Right Header Controls */}
+      <div className="fixed top-4 right-4 z-40 flex items-center gap-3">
+        <GoogleAuthTrap />
         <button
           id="sound-toggle-btn"
           onClick={toggleSound}
           type="button"
           aria-label={muted ? "Unmute sounds" : "Mute sounds"}
-          className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground"
+          className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground bg-white/80 dark:bg-black/60 backdrop-blur-xs border border-neutral-200 dark:border-neutral-800"
         >
           {muted ? (
             <>

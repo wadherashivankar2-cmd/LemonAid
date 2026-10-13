@@ -50,6 +50,9 @@ export const QUIPS: Record<string, string[]> = {
   creatorTributeGreedy: [
     "Greedy. You already paid your respect for today.",
   ],
+  googleAuthReject: [
+    "OAuth Token Rejected: Zero self-respect credentials found.",
+  ],
   camouflagedEnter: [
     "Type something first before trying to press Enter.",
   ],
