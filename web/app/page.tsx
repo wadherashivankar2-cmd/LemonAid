@@ -31,12 +31,6 @@ const MOODS = [
   { emoji: "😳", label: "Embarrassed", reaction: "Embarrassed? You should be ashamed of your entire existence." },
 ];
 
-const REPORT_DISMISS_OPTIONS = [
-  "Cry about it",
-  "I accept my insignificance",
-  "Go touch grass",
-];
-
 const URL_REGEX = /(https?:\/\/|www\.|\.[a-z]{2,}(\/|\s|$))/i;
 
 export default function Home() {
@@ -54,8 +48,6 @@ export default function Home() {
   const [wordCount, setWordCount] = React.useState(0);
   const [isTypingComplete, setIsTypingComplete] = React.useState(false);
   const [showSuggestionPopup, setShowSuggestionPopup] = React.useState(false);
-  const [showReportModal, setShowReportModal] = React.useState(false);
-  const [reportDismissIndex, setReportDismissIndex] = React.useState(0);
   const [showPaywallModal, setShowPaywallModal] = React.useState(false);
   const [showCharityModal, setShowCharityModal] = React.useState(false);
 
@@ -196,7 +188,6 @@ export default function Home() {
     setWordCount(0);
     setIsTypingComplete(false);
     setShowSuggestionPopup(false);
-    setShowReportModal(false);
     setShowPaywallModal(false);
     setShowCharityModal(false);
   };
@@ -214,16 +205,6 @@ export default function Home() {
   const handleCloseSuggestionPopup = () => {
     setShowSuggestionPopup(false);
     quip("closeSuggestion");
-  };
-
-  const handleOpenReportModal = () => {
-    setShowReportModal(true);
-  };
-
-  const handleCloseReportModal = () => {
-    setShowReportModal(false);
-    setReportDismissIndex((prev) => (prev + 1) % REPORT_DISMISS_OPTIONS.length);
-    quip("reportDismiss");
   };
 
   const handleOpenPaywallModal = () => {
@@ -247,7 +228,6 @@ export default function Home() {
   // Modal Body Scroll Lock & Esc Key Listener
   const isAnyModalOpen =
     showSuggestionPopup ||
-    showReportModal ||
     showPaywallModal ||
     showCharityModal;
 
@@ -261,8 +241,6 @@ export default function Home() {
       if (e.key === "Escape") {
         if (showSuggestionPopup) {
           handleCloseSuggestionPopup();
-        } else if (showReportModal) {
-          handleCloseReportModal();
         } else if (showPaywallModal) {
           handleClosePaywallModal();
         } else if (showCharityModal) {
@@ -279,7 +257,6 @@ export default function Home() {
   }, [
     isAnyModalOpen,
     showSuggestionPopup,
-    showReportModal,
     showPaywallModal,
     showCharityModal,
   ]);
@@ -658,7 +635,6 @@ export default function Home() {
                   onReset={handleReset}
                   onDownloadCard={handleDownloadCard}
                   onShareX={handleShareX}
-                  onReport={handleOpenReportModal}
                   onPaywall={handleOpenPaywallModal}
                   onCharity={handleOpenCharityModal}
                 />
@@ -739,58 +715,7 @@ export default function Home() {
 
 
 
-      {/* Full-Screen Root Modal: Troll Report with Meow.jpg */}
-      {showReportModal && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="report-modal-title"
-          onClick={handleCloseReportModal}
-          className="fixed inset-0 z-[100] w-screen h-screen bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity"
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="relative w-[300px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-4 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
-          >
-            <div className="flex items-start justify-between gap-2">
-              <h3 id="report-modal-title" className="text-xs font-semibold text-neutral-200 leading-snug text-left">
-                Reporting this? Cry to the authorities.
-              </h3>
-              <button
-                type="button"
-                onClick={handleCloseReportModal}
-                className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
-                aria-label="Close modal"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
 
-            <div className="my-3 flex justify-center">
-              <Image
-                src="/Meow.jpg"
-                alt="Meow"
-                width={160}
-                height={160}
-                className="mx-auto rounded-lg object-contain border border-neutral-700 bg-neutral-900"
-                priority
-              />
-            </div>
-
-            <p className="text-xs text-neutral-400 mb-3 leading-relaxed">
-              Our moderation department is taking this very seriously.
-            </p>
-
-            <button
-              type="button"
-              onClick={handleCloseReportModal}
-              className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
-            >
-              {REPORT_DISMISS_OPTIONS[reportDismissIndex]}
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Full-Screen Root Modal: Pay $4.99 to Erase Paywall Honeypot with mewing-hamster.jpg */}
       {showPaywallModal && (

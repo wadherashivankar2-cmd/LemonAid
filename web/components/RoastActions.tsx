@@ -13,12 +13,11 @@ interface RoastActionsProps {
   onReset: () => void;
   onShareX?: () => void;
   onDownloadCard?: () => void;
-  onReport?: () => void;
   onPaywall?: () => void;
   onCharity?: () => void;
 }
 
-type FeedbackModalType = "helpful" | "unhelpful" | "report" | null;
+type FeedbackModalType = "helpful" | "unhelpful" | "report" | "tribute_rejected" | null;
 
 const COOK_AGAIN_MESSAGES = [
   "Masochist detected. Back for another round of humiliation?",
@@ -28,25 +27,32 @@ const COOK_AGAIN_MESSAGES = [
 
 const FEEDBACK_MODAL_DATA = {
   helpful: {
-    title: "Opinion Registered",
+    title: "BRO THINKS HE COOKED",
     image: "/how_bro_felt.jpg",
     alt: "How bro felt",
-    message: "Look at bro thinking his opinion matters. Nobody asked, chief.",
-    dismiss: "I will keep quiet",
+    message: "Nobody asked for your approval bro. Sit down.",
+    dismiss: "My fault chief",
   },
   unhelpful: {
-    title: "Feedback Logged",
+    title: "CRY ABOUT IT",
     image: "/cartoon_bean.jpg",
     alt: "Cartoon bean",
-    message: "Cope and seethe. Your tears have been filed directly into the trash.",
-    dismiss: "I will cope harder",
+    message: "Skill issue. Go cry in the comments.",
+    dismiss: "I'll cope harder",
   },
   report: {
-    title: "Report Status",
+    title: "WOMP WOMP",
     image: "/womp_womp.jpg",
     alt: "Womp womp",
-    message: "Womp womp. Go cry to your mommy, because we don't care.",
-    dismiss: "Understood, womp womp",
+    message: "Calling the police on a roast? Bro is genuinely traumatized.",
+    dismiss: "Womp womp",
+  },
+  tribute_rejected: {
+    title: "TRIBUTE REJECTED",
+    image: "/how_bro_felt.jpg",
+    alt: "Tribute rejected",
+    message: "Bro thinks paying respect fixes his personality. Denied.",
+    dismiss: "Fair enough",
   },
 };
 
@@ -55,7 +61,6 @@ export function RoastActions({
   onReset,
   onShareX,
   onDownloadCard,
-  onReport,
   onPaywall,
   onCharity,
 }: RoastActionsProps) {
@@ -121,7 +126,6 @@ export function RoastActions({
   const handleReport = () => {
     void vote("salt");
     setActiveFeedbackModal("report");
-    if (onReport) onReport();
   };
 
   const handleShare = () => {
@@ -172,7 +176,7 @@ export function RoastActions({
 
   const handleTribute = () => {
     if (hasPaidTribute) {
-      quip("creatorTributeGreedy");
+      setActiveFeedbackModal("tribute_rejected");
       return;
     }
 
@@ -260,10 +264,10 @@ export function RoastActions({
           id="acknowledge-creator-btn"
           variant="outline"
           onClick={handleTribute}
-          className={`w-full py-2.5 px-4 text-xs font-semibold shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out border text-center ${
+          className={`w-full py-2.5 px-4 text-xs font-semibold shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out border text-center cursor-pointer ${
             hasPaidTribute
-              ? "border-neutral-800 bg-neutral-900/60 text-neutral-400 opacity-60 cursor-default"
-              : "border-amber-500/50 dark:border-amber-500/60 bg-amber-50 dark:bg-amber-950/30 text-amber-900 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-900/50 hover:border-amber-600 dark:hover:border-amber-400 hover:text-amber-950 dark:hover:text-amber-100 cursor-pointer"
+              ? "border-neutral-800 bg-neutral-900/60 text-neutral-400 hover:bg-neutral-800 hover:text-neutral-300 hover:border-neutral-700"
+              : "border-amber-500/50 dark:border-amber-500/60 bg-amber-50 dark:bg-amber-950/30 text-amber-900 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-900/50 hover:border-amber-600 dark:hover:border-amber-400 hover:text-amber-950 dark:hover:text-amber-100"
           }`}
         >
           {hasPaidTribute
@@ -321,21 +325,6 @@ export function RoastActions({
             Donate to Digital Wellness Foundation 🕊️
           </button>
         </div>
-      </div>
-
-      {/* Discreet Rickroll Know More Link */}
-      <div className="flex items-center justify-end w-full pt-1">
-        <a
-          id="know-more-rickroll-link"
-          href="https://youtu.be/Aq5WXmQQooo"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[11px] font-medium text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 inline-flex items-center gap-1 transition-colors select-none"
-          title="How this works"
-        >
-          <span>Know More</span>
-          <span className="text-xs">ℹ️</span>
-        </a>
       </div>
 
       {/* Interactive Feedback Meme Modal */}
