@@ -6,22 +6,20 @@
 
 export const QUIPS: Record<string, string[]> = {
   report: [
-    "Report received. Cry more, kiddo.",
-    "{salt} people have reported this roast. None were taken seriously.",
+    "Reporting won't fix your personality.",
+    "{salt} people have reported this roast. Still won't fix your personality.",
     "Your report has been escalated to nobody.",
-    "Trust and Safety will review your report in 3 to 5 business years.",
-    "Still reporting? Impressive stamina.",
     "Have you considered a hobby?",
   ],
   meh: [
-    "Feedback noted. Feedback filed. Feedback ignored.",
+    "Truth hurts, go cry in the group chat.",
+    "Feedback noted. Still, go cry in the group chat.",
     "We have noted your disappointment. It joins the others.",
-    "Understood. The roast will try less hard. It will not.",
   ],
   funny: [
-    "Glad that landed. Your enjoyment has been logged.",
-    "Easy. You have rated this {n} times.",
-    "Fine, you like it. Please stop telling us.",
+    "Masochist detected. Glad your fragile ego could take it.",
+    "Easy. You rated this {n} times. Still a masochist.",
+    "Glad your fragile ego could take it.",
   ],
   human: [
     "All of our humans are in standups. Estimated wait: 6 to 8 business years.",

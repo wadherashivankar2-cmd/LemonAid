@@ -1,11 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { Volume2, VolumeX, Loader2, Smile, Laugh, Meh, Frown, Annoyed, ArrowLeft, HeartHandshake } from "lucide-react";
+import { Volume2, VolumeX, Loader2, ArrowLeft, HeartHandshake } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RoastActions } from "@/components/RoastActions";
 import { RoastCard } from "@/components/RoastCard";
-import { WittyFooter } from "@/components/WittyFooter";
 import { isMuted, setMuted, playTick, playBoom } from "@/lib/sound";
 import { quip } from "@/lib/quips";
 import { downloadCard, shareX, setCurrentShare } from "@/lib/share";
@@ -22,22 +21,24 @@ interface RoastResponse {
   crisis_url?: string;
 }
 
-const LOADING_STEPS = [
-  "Dissecting ego...",
-  "Measuring performative effort...",
-  "Synthesizing bespoke disrespect...",
-  "Polishing the punchline...",
+const MOODS = [
+  { emoji: "😆", label: "Joyful", reaction: "Delusional confidence detected." },
+  { emoji: "🙂", label: "Happy", reaction: "Enjoy it before reality kicks in." },
+  { emoji: "😐", label: "Neutral", reaction: "Dead inside already, perfect." },
+  { emoji: "🙁", label: "Somber", reaction: "Pre-ordering sympathy won't save you." },
+  { emoji: "😶", label: "Speechless", reaction: "Zero thoughts, zero prospects." },
 ];
 
 export default function Home() {
   const [state, setState] = React.useState<AppState>("idle");
   const [input, setInput] = React.useState("");
   const [validationError, setValidationError] = React.useState<string | null>(null);
-  const [loadingTextIndex, setLoadingTextIndex] = React.useState(0);
+  const [loadingSeconds, setLoadingSeconds] = React.useState(0);
   const [roastData, setRoastData] = React.useState<RoastResponse | null>(null);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const [muted, setMutedState] = React.useState(false);
   const [selectedMood, setSelectedMood] = React.useState<number | null>(null);
+  const [hoveredMood, setHoveredMood] = React.useState<number | null>(null);
 
   // Typewriter effect state
   const [displayedWords, setDisplayedWords] = React.useState<string[]>([]);
@@ -52,19 +53,29 @@ export default function Home() {
     fetch(`${apiUrl}/health`, { mode: "cors" }).catch(() => { });
   }, []);
 
-  // Cycle loading messages when loading takes longer (Groq fallback)
+  // Progressive loading timer for cold starts
   React.useEffect(() => {
     if (state !== "loading") {
-      setLoadingTextIndex(0);
+      setLoadingSeconds(0);
       return;
     }
 
     const interval = setInterval(() => {
-      setLoadingTextIndex((prev) => (prev < LOADING_STEPS.length - 1 ? prev + 1 : prev));
-    }, 700);
+      setLoadingSeconds((s) => s + 1);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [state]);
+
+  const getLoadingMessage = (seconds: number) => {
+    if (seconds < 4) {
+      return "Reading your self-absorbed thought...";
+    }
+    if (seconds < 9) {
+      return "Formulating a reality check...";
+    }
+    return "Waking up the server from a coma... your roast is worth the wait.";
+  };
 
   // Word-by-word typewriter effect on reveal
   React.useEffect(() => {
@@ -116,6 +127,7 @@ export default function Home() {
     setRoastData(null);
     setErrorMessage(null);
     setSelectedMood(null);
+    setHoveredMood(null);
     setDisplayedWords([]);
     setIsTypingComplete(false);
   };
@@ -141,7 +153,7 @@ export default function Home() {
 
     setValidationError(null);
     setState("loading");
-    setLoadingTextIndex(0);
+    setLoadingSeconds(0);
     setRoastData(null);
 
     const controller = new AbortController();
@@ -261,28 +273,36 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Mood Emoji Buttons */}
+            {/* Interactive Witty Mood Emojis */}
             {state === "idle" && (
-              <div className="flex items-center gap-1.5 pt-1" aria-label="Select mood">
-                <span className="text-xs text-muted-foreground mr-1">Mood:</span>
-                {[
-                  { icon: Laugh, label: "Joyful" },
-                  { icon: Smile, label: "Happy" },
-                  { icon: Meh, label: "Neutral" },
-                  { icon: Frown, label: "Somber" },
-                  { icon: Annoyed, label: "Distressed" },
-                ].map(({ icon: Icon, label }, index) => (
-                  <button
-                    key={label}
-                    type="button"
-                    aria-label={`${label} mood`}
-                    onClick={() => handleMoodClick(index)}
-                    className={`p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-neutral-200/50 transition inline-flex items-center justify-center ${selectedMood === index ? "text-foreground bg-neutral-200/70" : ""
-                      }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                  </button>
-                ))}
+              <div className="space-y-1.5 pt-1" aria-label="Select mood">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs text-muted-foreground mr-1">Mood:</span>
+                  {MOODS.map(({ emoji, label }, index) => {
+                    const isSelected = selectedMood === index;
+                    const isHovered = hoveredMood === index;
+                    return (
+                      <button
+                        key={label}
+                        type="button"
+                        aria-label={`${label} mood`}
+                        onMouseEnter={() => setHoveredMood(index)}
+                        onMouseLeave={() => setHoveredMood(null)}
+                        onClick={() => handleMoodClick(index)}
+                        className={`text-base p-1.5 rounded-lg transition inline-flex items-center justify-center hover:bg-neutral-200/60 active:scale-95 ${
+                          isSelected ? "bg-neutral-200/90 ring-1 ring-neutral-400" : isHovered ? "bg-neutral-100" : ""
+                        }`}
+                      >
+                        <span role="img" aria-label={label}>{emoji}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                {(hoveredMood !== null || selectedMood !== null) && (
+                  <p className="text-xs text-neutral-600 font-mono tracking-tight animate-fade-in pl-0.5">
+                    {MOODS[hoveredMood !== null ? hoveredMood : (selectedMood as number)].reaction}
+                  </p>
+                )}
               </div>
             )}
 
@@ -295,22 +315,22 @@ export default function Home() {
 
           {state === "idle" && (
             <Button
-              id="save-to-heart-btn"
+              id="destroy-my-ego-btn"
               type="submit"
               disabled={input.trim().length === 0}
               className="rounded-lg bg-[#1F1B16] text-[#FAF8F5] hover:bg-black/90 font-medium px-6 py-2.5 transition active:scale-[0.99]"
             >
-              Save to Heart
+              Destroy My Ego
             </Button>
           )}
         </form>
 
-        {/* Dynamic Multi-Stage Loading State */}
+        {/* Cold-Start Progressive Loading State */}
         {state === "loading" && (
           <div className="flex flex-col items-center justify-center space-y-3 py-6 text-center animate-fade-in" aria-live="polite">
             <Loader2 className="h-5 w-5 animate-spin text-neutral-700" aria-hidden="true" />
             <p className="text-sm font-mono text-neutral-600 tracking-tight animate-pulse">
-              {LOADING_STEPS[loadingTextIndex]}
+              {getLoadingMessage(loadingSeconds)}
             </p>
           </div>
         )}
@@ -409,9 +429,6 @@ export default function Home() {
           </div>
         )}
       </div>
-
-      {/* Persistent Witty Footer */}
-      <WittyFooter />
     </main>
   );
 }
