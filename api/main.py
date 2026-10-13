@@ -29,13 +29,9 @@ if _local_env.exists():
 
 app = FastAPI(title="Mr.Roast API", version="1.0.0")
 
-# --- Environment Configuration ---
-ALLOWED_ORIGINS_RAW = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000")
-ALLOWED_ORIGINS = [o.strip() for o in ALLOWED_ORIGINS_RAW.split(",") if o.strip()]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS if ALLOWED_ORIGINS else ["*"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -335,8 +331,8 @@ class RoastRequest(BaseModel):
         stripped = v.strip()
         if len(stripped) < 3:
             raise ValueError("Input must be at least 3 characters.")
-        if len(stripped) > 200:
-            raise ValueError("Input must not exceed 200 characters.")
+        if len(stripped) > 750:
+            raise ValueError("Input must not exceed 750 characters.")
         return stripped
 
 
@@ -354,7 +350,12 @@ def health():
 
 @app.post("/roast")
 async def generate_roast(req: RoastRequest, request: Request, background_tasks: BackgroundTasks):
-    check_rate_limit(request, limit=20, window_seconds=60)
+    check_rate_limit(
+        request,
+        limit=5,
+        window_seconds=60,
+        detail="Rate limit exceeded. Your desperation is exhausting our servers. Wait a minute before asking for another burn.",
+    )
     input_text = req.happy_thought
 
     # 1. Critical crisis gateway

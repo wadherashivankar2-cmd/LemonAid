@@ -150,8 +150,9 @@ export default function Home() {
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
     const delta = val.length - input.length;
-    // Fallback guard: reject sudden chunk insertions without normal keystroke cadence
-    if (delta > 2) {
+    // Fallback guard: reject sudden chunk insertions without normal keystroke cadence (>20 chars)
+    // Allows mobile autocorrect, virtual keyboard suggestions, and swipe gestures
+    if (delta > 20) {
       playTick();
       const insult = "Type it out yourself, you lazy parasite. We don't accept copied delusions.";
       setValidationError(insult);
@@ -335,14 +336,32 @@ export default function Home() {
       });
 
       if (response.status === 429) {
+        let msg = "Rate limit exceeded. Your desperation is exhausting our servers. Wait a minute before asking for another burn.";
+        try {
+          const errData = await response.json();
+          if (errData?.detail && typeof errData.detail === "string") {
+            msg = errData.detail;
+          }
+        } catch {
+          // fallback to default msg
+        }
         setState("error");
-        setErrorMessage("Slow down. Inner peace takes time.");
+        setErrorMessage(msg);
         return;
       }
 
       if (!response.ok) {
+        let msg = "The universe is buffering. Try again in a moment.";
+        try {
+          const errData = await response.json();
+          if (errData?.detail && typeof errData.detail === "string") {
+            msg = errData.detail;
+          }
+        } catch {
+          // fallback to default msg
+        }
         setState("error");
-        setErrorMessage("The universe is buffering. Try again in a moment.");
+        setErrorMessage(msg);
         return;
       }
 
