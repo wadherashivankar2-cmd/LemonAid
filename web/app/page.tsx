@@ -391,6 +391,26 @@ export default function Home() {
                 onDownloadCard={handleDownloadCard}
                 onShareX={handleShareX}
               />
+
+              {/* Output-Only Compact Suggestions Widget */}
+              <div className="mt-3 pt-3 border-t border-border/70">
+                <div className="flex items-center justify-between gap-2.5 px-3 py-2 rounded-lg border border-neutral-800 bg-[#14120E] text-[#FAF8F5]">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-sm shrink-0" role="img" aria-label="suggestion box">💡</span>
+                    <p className="text-[11px] sm:text-xs font-medium text-neutral-200 truncate">
+                      Have a suggestion to improve Mr. Roast?
+                    </p>
+                  </div>
+                  <button
+                    id="suggestions-widget-btn"
+                    type="button"
+                    onClick={() => quip("suggestions")}
+                    className="px-2.5 py-1 text-[11px] font-semibold text-neutral-900 bg-[#FAF8F5] hover:bg-neutral-200 active:scale-95 rounded-md transition shrink-0 cursor-pointer shadow-xs"
+                  >
+                    Submit Feedback
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -439,31 +459,6 @@ export default function Home() {
             </Button>
           </div>
         )}
-
-        {/* Dedicated Suggestions Widget */}
-        <div className="pt-4 animate-fade-in">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-xl border border-neutral-800 bg-[#14120E] text-[#FAF8F5] shadow-sm">
-            <div className="flex items-center gap-3">
-              <span className="text-xl shrink-0" role="img" aria-label="suggestion box">💡</span>
-              <div>
-                <p className="text-xs sm:text-sm font-medium text-neutral-200">
-                  Have a suggestion to improve Mr. Roast?
-                </p>
-                <p className="text-[11px] text-neutral-400">
-                  We review every submission with zero care.
-                </p>
-              </div>
-            </div>
-            <button
-              id="suggestions-widget-btn"
-              type="button"
-              onClick={() => quip("suggestions")}
-              className="px-3.5 py-1.5 text-xs font-semibold text-neutral-900 bg-[#FAF8F5] hover:bg-neutral-200 active:scale-95 rounded-lg transition shrink-0 cursor-pointer shadow-xs"
-            >
-              Submit Feedback
-            </button>
-          </div>
-        </div>
 
         {/* Off-screen RoastCard for PNG Export */}
         {state === "reveal" && roastData && (
