@@ -33,6 +33,14 @@ const MOODS = [
 
 const URL_REGEX = /(https?:\/\/|www\.|\.[a-z]{2,}(\/|\s|$))/i;
 
+const LOADING_MESSAGES = [
+  "Waking up the server from a coma...",
+  "Analyzing your questionable life choices...",
+  "Formulating maximum emotional damage...",
+  "Consulting the elders of disrespect...",
+  "Almost done cooking you...",
+];
+
 
 export default function Home() {
   const [state, setState] = React.useState<AppState>("idle");
@@ -53,6 +61,8 @@ export default function Home() {
   const [showSuggestionPopup, setShowSuggestionPopup] = React.useState(false);
   const [showPaywallModal, setShowPaywallModal] = React.useState(false);
   const [showCharityModal, setShowCharityModal] = React.useState(false);
+  const [showProceedPrankModal, setShowProceedPrankModal] = React.useState(false);
+  const isSubmittingRef = React.useRef(false);
 
   const words = React.useMemo(() => {
     return roastData?.text ? roastData.text.trim().split(/\s+/) : [];
@@ -82,13 +92,8 @@ export default function Home() {
   }, [state]);
 
   const getLoadingMessage = (seconds: number) => {
-    if (seconds < 4) {
-      return "Reading your self-absorbed thought...";
-    }
-    if (seconds < 9) {
-      return "Formulating a reality check...";
-    }
-    return "Waking up the server from a coma... your roast is worth the wait.";
+    const index = Math.floor(seconds / 3) % LOADING_MESSAGES.length;
+    return LOADING_MESSAGES[index];
   };
 
   const getInputLengthInsult = (len: number) => {
@@ -183,6 +188,8 @@ export default function Home() {
     setShowSuggestionPopup(false);
     setShowPaywallModal(false);
     setShowCharityModal(false);
+    setShowProceedPrankModal(false);
+    isSubmittingRef.current = false;
     setIsShaking(false);
   };
 
@@ -223,7 +230,8 @@ export default function Home() {
   const isAnyModalOpen =
     showSuggestionPopup ||
     showPaywallModal ||
-    showCharityModal;
+    showCharityModal ||
+    showProceedPrankModal;
 
   React.useEffect(() => {
     if (!isAnyModalOpen) return;
@@ -233,7 +241,9 @@ export default function Home() {
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        if (showSuggestionPopup) {
+        if (showProceedPrankModal) {
+          handleCloseProceedPrankModal();
+        } else if (showSuggestionPopup) {
           handleCloseSuggestionPopup();
         } else if (showPaywallModal) {
           handleClosePaywallModal();
@@ -250,6 +260,7 @@ export default function Home() {
     };
   }, [
     isAnyModalOpen,
+    showProceedPrankModal,
     showSuggestionPopup,
     showPaywallModal,
     showCharityModal,
@@ -277,15 +288,20 @@ export default function Home() {
     playTick();
     setIsShaking(true);
     setTimeout(() => setIsShaking(false), 500);
-    const trollMsg = "Nice try. Hit 'Enter' on your keyboard like a normal human.";
+    const trollMsg = "Did you really think a button would save you? Press Enter on your keyboard.";
     setValidationError(trollMsg);
     quip(trollMsg, undefined, { duration: 5000 });
+    setShowProceedPrankModal(true);
+  };
+
+  const handleCloseProceedPrankModal = () => {
+    setShowProceedPrankModal(false);
     textareaRef.current?.focus();
   };
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (state === "loading") return;
+    if (state === "loading" || isSubmittingRef.current) return;
 
     const trimmed = input.trim();
     if (URL_REGEX.test(trimmed)) {
@@ -303,6 +319,7 @@ export default function Home() {
       return;
     }
 
+    isSubmittingRef.current = true;
     setValidationError(null);
     setState("loading");
     setLoadingSeconds(0);
@@ -367,6 +384,8 @@ export default function Home() {
       if (controller.signal.aborted) return;
       setState("error");
       setErrorMessage("The meditation timed out. Try again in a moment.");
+    } finally {
+      isSubmittingRef.current = false;
     }
   };
 
@@ -501,7 +520,9 @@ export default function Home() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
-                      handleSubmit();
+                      if (state !== "loading" && !isSubmittingRef.current) {
+                        handleSubmit();
+                      }
                     }
                   }}
                   placeholder="Today I felt grateful for..."
@@ -531,7 +552,7 @@ export default function Home() {
                 disabled={input.trim().length === 0}
                 className="rounded-xl bg-[#2D2823] hover:bg-[#3D3630] text-[#FAF8F5] border border-[#433B33] font-medium px-6 py-2.5 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out select-none"
               >
-                Proceed &rarr;
+                Proceed ✨
               </Button>
             )}
           </form>
@@ -539,10 +560,17 @@ export default function Home() {
           {/* Cold-Start Progressive Loading State */}
           {state === "loading" && (
             <div className="flex flex-col items-center justify-center space-y-3 py-6 text-center animate-fade-in" aria-live="polite">
-              <Loader2 className="h-5 w-5 animate-spin text-neutral-700" aria-hidden="true" />
-              <p className="text-sm font-mono text-neutral-600 tracking-tight animate-pulse">
+              <div className="flex items-center gap-2">
+                <Loader2 className="h-5 w-5 animate-spin text-neutral-800" aria-hidden="true" />
+                <span className="text-xs uppercase tracking-widest font-mono text-neutral-500">Cooking Roast</span>
+              </div>
+              <p className="text-sm font-mono text-neutral-700 tracking-tight transition-all duration-300 min-h-[1.5rem] animate-pulse">
                 {getLoadingMessage(loadingSeconds)}
               </p>
+              {/* Subtle animated pulsing bar beneath textarea */}
+              <div className="w-56 h-1.5 bg-neutral-200/80 rounded-full overflow-hidden mt-1 shadow-inner">
+                <div className="h-full bg-neutral-800 rounded-full animate-pulse w-full" />
+              </div>
             </div>
           )}
 
@@ -828,6 +856,60 @@ export default function Home() {
               className="w-full py-3 px-5 text-sm font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
             >
               I will suffer for free
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Full-Screen Root Modal: Proceed Honeypot Prank Trap */}
+      {showProceedPrankModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="proceed-prank-title"
+          onClick={handleCloseProceedPrankModal}
+          className="fixed inset-0 z-[100] w-screen h-screen bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-[340px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <h3 id="proceed-prank-title" className="text-xs font-semibold text-neutral-300 uppercase tracking-wider text-left">
+                BUTTON DISABLED
+              </h3>
+              <button
+                type="button"
+                onClick={handleCloseProceedPrankModal}
+                className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
+                aria-label="Close modal"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="my-3 flex justify-center">
+              <Image
+                src="/no_braincells.jpg"
+                alt="No braincells"
+                width={150}
+                height={150}
+                className="max-h-44 w-auto object-contain mx-auto rounded-xl border border-neutral-700 bg-neutral-900 shadow-inner"
+                priority
+              />
+            </div>
+
+            <p className="text-sm font-medium text-neutral-200 my-2 leading-relaxed px-1">
+              Did you really think a button would save you? Press Enter on your keyboard.
+            </p>
+
+            <button
+              id="proceed-prank-dismiss-btn"
+              type="button"
+              onClick={handleCloseProceedPrankModal}
+              className="w-full py-2.5 px-4 text-xs font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
+            >
+              I&apos;ll press Enter like a human
             </button>
           </div>
         </div>
