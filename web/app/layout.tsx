@@ -4,7 +4,7 @@ import { fontSans, fontSerif } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { Chrome } from "@/components/Chrome";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mr-roast.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lovebite.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
