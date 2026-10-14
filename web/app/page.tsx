@@ -341,21 +341,11 @@ export default function Home() {
     showCharityModal,
   ]);
 
-  const handleCamouflagedEnter = () => {
-    if (state === "loading") return;
-    const trimmed = input.trim();
-    if (URL_REGEX.test(trimmed)) {
-      playTick();
-      setValidationError("Nice try. We don't read your links or debug your profiles. Use your words.");
-      quip("urlBlock", undefined, { duration: 5000 });
-      return;
-    }
-    if (trimmed.length < 3) {
-      quip("camouflagedEnter");
-      setValidationError("Even a humblebrag needs at least 3 characters.");
-    } else {
-      handleSubmit();
-    }
+  const isLoading = state === "loading";
+
+  const handleRealSubmit = () => {
+    if (isLoading || isSubmittingRef.current) return;
+    handleSubmit();
   };
 
   const handleProceedClick = (e: React.MouseEvent) => {
@@ -518,16 +508,23 @@ export default function Home() {
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
               What brought you genuine peace or pride today?
             </p>
-            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+            <p className="text-neutral-500 text-xs mb-4 flex items-center gap-1.5">
               <button
                 type="button"
-                disabled={state === "loading"}
-                onClick={handleCamouflagedEnter}
-                className="text-muted-foreground font-normal p-0 m-0 bg-transparent border-0 outline-none focus:outline-none cursor-pointer inline select-none disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleRealSubmit}
+                onMouseEnter={() => {
+                  // Trigger if user typed something and hovers over the button
+                  if (input.trim().length > 0 && !isLoading) {
+                    handleRealSubmit();
+                  }
+                }}
+                disabled={input.trim().length === 0 || isLoading}
+                title="Secret submit"
+                className="inline-flex items-center justify-center px-2 py-0.5 text-[11px] font-mono font-semibold rounded bg-neutral-100 hover:bg-neutral-200 active:bg-neutral-300 border border-neutral-300 text-neutral-700 shadow-xs cursor-pointer transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed select-none"
               >
                 Enter
-              </button>{" "}
-              your achievement or whatever.
+              </button>
+              <span>your achievement or whatever.</span>
             </p>
           </header>
 
@@ -596,14 +593,6 @@ export default function Home() {
                     const insult = "Type it out yourself, you lazy parasite. We don't accept copied delusions.";
                     setValidationError(insult);
                     quip(insult, undefined, { duration: 5000 });
-                  }}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      if (state !== "loading" && !isSubmittingRef.current) {
-                        handleSubmit();
-                      }
-                    }
                   }}
                   placeholder="Today I felt grateful for..."
                   aria-label="What brought you genuine peace or pride today?"
@@ -990,7 +979,7 @@ export default function Home() {
             </div>
 
             <p className="text-sm font-medium text-neutral-200 my-2 leading-relaxed px-1">
-              Are you blind? Can&apos;t you see &apos;Enter&apos;? Stop clicking buttons like an NPC and hit Enter on your keyboard.
+              Are you blind? Can&apos;t you see &apos;Enter&apos;? Stop clicking buttons like an NPC.
             </p>
 
             <button
