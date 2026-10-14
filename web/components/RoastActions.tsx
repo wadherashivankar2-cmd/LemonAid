@@ -354,14 +354,20 @@ export function RoastActions({
               </button>
             </div>
 
-            <div className="my-3 flex justify-center">
-              {activeFeedbackModal === "tribute_rejected" ? (
+            {activeFeedbackModal === "tribute_rejected" ? (
+              <div className="relative w-full h-56 my-3 rounded-lg overflow-hidden bg-neutral-800 flex items-center justify-center">
                 <img
                   src="/Superman.jpg"
-                  alt="Tribute Rejected"
-                  className="w-full rounded-lg object-cover"
+                  alt="Sad Superman"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    // Fallback if filename case is lowercase
+                    (e.currentTarget as HTMLImageElement).src = "/superman.jpg";
+                  }}
                 />
-              ) : (
+              </div>
+            ) : (
+              <div className="my-3 flex justify-center">
                 <Image
                   src={FEEDBACK_MODAL_DATA[activeFeedbackModal].image}
                   alt={FEEDBACK_MODAL_DATA[activeFeedbackModal].alt}
@@ -370,8 +376,8 @@ export function RoastActions({
                   className="max-h-48 w-auto object-contain mx-auto rounded-xl border border-neutral-700 bg-neutral-900 shadow-inner"
                   priority
                 />
-              )}
-            </div>
+              </div>
+            )}
 
             <p className="text-sm font-medium text-neutral-200 my-2 leading-relaxed px-1">
               {FEEDBACK_MODAL_DATA[activeFeedbackModal].message}

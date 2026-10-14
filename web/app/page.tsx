@@ -44,6 +44,8 @@ export default function Home() {
   const [muted, setMutedState] = React.useState(false);
   const [selectedMood, setSelectedMood] = React.useState<number | null>(null);
   const [hoveredMood, setHoveredMood] = React.useState<number | null>(null);
+  const [isShaking, setIsShaking] = React.useState(false);
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
   // Typewriter effect state
   const [wordCount, setWordCount] = React.useState(0);
@@ -181,6 +183,7 @@ export default function Home() {
     setShowSuggestionPopup(false);
     setShowPaywallModal(false);
     setShowCharityModal(false);
+    setIsShaking(false);
   };
 
   const handleMoodClick = (index: number) => {
@@ -267,6 +270,17 @@ export default function Home() {
     } else {
       handleSubmit();
     }
+  };
+
+  const handleProceedClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    playTick();
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 500);
+    const trollMsg = "Nice try. Hit 'Enter' on your keyboard like a normal human.";
+    setValidationError(trollMsg);
+    quip(trollMsg, undefined, { duration: 5000 });
+    textareaRef.current?.focus();
   };
 
   const handleSubmit = async (e?: React.FormEvent) => {
@@ -419,7 +433,7 @@ export default function Home() {
           </header>
 
           {/* Input Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
             <div className="space-y-3">
               {/* Interactive Witty Mood Emojis Above Textarea */}
               {state === "idle" && (
@@ -467,8 +481,9 @@ export default function Home() {
                 </div>
               )}
 
-              <div className="relative">
+              <div className={`relative transition-transform ${isShaking ? "animate-shake" : ""}`}>
                 <textarea
+                  ref={textareaRef}
                   id="gratitude-entry"
                   rows={4}
                   value={input}
@@ -486,7 +501,7 @@ export default function Home() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                       e.preventDefault();
-                      handleCamouflagedEnter();
+                      handleSubmit();
                     }
                   }}
                   placeholder="Today I felt grateful for..."
@@ -511,8 +526,8 @@ export default function Home() {
             {state === "idle" && (
               <Button
                 id="proceed-btn"
-                type="submit"
-                onClick={handleSubmit}
+                type="button"
+                onClick={handleProceedClick}
                 disabled={input.trim().length === 0}
                 className="rounded-xl bg-[#2D2823] hover:bg-[#3D3630] text-[#FAF8F5] border border-[#433B33] font-medium px-6 py-2.5 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out select-none"
               >
