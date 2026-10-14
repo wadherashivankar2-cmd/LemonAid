@@ -4,9 +4,33 @@ import { fontSans, fontSerif } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { Chrome } from "@/components/Chrome";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mr-roast.vercel.app";
+
 export const metadata: Metadata = {
-  title: "LoveBite",
-  description: "Reflect on what brought you genuine peace or pride today.",
+  metadataBase: new URL(siteUrl),
+  title: "LoveBite — Reflect on Your Day",
+  description: "A calm, mindful space for genuine daily self-reflection and personal growth.",
+  openGraph: {
+    title: "LoveBite — Reflect on Your Day",
+    description: "A calm, mindful space for genuine daily self-reflection and personal growth.",
+    url: siteUrl,
+    siteName: "LoveBite",
+    type: "website",
+    images: [
+      {
+        url: "/api/og",
+        width: 1200,
+        height: 630,
+        alt: "LoveBite — Reflect on Your Day",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "LoveBite — Reflect on Your Day",
+    description: "A calm, mindful space for genuine daily self-reflection.",
+    images: ["/api/og"],
+  },
   icons: {
     icon: [
       { url: "/icon.svg", type: "image/svg+xml" },
