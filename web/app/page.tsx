@@ -41,12 +41,20 @@ const LOADING_MESSAGES = [
   "Almost done cooking you...",
 ];
 
+const getProgressMilestoneMessage = (progress: number) => {
+  if (progress >= 100) return "Enlightenment achieved.";
+  if (progress >= 75) return "Manifesting your reflection into reality...";
+  if (progress >= 50) return "Consulting universal energy for maximum accuracy...";
+  if (progress >= 25) return "Filtering out toxic optimism...";
+  return "Calibrating emotional baseline...";
+};
 
 export default function Home() {
   const [state, setState] = React.useState<AppState>("idle");
   const [input, setInput] = React.useState("");
   const [validationError, setValidationError] = React.useState<string | null>(null);
   const [loadingSeconds, setLoadingSeconds] = React.useState(0);
+  const [loadingProgress, setLoadingProgress] = React.useState(0);
   const [roastData, setRoastData] = React.useState<RoastResponse | null>(null);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const [muted, setMutedState] = React.useState(false);
@@ -77,16 +85,28 @@ export default function Home() {
     fetch(`${apiUrl}/health`, { mode: "cors" }).catch(() => { });
   }, []);
 
-  // Progressive loading timer for cold starts
+  // Progressive loading timer and animated milestone progress bar
   React.useEffect(() => {
     if (state !== "loading") {
       setLoadingSeconds(0);
+      setLoadingProgress(0);
       return;
     }
 
+    const startTime = Date.now();
     const interval = setInterval(() => {
-      setLoadingSeconds((s) => s + 1);
-    }, 1000);
+      const elapsed = Date.now() - startTime;
+      setLoadingSeconds(Math.floor(elapsed / 1000));
+
+      // Dynamically simulate progress up to 90-95% over ~8-12 seconds
+      let p = 0;
+      if (elapsed <= 10000) {
+        p = Math.floor((elapsed / 10000) * 90);
+      } else {
+        p = Math.min(95, 90 + Math.floor((elapsed - 10000) / 2000));
+      }
+      setLoadingProgress(p);
+    }, 100);
 
     return () => clearInterval(interval);
   }, [state]);
@@ -190,6 +210,7 @@ export default function Home() {
     setShowCharityModal(false);
     setShowProceedPrankModal(false);
     isSubmittingRef.current = false;
+    setLoadingProgress(0);
     setIsShaking(false);
   };
 
@@ -288,7 +309,7 @@ export default function Home() {
     playTick();
     setIsShaking(true);
     setTimeout(() => setIsShaking(false), 500);
-    const trollMsg = "Did you really think a button would save you? Press Enter on your keyboard.";
+    const trollMsg = "Digital shortcuts lack spiritual depth. Press 'Enter' on your keyboard.";
     setValidationError(trollMsg);
     quip(trollMsg, undefined, { duration: 5000 });
     setShowProceedPrankModal(true);
@@ -323,6 +344,7 @@ export default function Home() {
     setValidationError(null);
     setState("loading");
     setLoadingSeconds(0);
+    setLoadingProgress(0);
     setRoastData(null);
 
     const controller = new AbortController();
@@ -370,6 +392,10 @@ export default function Home() {
 
       const data: RoastResponse = await response.json();
       setRoastData(data);
+
+      // Snap loading progress to 100% on completion
+      setLoadingProgress(100);
+      await new Promise((resolve) => setTimeout(resolve, 400));
 
       if (data.kind === "gentle") {
         setState("gentle");
@@ -559,17 +585,29 @@ export default function Home() {
 
           {/* Cold-Start Progressive Loading State */}
           {state === "loading" && (
-            <div className="flex flex-col items-center justify-center space-y-3 py-6 text-center animate-fade-in" aria-live="polite">
-              <div className="flex items-center gap-2">
-                <Loader2 className="h-5 w-5 animate-spin text-neutral-800" aria-hidden="true" />
-                <span className="text-xs uppercase tracking-widest font-mono text-neutral-500">Cooking Roast</span>
+            <div className="w-full py-4 text-center animate-fade-in" aria-live="polite">
+              {/* Dynamic Milestone & Percentage Label above the bar */}
+              <div className="flex items-center justify-between text-xs font-mono text-neutral-600 mb-1.5 px-0.5">
+                <span className="font-medium tracking-tight">
+                  {getProgressMilestoneMessage(loadingProgress)}
+                </span>
+                <span className="font-semibold text-neutral-700">{loadingProgress}%</span>
               </div>
-              <p className="text-sm font-mono text-neutral-700 tracking-tight transition-all duration-300 min-h-[1.5rem] animate-pulse">
-                {getLoadingMessage(loadingSeconds)}
-              </p>
-              {/* Subtle animated pulsing bar beneath textarea */}
-              <div className="w-56 h-1.5 bg-neutral-200/80 rounded-full overflow-hidden mt-1 shadow-inner">
-                <div className="h-full bg-neutral-800 rounded-full animate-pulse w-full" />
+
+              {/* Thick Yellow Loading Bar */}
+              <div className="w-full h-3.5 bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden my-4 border border-neutral-300 dark:border-neutral-700">
+                <div
+                  className="h-full bg-yellow-400 transition-all duration-300 ease-out rounded-full"
+                  style={{ width: `${loadingProgress}%` }}
+                />
+              </div>
+
+              {/* Server Wakeup / Disrespect Quip */}
+              <div className="flex items-center justify-center gap-2 pt-1">
+                <Loader2 className="h-4 w-4 animate-spin text-neutral-600" aria-hidden="true" />
+                <span className="text-xs text-neutral-500 font-mono tracking-tight animate-pulse">
+                  {getLoadingMessage(loadingSeconds)}
+                </span>
               </div>
             </div>
           )}
@@ -876,7 +914,7 @@ export default function Home() {
           >
             <div className="flex items-start justify-between gap-2">
               <h3 id="proceed-prank-title" className="text-xs font-semibold text-neutral-300 uppercase tracking-wider text-left">
-                BUTTON DISABLED
+                INTENTION REQUIRED
               </h3>
               <button
                 type="button"
@@ -891,7 +929,7 @@ export default function Home() {
             <div className="my-3 flex justify-center">
               <Image
                 src="/no_braincells.jpg"
-                alt="No braincells"
+                alt="Intention required"
                 width={150}
                 height={150}
                 className="max-h-44 w-auto object-contain mx-auto rounded-xl border border-neutral-700 bg-neutral-900 shadow-inner"
@@ -900,7 +938,7 @@ export default function Home() {
             </div>
 
             <p className="text-sm font-medium text-neutral-200 my-2 leading-relaxed px-1">
-              Did you really think a button would save you? Press Enter on your keyboard.
+              Clicking buttons is low-vibrational behavior. True self-reflection requires committing to the &apos;Enter&apos; key.
             </p>
 
             <button
@@ -909,7 +947,7 @@ export default function Home() {
               onClick={handleCloseProceedPrankModal}
               className="w-full py-2.5 px-4 text-xs font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
             >
-              I&apos;ll press Enter like a human
+              I&apos;ll align and press Enter
             </button>
           </div>
         </div>
