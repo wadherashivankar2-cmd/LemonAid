@@ -6,7 +6,7 @@ import { Volume2, VolumeX, Loader2, ArrowLeft, HeartHandshake, X } from "lucide-
 import { Button } from "@/components/ui/button";
 import { RoastActions } from "@/components/RoastActions";
 import { RoastCard } from "@/components/RoastCard";
-import { isMuted, setMuted, playTick, playBoom } from "@/lib/sound";
+import { setMuted, playTick, playBoom } from "@/lib/sound";
 import { quip } from "@/lib/quips";
 import { downloadCard, shareX, setCurrentShare } from "@/lib/share";
 import { GoogleAuthTrap } from "@/components/GoogleAuthTrap";
@@ -89,7 +89,11 @@ export default function Home() {
   const [loadingProgress, setLoadingProgress] = React.useState(0);
   const [roastData, setRoastData] = React.useState<RoastResponse | null>(null);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
-  const [muted, setMutedState] = React.useState(false);
+  const [soundMuteAttempt, setSoundMuteAttempt] = React.useState(false);
+  const [muteToast, setMuteToast] = React.useState<string | null>(null);
+  const muteTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const muteToastTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const soundAttemptCountRef = React.useRef(0);
   const [selectedMood, setSelectedMood] = React.useState<number | null>(null);
   const [hoveredMood, setHoveredMood] = React.useState<number | null>(null);
   const [isShaking, setIsShaking] = React.useState(false);
@@ -117,7 +121,7 @@ export default function Home() {
 
   // Initialize sound mute preference and wake backend (pre-warm Render container)
   React.useEffect(() => {
-    setMutedState(isMuted());
+    setMuted(false);
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
     fetch(`${apiUrl}/health`, { mode: "cors" }).catch(() => { });
   }, []);
@@ -201,10 +205,35 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [state, words]);
 
-  const toggleSound = () => {
-    const next = !muted;
-    setMuted(next);
-    setMutedState(next);
+  const handleSoundToggleAttempt = () => {
+    playTick();
+    soundAttemptCountRef.current += 1;
+    setSoundMuteAttempt(true);
+
+    const replies = [
+      "You can't mute the truth. Sound stays on.",
+      "Silence is earned, not toggled.",
+      "Nice try. Face the music.",
+    ];
+
+    let reply = replies[0];
+    if (soundAttemptCountRef.current === 2) {
+      reply = replies[1];
+    } else if (soundAttemptCountRef.current > 2) {
+      reply = replies[Math.floor(Math.random() * replies.length)];
+    }
+    setMuteToast(reply);
+
+    if (muteTimeoutRef.current) clearTimeout(muteTimeoutRef.current);
+    if (muteToastTimeoutRef.current) clearTimeout(muteToastTimeoutRef.current);
+
+    muteTimeoutRef.current = setTimeout(() => {
+      setSoundMuteAttempt(false);
+    }, 200);
+
+    muteToastTimeoutRef.current = setTimeout(() => {
+      setMuteToast(null);
+    }, 2500);
   };
 
   const handlePaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
@@ -474,25 +503,52 @@ export default function Home() {
       {/* Top Right Header Controls */}
       <div className="fixed top-4 right-4 z-40 flex items-center gap-3">
         <GoogleAuthTrap />
-        <button
-          id="sound-toggle-btn"
-          onClick={toggleSound}
-          type="button"
-          aria-label={muted ? "Unmute sounds" : "Mute sounds"}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all shadow-sm cursor-pointer select-none"
-        >
-          {muted ? (
-            <>
-              <VolumeX className="h-3.5 w-3.5 text-neutral-700 dark:text-neutral-200 shrink-0" aria-hidden="true" />
-              <span className="text-neutral-700 dark:text-neutral-200">Sound off</span>
-            </>
-          ) : (
-            <>
-              <Volume2 className="h-3.5 w-3.5 text-neutral-700 dark:text-neutral-200 shrink-0" aria-hidden="true" />
-              <span className="text-neutral-700 dark:text-neutral-200">Sound on</span>
-            </>
+        <div className="relative">
+          <button
+            id="sound-toggle-btn"
+            onClick={handleSoundToggleAttempt}
+            type="button"
+            aria-label="Sound toggle"
+            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all shadow-sm cursor-pointer select-none ${
+              soundMuteAttempt ? "animate-shake border-neutral-400" : ""
+            }`}
+          >
+            {soundMuteAttempt ? (
+              <VolumeX className="h-3.5 w-3.5 text-neutral-500 shrink-0 transition-transform scale-95" aria-hidden="true" />
+            ) : (
+              <Volume2 className="h-3.5 w-3.5 text-neutral-800 dark:text-neutral-200 shrink-0" aria-hidden="true" />
+            )}
+            <span className="font-medium text-neutral-700 dark:text-neutral-300">
+              {soundMuteAttempt ? "Sound off" : "Sound on"}
+            </span>
+
+            {/* Switch indicator fixed in ON state, momentarily flicks to OFF */}
+            <div
+              className={`w-7 h-4 rounded-full p-0.5 transition-colors duration-150 flex items-center ${
+                soundMuteAttempt
+                  ? "bg-neutral-300 dark:bg-neutral-700 justify-start"
+                  : "bg-neutral-900 dark:bg-neutral-100 justify-end"
+              }`}
+            >
+              <div
+                className={`w-3 h-3 rounded-full shadow-xs transition-transform duration-150 ${
+                  soundMuteAttempt ? "bg-neutral-500" : "bg-white dark:bg-neutral-900"
+                }`}
+              />
+            </div>
+          </button>
+
+          {/* Temporary witty toast / popover beneath button */}
+          {muteToast && (
+            <div
+              role="alert"
+              className="absolute top-full right-0 mt-2 w-64 p-2.5 rounded-xl bg-neutral-900 text-white text-[11px] font-medium shadow-xl border border-neutral-800 text-center animate-fade-in z-50 pointer-events-none"
+            >
+              <div className="absolute -top-1 right-6 w-2 h-2 bg-neutral-900 border-t border-l border-neutral-800 rotate-45" />
+              {muteToast}
+            </div>
           )}
-        </button>
+        </div>
       </div>
 
       {state !== "reveal" ? (
