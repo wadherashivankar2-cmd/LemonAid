@@ -512,14 +512,8 @@ export default function Home() {
               <button
                 type="button"
                 onClick={handleRealSubmit}
-                onMouseEnter={() => {
-                  // Trigger if user typed something and hovers over the button
-                  if (input.trim().length > 0 && !isLoading) {
-                    handleRealSubmit();
-                  }
-                }}
                 disabled={input.trim().length === 0 || isLoading}
-                title="Secret submit"
+                title="Submit reflection"
                 className="inline-flex items-center justify-center px-2 py-0.5 text-[11px] font-mono font-semibold rounded bg-neutral-100 hover:bg-neutral-200 active:bg-neutral-300 border border-neutral-300 text-neutral-700 shadow-xs cursor-pointer transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed select-none"
               >
                 Enter
