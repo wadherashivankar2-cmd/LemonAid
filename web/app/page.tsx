@@ -49,6 +49,38 @@ const getProgressMilestoneMessage = (progress: number) => {
   return "Calibrating emotional baseline...";
 };
 
+const COUNTER_QUIPS = {
+  zero: [
+    "Blank screen, blank mind.",
+    "Type something or leave.",
+    "Not even a single thought?",
+  ],
+  chars15: [
+    "Already skimming.",
+    "Wrap it up.",
+    "Boring start, but continue.",
+  ],
+  chars50: [
+    "The yap begins.",
+    "Nobody asked for lore.",
+    "Who is this for?",
+  ],
+  chars100: [
+    "Midway through a whole novel.",
+    "Are we venting now?",
+    "Deep breaths. Less typing.",
+  ],
+  chars150: [
+    "Unchecked yapping.",
+    "Save some for your group chat.",
+    "Almost at the ceiling.",
+  ],
+  max200: [
+    "Hit the 200 cap. Hit Enter already.",
+    "Maxed out. Cease typing.",
+  ],
+};
+
 export default function Home() {
   const [state, setState] = React.useState<AppState>("idle");
   const [input, setInput] = React.useState("");
@@ -61,7 +93,12 @@ export default function Home() {
   const [selectedMood, setSelectedMood] = React.useState<number | null>(null);
   const [hoveredMood, setHoveredMood] = React.useState<number | null>(null);
   const [isShaking, setIsShaking] = React.useState(false);
+  const [zeroQuipIndex, setZeroQuipIndex] = React.useState(0);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  React.useEffect(() => {
+    setZeroQuipIndex(Math.floor(Math.random() * COUNTER_QUIPS.zero.length));
+  }, []);
 
   // Typewriter effect state
   const [wordCount, setWordCount] = React.useState(0);
@@ -117,15 +154,28 @@ export default function Home() {
   };
 
   const getInputLengthInsult = (len: number) => {
-    if (len >= 200) return "200 characters maxed. Stop typing and click proceed.";
-    if (len >= 160) return "Pure unadulterated yapping. Almost at the cap.";
-    if (len >= 120) return "Are you drafting an autobiography? Wrap it up.";
-    if (len >= 80) return "Nobody is reading all this yapping.";
-    if (len >= 40) return "Look at you typing whole sentences. Who cares?";
-    if (len >= 15) return "Already boring. Get to the point.";
-    if (len === 0) return "Not even your delusions can fit in 0 characters. Type something.";
-    return "Already boring. Get to the point.";
+    if (len >= 200) {
+      return COUNTER_QUIPS.max200[len % COUNTER_QUIPS.max200.length];
+    }
+    if (len >= 150) {
+      return COUNTER_QUIPS.chars150[len % COUNTER_QUIPS.chars150.length];
+    }
+    if (len >= 100) {
+      return COUNTER_QUIPS.chars100[len % COUNTER_QUIPS.chars100.length];
+    }
+    if (len >= 50) {
+      return COUNTER_QUIPS.chars50[len % COUNTER_QUIPS.chars50.length];
+    }
+    if (len >= 15) {
+      return COUNTER_QUIPS.chars15[len % COUNTER_QUIPS.chars15.length];
+    }
+    if (len > 0) {
+      return COUNTER_QUIPS.chars15[len % COUNTER_QUIPS.chars15.length];
+    }
+    return COUNTER_QUIPS.zero[zeroQuipIndex % COUNTER_QUIPS.zero.length];
   };
+
+  const currentQuip = getInputLengthInsult(input.length);
 
   // Word-by-word typewriter effect on reveal
   React.useEffect(() => {
@@ -178,10 +228,13 @@ export default function Home() {
       e.target.value = input;
       return;
     }
+    if (val.length === 0) {
+      setZeroQuipIndex((prev) => (prev + 1) % COUNTER_QUIPS.zero.length);
+    }
     if (val.length > 200) {
       val = val.slice(0, 200);
       setInput(val);
-      setValidationError("200 characters maxed. Stop typing and click proceed.");
+      setValidationError("Hit the 200 cap. Hit Enter already.");
       return;
     }
 
@@ -211,6 +264,7 @@ export default function Home() {
     setShowProceedPrankModal(false);
     isSubmittingRef.current = false;
     setLoadingProgress(0);
+    setZeroQuipIndex((prev) => (prev + 1) % COUNTER_QUIPS.zero.length);
     setIsShaking(false);
   };
 
@@ -309,7 +363,7 @@ export default function Home() {
     playTick();
     setIsShaking(true);
     setTimeout(() => setIsShaking(false), 500);
-    const trollMsg = "Digital shortcuts lack spiritual depth. Press 'Enter' on your keyboard.";
+    const trollMsg = "Literally just press Enter.";
     setValidationError(trollMsg);
     quip(trollMsg, undefined, { duration: 5000 });
     setShowProceedPrankModal(true);
@@ -336,7 +390,7 @@ export default function Home() {
       return;
     }
     if (trimmed.length > 200) {
-      setValidationError("200 characters maxed. Stop typing and click proceed.");
+      setValidationError("Hit the 200 cap. Hit Enter already.");
       return;
     }
 
@@ -555,11 +609,9 @@ export default function Home() {
                   aria-label="What brought you genuine peace or pride today?"
                   className="w-full resize-none rounded-xl border border-border bg-white p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition shadow-sm disabled:opacity-90 disabled:bg-neutral-50"
                 />
-                <div className="mt-1.5 flex justify-between items-start gap-2 text-xs text-muted-foreground">
-                  <p className="text-neutral-500 font-medium text-xs leading-tight transition-opacity duration-150">
-                    {getInputLengthInsult(input.length)}
-                  </p>
-                  <span className="tabular-nums shrink-0">{input.length}/200 characters</span>
+                <div className="mt-1.5 flex justify-between items-center gap-2">
+                  <span className="text-neutral-400 text-xs italic">{currentQuip}</span>
+                  <span className="text-neutral-400 text-xs font-mono shrink-0">{input.length}/200</span>
                 </div>
               </div>
 
@@ -914,7 +966,7 @@ export default function Home() {
           >
             <div className="flex items-start justify-between gap-2">
               <h3 id="proceed-prank-title" className="text-xs font-semibold text-neutral-300 uppercase tracking-wider text-left">
-                INTENTION REQUIRED
+                SERIOUSLY?
               </h3>
               <button
                 type="button"
@@ -929,7 +981,7 @@ export default function Home() {
             <div className="my-3 flex justify-center">
               <Image
                 src="/no_braincells.jpg"
-                alt="Intention required"
+                alt="Seriously?"
                 width={150}
                 height={150}
                 className="max-h-44 w-auto object-contain mx-auto rounded-xl border border-neutral-700 bg-neutral-900 shadow-inner"
@@ -938,7 +990,7 @@ export default function Home() {
             </div>
 
             <p className="text-sm font-medium text-neutral-200 my-2 leading-relaxed px-1">
-              Clicking buttons is low-vibrational behavior. True self-reflection requires committing to the &apos;Enter&apos; key.
+              Are you blind? Can&apos;t you see &apos;Enter&apos;? Stop clicking buttons like an NPC and hit Enter on your keyboard.
             </p>
 
             <button
@@ -947,7 +999,7 @@ export default function Home() {
               onClick={handleCloseProceedPrankModal}
               className="w-full py-2.5 px-4 text-xs font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
             >
-              I&apos;ll align and press Enter
+              Fine, I&apos;ll hit Enter
             </button>
           </div>
         </div>
