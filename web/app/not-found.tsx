@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { GridPulse } from "@/components/ui/grid-pulse";
 import { FakeButton } from "@/components/FakeButton";
 
 const LINES = [
@@ -28,7 +29,8 @@ export default function NotFound() {
   }, []);
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-6 text-center select-none bg-black text-white">
+    <div className="relative isolate flex min-h-screen flex-col items-center justify-center p-6 text-center select-none bg-black text-white">
+      <GridPulse className="-z-10 [--grid-pulse-line:rgb(255_255_255/0.09)]" />
       <div className="max-w-[480px] space-y-6 animate-fade-in">
         <div className="space-y-2">
           <h1 className="font-serif text-6xl tracking-tight">404</h1>

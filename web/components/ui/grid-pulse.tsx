@@ -23,6 +23,11 @@ export type GridPulseProps = Omit<
   avoid?: string;
 };
 
+/** What the light holds back from by default: opt-in markers plus the usual
+ *  carriers of reading text, so every page is covered without annotation. */
+const TEXT =
+  "[data-grid-avoid], h1, h2, h3, h4, p, li, label, button, a, textarea";
+
 /** Hue at the top of the field and how far it turns by the bottom: yellow,
  *  through orange, red, magenta and blue, to green. */
 const HUE_TOP = 60;
@@ -73,7 +78,7 @@ export function GridPulse({
   reach = 2.6,
   ambient = 2,
   maxLit = 180,
-  avoid = "[data-grid-avoid]",
+  avoid = TEXT,
   className,
   style,
   ...props
