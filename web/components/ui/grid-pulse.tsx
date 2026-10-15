@@ -112,7 +112,10 @@ export function GridPulse({
       probe.clearRect(0, 0, 1, 1);
       probe.fillStyle = getComputedStyle(el).color;
       probe.fillRect(0, 0, 1, 1);
-      const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
+      const imgData = probe.getImageData(0, 0, 1, 1).data;
+      const r = imgData[0];
+      const g = imgData[1];
+      const b = imgData[2];
       const light = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255 > 0.5;
       tints = light ? TINTS_DARK : TINTS;
     };
@@ -123,10 +126,10 @@ export function GridPulse({
     const measureText = () => {
       const bounds = el.getBoundingClientRect();
       const scope = el.parentElement ?? document;
-      clear = [...scope.querySelectorAll(avoid)].flatMap((node) => {
+      clear = Array.from(scope.querySelectorAll(avoid)).flatMap((node) => {
         const range = document.createRange();
         range.selectNodeContents(node);
-        const lines = [...range.getClientRects()].filter(
+        const lines = Array.from(range.getClientRects()).filter(
           (r) => r.width > 0 && r.height > 0,
         );
         const boxes = lines.length > 0 ? lines : [node.getBoundingClientRect()];
