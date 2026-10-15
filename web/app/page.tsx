@@ -114,6 +114,7 @@ export default function Home() {
   const [showCrateModal, setShowCrateModal] = React.useState(false);
   const [splashes, setSplashes] = React.useState<{ id: number; x: number; y: number }[]>([]);
   const splashCounter = React.useRef(0);
+  const [hoverSplashActive, setHoverSplashActive] = React.useState(false);
   const isSubmittingRef = React.useRef(false);
 
   const words = React.useMemo(() => {
@@ -126,6 +127,11 @@ export default function Home() {
     const id = ++splashCounter.current;
     setSplashes((prev) => [...prev, { id, x: e.clientX, y: e.clientY }]);
     setTimeout(() => setSplashes((prev) => prev.filter((s) => s.id !== id)), 800);
+  }, []);
+
+  const handleLemonMouseEnter = React.useCallback(() => {
+    setHoverSplashActive(true);
+    setTimeout(() => setHoverSplashActive(false), 1000);
   }, []);
 
   // Initialize sound mute preference and wake backend (pre-warm Render container)
@@ -530,6 +536,16 @@ export default function Home() {
           style={{ left: s.x, top: s.y }}
         />
       ))}
+      {/* 3D hover splash wave */}
+      {hoverSplashActive && (
+        <div
+          key={String(hoverSplashActive)}
+          aria-hidden="true"
+          className="fixed inset-0 pointer-events-none z-40 flex items-center justify-center overflow-hidden animate-hover-splash-3d"
+        >
+          <div className="w-[120vmax] h-[120vmax] rounded-full bg-[radial-gradient(circle,rgba(250,204,21,0.32)_0%,rgba(245,158,11,0.18)_35%,transparent_70%)]" />
+        </div>
+      )}
       {/* 1-second lemon-yellow viewport flash on load */}
       <div className="fixed inset-0 pointer-events-none z-50 animate-yellow-flash" aria-hidden="true" />
       {/* Ambient citrus radial glow */}
@@ -591,8 +607,9 @@ export default function Home() {
                 LemonAid
               </span>{" "}
               <span
-                className="inline-flex items-center animate-lemon-pop cursor-pointer"
+                className="inline-flex items-center animate-lemon-pop lemon-3d cursor-pointer"
                 onClick={handleLemonClick}
+                onMouseEnter={handleLemonMouseEnter}
                 role="button"
                 aria-label="Tap the lemon"
               >🍋</span>
@@ -813,48 +830,20 @@ export default function Home() {
                     href="https://youtu.be/Aq5WXmQQooo"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-[11px] font-medium text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 transition-colors inline-flex items-center gap-1 cursor-pointer select-none"
-                    title="How this works"
+                    className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-neutral-900 text-yellow-300 border border-yellow-400/30 hover:border-yellow-400 hover:bg-yellow-400/10 hover:scale-105 transition-all shadow-sm inline-flex items-center gap-1.5 cursor-pointer select-none"
+                    title="What did I do wrong?"
                   >
-                    <span>Know More</span>
-                    <span className="text-xs">ℹ️</span>
+                    <span>🔍 What did I do wrong?</span>
+                    <span className="text-[10px] text-yellow-400/70 font-normal">Spill the tea</span>
                   </a>
-                  <span className="text-xs text-muted-foreground font-serif italic hidden sm:inline">
-                    Nobody asked, but here we are.
-                  </span>
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 my-2">
-                <blockquote className="font-serif text-xl sm:text-2xl text-[#1F1B16] leading-snug tracking-tight border-l-2 border-[#1F1B16] pl-4 flex-1 min-h-[3rem]">
+              <div className="relative my-2">
+                <blockquote className="font-serif text-xl sm:text-2xl text-[#1F1B16] leading-snug tracking-tight border-l-2 border-[#1F1B16] pl-4 min-h-[3rem] pr-4">
                   &ldquo;{words.slice(0, wordCount).join(" ")}&rdquo;
                   {!isTypingComplete && <span className="inline-block w-1.5 h-5 bg-[#1F1B16] ml-1 animate-pulse align-middle" />}
                 </blockquote>
-
-                {/* Matte-Black Industrial Crate Button */}
-                <button
-                  id="crate-coming-soon-btn"
-                  type="button"
-                  onClick={handleOpenCrateModal}
-                  title="Confidential Shipment — COMING SOON"
-                  className="group shrink-0 self-end sm:self-center w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 border-neutral-800 hover:border-yellow-500/70 bg-gradient-to-br from-neutral-900 via-neutral-950 to-black p-2 flex flex-col items-center justify-center gap-1.5 shadow-[inset_0_1px_2px_rgba(255,255,255,0.08),inset_0_-2px_4px_rgba(0,0,0,0.8),0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_0_16px_rgba(250,204,21,0.25)] transition-all duration-300 hover:scale-[1.04] active:scale-95 cursor-pointer relative overflow-hidden"
-                >
-                  {/* Subtle Industrial Crate Corner Brackets */}
-                  <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-neutral-700/80 pointer-events-none" />
-                  <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-neutral-700/80 pointer-events-none" />
-                  <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-neutral-700/80 pointer-events-none" />
-                  <div className="absolute bottom-1 right-1 w-2 h-2 border-b border-r border-neutral-700/80 pointer-events-none" />
-
-                  {/* Crate Icon */}
-                  <span className="text-xl sm:text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-                    📦
-                  </span>
-
-                  {/* Stencil Label */}
-                  <span className="font-mono text-[9px] sm:text-[10px] font-black tracking-widest text-neutral-400 group-hover:text-yellow-400 transition-colors uppercase text-center leading-tight">
-                    COMING<br />SOON
-                  </span>
-                </button>
               </div>
 
               <div className="transition-opacity duration-300 opacity-100">
@@ -868,6 +857,27 @@ export default function Home() {
                   onPaywall={handleOpenPaywallModal}
                   onCharity={handleOpenCharityModal}
                 />
+              </div>
+              {/* Matte-Black Industrial Crate — Bottom-Right Honeypot */}
+              <div className="flex justify-end mt-4">
+                <button
+                  id="crate-coming-soon-btn"
+                  type="button"
+                  onClick={handleOpenCrateModal}
+                  title="DO NOT OPEN — Confidential Shipment"
+                  className="group w-28 h-28 sm:w-32 sm:h-32 rounded-2xl border border-neutral-700/60 bg-neutral-950/90 hover:border-yellow-400/50 hover:shadow-[0_0_25px_rgba(250,204,21,0.2)] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer flex flex-col items-center justify-center gap-2 relative overflow-hidden"
+                >
+                  {/* Corner brackets */}
+                  <div className="absolute top-1.5 left-1.5 w-2.5 h-2.5 border-t-2 border-l-2 border-neutral-700/80 pointer-events-none" />
+                  <div className="absolute top-1.5 right-1.5 w-2.5 h-2.5 border-t-2 border-r-2 border-neutral-700/80 pointer-events-none" />
+                  <div className="absolute bottom-1.5 left-1.5 w-2.5 h-2.5 border-b-2 border-l-2 border-neutral-700/80 pointer-events-none" />
+                  <div className="absolute bottom-1.5 right-1.5 w-2.5 h-2.5 border-b-2 border-r-2 border-neutral-700/80 pointer-events-none" />
+                  <span className="text-3xl transition-transform duration-300 group-hover:scale-125 group-hover:animate-bounce">📦</span>
+                  <div className="flex flex-col items-center gap-0.5">
+                    <span className="font-mono text-[10px] font-black tracking-widest text-neutral-300 group-hover:text-yellow-400 transition-colors uppercase">DO NOT OPEN</span>
+                    <span className="font-mono text-[8px] text-neutral-600 group-hover:text-yellow-500/60 transition-colors">98% regret clicking</span>
+                  </div>
+                </button>
               </div>
             </div>
           </div>
