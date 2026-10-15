@@ -80,13 +80,21 @@ export function GoogleAuthTrap() {
             onClick={(e) => e.stopPropagation()}
             className="relative w-[380px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-left"
           >
+            <div className="relative w-full overflow-hidden rounded-xl border border-neutral-800 mb-4 aspect-video bg-neutral-900">
+              <img
+                src="/laptop_user.jpg"
+                alt="User staring in disbelief"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
             <div className="flex items-start justify-between gap-2">
               <div>
                 <h3 id="google-auth-trap-title" className="text-sm font-semibold text-neutral-200 leading-snug">
-                  Google Login Error
+                  IDENTITY PROTECTED BY GOOGLE
                 </h3>
                 <span className="text-[10px] text-red-400 font-mono tracking-wide mt-1 block">
-                  ACCESS DENIED
+                  403 HANDSHAKE ABORTED
                 </span>
               </div>
               <button
@@ -99,10 +107,16 @@ export function GoogleAuthTrap() {
               </button>
             </div>
 
-            <div className="my-4 rounded-xl border border-neutral-800 bg-neutral-900/60 p-4 text-center">
-              <p className="font-mono text-sm text-red-400 py-1">
-                Error: No dignity found.
+            <div className="my-4 font-mono text-xs text-red-400 bg-red-950/20 border border-red-500/20 rounded-lg p-3.5 text-left space-y-1.5 leading-relaxed">
+              <div className="text-red-300 font-semibold flex items-center gap-1.5">
+                <span>[!]</span> SSO Exception: Insufficient Self-Awareness
+              </div>
+              <p className="text-neutral-400 text-[11.5px] leading-snug">
+                Google refused the OAuth handshake. We cannot in good faith attach an active Google Workspace account to someone taking emotional damage from a web app.
               </p>
+              <div className="text-neutral-500 text-[10.5px] pt-1 border-t border-red-950/40">
+                status: 403_pure_cope • threat_level: career_limiting
+              </div>
             </div>
 
             <button

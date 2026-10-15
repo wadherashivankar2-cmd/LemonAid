@@ -10,6 +10,7 @@ import { setMuted, playTick, playBoom } from "@/lib/sound";
 import { quip } from "@/lib/quips";
 import { downloadCard, shareX, setCurrentShare } from "@/lib/share";
 import { GoogleAuthTrap } from "@/components/GoogleAuthTrap";
+import { ThemeToggle } from "@/components/Chrome";
 
 type AppState = "idle" | "loading" | "reveal" | "gentle" | "error";
 
@@ -526,7 +527,7 @@ export default function Home() {
   };
 
   return (
-    <main className="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 text-neutral-100 font-sans">
+    <main className="relative min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 bg-transparent text-neutral-900 dark:text-neutral-100 font-sans">
       {/* Citrus splash ripples */}
       {splashes.map((s) => (
         <div
@@ -536,6 +537,43 @@ export default function Home() {
           style={{ left: s.x, top: s.y }}
         />
       ))}
+      {/* Fixed bottom-right floating crate — visible on reveal */}
+      {state === "reveal" && (
+        <div className="fixed bottom-48 right-6 sm:bottom-52 sm:right-8 z-30">
+          <div
+            id="crate-coming-soon-btn"
+            role="button"
+            tabIndex={0}
+            className="relative group cursor-pointer"
+            onClick={handleOpenCrateModal}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleOpenCrateModal();
+              }
+            }}
+          >
+            <div className="p-3.5 rounded-2xl border border-neutral-700/60 bg-neutral-900/80 backdrop-blur-md hover:border-neutral-500 hover:bg-neutral-800/90 transition-all duration-300 shadow-xl flex flex-col items-center gap-1.5 text-center min-w-[130px]">
+              <span className="text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3">
+                📦
+              </span>
+              
+              <span className="px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider font-bold rounded-full bg-amber-400/10 text-amber-400 border border-amber-400/30">
+                COMING SOON
+              </span>
+
+              <div className="space-y-0.5">
+                <div className="text-[11px] font-mono font-bold tracking-wider text-neutral-200">
+                  DO NOT OPEN
+                </div>
+                <div className="text-[10px] text-neutral-400 font-mono">
+                  98% regret clicking
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {/* 3D hover splash wave */}
       {hoverSplashActive && (
         <div
@@ -552,6 +590,7 @@ export default function Home() {
       <div className="fixed inset-0 pointer-events-none -z-10 bg-[radial-gradient(ellipse_80%_80%_at_50%_-10%,rgba(250,204,21,0.18),rgba(10,10,10,0))]" aria-hidden="true" />
       {/* Top Right Header Controls */}
       <div className="fixed top-4 right-4 z-40 flex items-center gap-3">
+        <ThemeToggle />
         <GoogleAuthTrap />
         <div className="relative">
           <button
@@ -600,7 +639,7 @@ export default function Home() {
 
       {state !== "reveal" ? (
         /* Main Container for Idle / Loading / Gentle / Error */
-        <div className="relative z-10 w-full max-w-xl mx-auto my-auto space-y-6 animate-fade-in bg-neutral-900/70 border border-neutral-800/80 backdrop-blur-xl rounded-3xl p-6 sm:p-10 shadow-[0_0_50px_-12px_rgba(0,0,0,0.8)]">
+        <div className="relative z-10 w-full max-w-xl mx-auto my-auto space-y-6 animate-fade-in bg-white/80 dark:bg-neutral-900/80 border border-neutral-200 dark:border-neutral-800 backdrop-blur-xl rounded-3xl p-6 sm:p-10 shadow-xl">
           <header className="space-y-2">
             <h1 className="group text-5xl sm:text-6xl md:text-7xl font-black tracking-tight mb-2 select-none lemon-wobble transition-all duration-300 drop-shadow-xs hover:drop-shadow-[0_0_20px_rgba(250,204,21,0.8)] cursor-pointer">
               <span className="bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 group-hover:from-yellow-200 group-hover:to-lime-300 bg-clip-text text-transparent transition-all duration-300">
@@ -700,7 +739,7 @@ export default function Home() {
                   }}
                   placeholder="Today I felt grateful for..."
                   aria-label="What brought you genuine peace or pride today?"
-                  className="w-full resize-none rounded-xl border border-neutral-800 bg-neutral-900/80 p-4 text-base text-neutral-100 placeholder:text-neutral-500 focus:border-yellow-400 focus:outline-none focus:ring-1 focus:ring-yellow-400 transition shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full resize-none rounded-xl border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-neutral-900/80 p-4 text-base text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:border-yellow-400 focus:outline-none focus:ring-1 focus:ring-yellow-400 transition shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
                 />
                 <div className="mt-1.5 flex justify-between items-center gap-2">
                   <span className="text-neutral-400 text-xs italic">{currentQuip}</span>
@@ -809,7 +848,7 @@ export default function Home() {
           <div className="w-full max-w-xl">
             <div
               id="roast-reveal-container"
-              className="space-y-5 rounded-xl border border-border bg-white p-6 sm:p-7 shadow-sm"
+              className="space-y-5 rounded-xl bg-white dark:bg-neutral-900/90 border border-neutral-200 dark:border-neutral-800 shadow-xl p-6 sm:p-7"
               aria-live="polite"
             >
               <div className="flex items-center justify-between">
@@ -840,9 +879,9 @@ export default function Home() {
               </div>
 
               <div className="relative my-2">
-                <blockquote className="font-serif text-xl sm:text-2xl text-[#1F1B16] leading-snug tracking-tight border-l-2 border-[#1F1B16] pl-4 min-h-[3rem] pr-4">
+                <blockquote className="font-serif text-xl sm:text-2xl text-[#1F1B16] dark:text-neutral-100 leading-snug tracking-tight border-l-2 border-[#1F1B16] dark:border-neutral-200 pl-4 min-h-[3rem] pr-4">
                   &ldquo;{words.slice(0, wordCount).join(" ")}&rdquo;
-                  {!isTypingComplete && <span className="inline-block w-1.5 h-5 bg-[#1F1B16] ml-1 animate-pulse align-middle" />}
+                  {!isTypingComplete && <span className="inline-block w-1.5 h-5 bg-[#1F1B16] dark:bg-neutral-100 ml-1 animate-pulse align-middle" />}
                 </blockquote>
               </div>
 
@@ -858,43 +897,22 @@ export default function Home() {
                   onCharity={handleOpenCharityModal}
                 />
               </div>
-              {/* Matte-Black Industrial Crate — Bottom-Right Honeypot */}
-              <div className="flex justify-end mt-4">
-                <button
-                  id="crate-coming-soon-btn"
-                  type="button"
-                  onClick={handleOpenCrateModal}
-                  title="DO NOT OPEN — Confidential Shipment"
-                  className="group w-28 h-28 sm:w-32 sm:h-32 rounded-2xl border border-neutral-700/60 bg-neutral-950/90 hover:border-yellow-400/50 hover:shadow-[0_0_25px_rgba(250,204,21,0.2)] transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer flex flex-col items-center justify-center gap-2 relative overflow-hidden"
-                >
-                  {/* Corner brackets */}
-                  <div className="absolute top-1.5 left-1.5 w-2.5 h-2.5 border-t-2 border-l-2 border-neutral-700/80 pointer-events-none" />
-                  <div className="absolute top-1.5 right-1.5 w-2.5 h-2.5 border-t-2 border-r-2 border-neutral-700/80 pointer-events-none" />
-                  <div className="absolute bottom-1.5 left-1.5 w-2.5 h-2.5 border-b-2 border-l-2 border-neutral-700/80 pointer-events-none" />
-                  <div className="absolute bottom-1.5 right-1.5 w-2.5 h-2.5 border-b-2 border-r-2 border-neutral-700/80 pointer-events-none" />
-                  <span className="text-3xl transition-transform duration-300 group-hover:scale-125 group-hover:animate-bounce">📦</span>
-                  <div className="flex flex-col items-center gap-0.5">
-                    <span className="font-mono text-[10px] font-black tracking-widest text-neutral-300 group-hover:text-yellow-400 transition-colors uppercase">DO NOT OPEN</span>
-                    <span className="font-mono text-[8px] text-neutral-600 group-hover:text-yellow-500/60 transition-colors">98% regret clicking</span>
-                  </div>
-                </button>
-              </div>
             </div>
           </div>
 
           {/* Side Suggestions Widget (Right Column) */}
           <div className="w-full lg:w-64 shrink-0">
-            <div className="bg-[#14120E] border border-neutral-800 rounded-xl p-4 text-left shadow-md">
+            <div className="bg-white/80 dark:bg-neutral-900/80 border border-neutral-200 dark:border-neutral-800 rounded-xl p-4 text-left shadow-md">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-base" role="img" aria-label="suggestion box">💡</span>
-                <h4 className="text-sm font-semibold text-neutral-200">Have a suggestion?</h4>
+                <h4 className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">Have a suggestion?</h4>
               </div>
-              <p className="text-xs text-neutral-400 mb-4">Reviewed with zero care.</p>
+              <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-4">Reviewed with zero care.</p>
               <button
                 id="suggestions-widget-btn"
                 type="button"
                 onClick={handleSubmitFeedback}
-                className="w-full py-2.5 px-3 text-xs font-semibold rounded-lg bg-white text-black hover:bg-neutral-200 border border-neutral-200 hover:border-neutral-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
+                className="w-full py-2.5 px-3 text-xs font-semibold rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-black hover:bg-neutral-800 dark:hover:bg-neutral-200 border border-neutral-900 dark:border-neutral-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
               >
                 Submit Feedback
               </button>
@@ -1136,7 +1154,7 @@ export default function Home() {
           >
             <div className="flex items-start justify-between gap-2">
               <h3 id="crate-prank-title" className="text-xs font-semibold text-neutral-300 uppercase tracking-wider text-left">
-                RESTRICTED SHIPMENT: YOU THOUGHT?
+                EARLY ACCESS DENIED
               </h3>
               <button
                 type="button"
@@ -1159,9 +1177,14 @@ export default function Home() {
               />
             </div>
 
-            <p className="text-sm font-medium text-neutral-200 my-2 leading-relaxed px-1">
-              Bro can barely handle a 2-sentence reality check and is already clicking unopened crates hoping for emotional support. You weren&apos;t ready.
-            </p>
+            <div className="py-2 text-center space-y-1.5">
+              <p className="text-sm font-semibold text-neutral-200">
+                You saw a box stamped &ldquo;COMING SOON&rdquo; and still clicked it expecting secret DLC.
+              </p>
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                There is no roadmap. There is no feature drop. Just pure, unadulterated FOMO and zero impulse control.
+              </p>
+            </div>
 
             <button
               id="crate-prank-dismiss-btn"
@@ -1169,7 +1192,7 @@ export default function Home() {
               onClick={handleCloseCrateModal}
               className="w-full py-2.5 px-4 text-xs font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
             >
-              I admit I wasn&apos;t ready 😔
+              I Have Learned Nothing 📦
             </button>
           </div>
         </div>

@@ -18,9 +18,52 @@ const KONAMI_CODE = [
   "a",
 ];
 
+export function ThemeToggle({ className }: { className?: string } = {}) {
+  const [theme, setTheme] = React.useState<"dark" | "light">("dark");
+
+  React.useEffect(() => {
+    const savedTheme = (localStorage.getItem("theme") as "dark" | "light") || "dark";
+    setTheme(savedTheme);
+    document.documentElement.classList.toggle("dark", savedTheme === "dark");
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.setItem("theme", nextTheme);
+    document.documentElement.classList.toggle("dark", nextTheme === "dark");
+  };
+
+  return (
+    <button
+      onClick={toggleTheme}
+      type="button"
+      className={`h-9 w-9 flex items-center justify-center rounded-full border border-neutral-700/60 bg-neutral-900/80 hover:bg-neutral-800 text-neutral-200 text-sm transition-colors cursor-pointer select-none ${className || ""}`}
+      title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
+      aria-label="Toggle theme"
+    >
+      {theme === "dark" ? "☀️" : "🌙"}
+    </button>
+  );
+}
+
 export function Chrome() {
   const [showCookies, setShowCookies] = React.useState(false);
+  const [theme, setTheme] = React.useState<"dark" | "light">("dark");
   const konamiIndex = React.useRef(0);
+
+  React.useEffect(() => {
+    const savedTheme = (localStorage.getItem("theme") as "dark" | "light") || "dark";
+    setTheme(savedTheme);
+    document.documentElement.classList.toggle("dark", savedTheme === "dark");
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.setItem("theme", nextTheme);
+    document.documentElement.classList.toggle("dark", nextTheme === "dark");
+  };
 
   React.useEffect(() => {
     // 1. Devtools console line
