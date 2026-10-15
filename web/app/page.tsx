@@ -499,7 +499,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FBF9F5] flex flex-col items-center justify-center p-4 sm:p-6 text-neutral-900 font-sans">
+    <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 text-neutral-900 font-sans">
       {/* Top Right Header Controls */}
       <div className="fixed top-4 right-4 z-40 flex items-center gap-3">
         <GoogleAuthTrap />

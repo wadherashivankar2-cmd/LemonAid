@@ -3,6 +3,7 @@ import "./globals.css";
 import { fontSans, fontSerif } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { Chrome } from "@/components/Chrome";
+import { GridPulse } from "@/components/ui/grid-pulse";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mr-roast-ten.vercel.app";
 
@@ -52,6 +53,7 @@ export default function RootLayout({
       className={cn("min-h-screen bg-background antialiased", fontSans.variable, fontSerif.variable)}
     >
       <body className="min-h-screen font-sans selection:bg-neutral-200">
+        <GridPulse className="fixed -z-10 [mask-image:none]" />
         <Chrome />
         {children}
       </body>
