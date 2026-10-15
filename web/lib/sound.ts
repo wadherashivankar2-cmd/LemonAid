@@ -1,5 +1,5 @@
 /**
- * Synthesized Web Audio sound engine for Mr.Roast.
+ * Synthesized Web Audio sound engine for LemonAid.
  * Zero external audio files. Gracefully handles unsupported environments,
  * autoplay policies, and user mute preference in localStorage.
  */

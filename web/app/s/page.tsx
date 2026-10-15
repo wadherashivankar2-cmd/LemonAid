@@ -17,7 +17,7 @@ export async function generateMetadata({ searchParams }: SharePageProps): Promis
   const { b, r, sig } = searchParams;
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mr-roast-ten.vercel.app";
 
-  let title = "LoveBite Roast";
+  let title = "LemonAid Roast";
   let description = "A private moment of reflection and its inevitable burn.";
 
   if (b && r && sig) {
@@ -26,7 +26,7 @@ export async function generateMetadata({ searchParams }: SharePageProps): Promis
       const roast = base64UrlDecode(r);
       const isValid = await verifySig(brag, roast, sig);
       if (isValid) {
-        title = `"${roast.slice(0, 60)}..." | LoveBite`;
+        title = `"${roast.slice(0, 60)}..." | LemonAid`;
         description = `In response to: "${brag}"`;
       }
     } catch {

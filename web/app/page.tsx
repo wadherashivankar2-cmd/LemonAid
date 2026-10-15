@@ -111,6 +111,9 @@ export default function Home() {
   const [showPaywallModal, setShowPaywallModal] = React.useState(false);
   const [showCharityModal, setShowCharityModal] = React.useState(false);
   const [showProceedPrankModal, setShowProceedPrankModal] = React.useState(false);
+  const [showCrateModal, setShowCrateModal] = React.useState(false);
+  const [splashes, setSplashes] = React.useState<{ id: number; x: number; y: number }[]>([]);
+  const splashCounter = React.useRef(0);
   const isSubmittingRef = React.useRef(false);
 
   const words = React.useMemo(() => {
@@ -118,6 +121,12 @@ export default function Home() {
   }, [roastData?.text]);
 
   const abortControllerRef = React.useRef<AbortController | null>(null);
+
+  const handleLemonClick = React.useCallback((e: React.MouseEvent) => {
+    const id = ++splashCounter.current;
+    setSplashes((prev) => [...prev, { id, x: e.clientX, y: e.clientY }]);
+    setTimeout(() => setSplashes((prev) => prev.filter((s) => s.id !== id)), 800);
+  }, []);
 
   // Initialize sound mute preference and wake backend (pre-warm Render container)
   React.useEffect(() => {
@@ -330,12 +339,21 @@ export default function Home() {
     quip("charityDismiss");
   };
 
+  const handleOpenCrateModal = () => {
+    setShowCrateModal(true);
+  };
+
+  const handleCloseCrateModal = () => {
+    setShowCrateModal(false);
+  };
+
   // Modal Body Scroll Lock & Esc Key Listener
   const isAnyModalOpen =
     showSuggestionPopup ||
     showPaywallModal ||
     showCharityModal ||
-    showProceedPrankModal;
+    showProceedPrankModal ||
+    showCrateModal;
 
   React.useEffect(() => {
     if (!isAnyModalOpen) return;
@@ -345,7 +363,9 @@ export default function Home() {
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        if (showProceedPrankModal) {
+        if (showCrateModal) {
+          handleCloseCrateModal();
+        } else if (showProceedPrankModal) {
           handleCloseProceedPrankModal();
         } else if (showSuggestionPopup) {
           handleCloseSuggestionPopup();
@@ -364,6 +384,7 @@ export default function Home() {
     };
   }, [
     isAnyModalOpen,
+    showCrateModal,
     showProceedPrankModal,
     showSuggestionPopup,
     showPaywallModal,
@@ -499,7 +520,20 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 text-neutral-900 font-sans">
+    <main className="relative min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 text-neutral-100 font-sans">
+      {/* Citrus splash ripples */}
+      {splashes.map((s) => (
+        <div
+          key={s.id}
+          aria-hidden="true"
+          className="pointer-events-none fixed rounded-full w-[650px] h-[650px] bg-[radial-gradient(circle,rgba(250,204,21,0.45)_0%,rgba(245,158,11,0.25)_40%,transparent_75%)] animate-citrus-splash z-40"
+          style={{ left: s.x, top: s.y }}
+        />
+      ))}
+      {/* 1-second lemon-yellow viewport flash on load */}
+      <div className="fixed inset-0 pointer-events-none z-50 animate-yellow-flash" aria-hidden="true" />
+      {/* Ambient citrus radial glow */}
+      <div className="fixed inset-0 pointer-events-none -z-10 bg-[radial-gradient(ellipse_80%_80%_at_50%_-10%,rgba(250,204,21,0.18),rgba(10,10,10,0))]" aria-hidden="true" />
       {/* Top Right Header Controls */}
       <div className="fixed top-4 right-4 z-40 flex items-center gap-3">
         <GoogleAuthTrap />
@@ -509,9 +543,8 @@ export default function Home() {
             onClick={handleSoundToggleAttempt}
             type="button"
             aria-label="Sound toggle"
-            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all shadow-sm cursor-pointer select-none ${
-              soundMuteAttempt ? "animate-shake border-neutral-400" : ""
-            }`}
+            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all shadow-sm cursor-pointer select-none ${soundMuteAttempt ? "animate-shake border-neutral-400" : ""
+              }`}
           >
             {soundMuteAttempt ? (
               <VolumeX className="h-3.5 w-3.5 text-neutral-500 shrink-0 transition-transform scale-95" aria-hidden="true" />
@@ -524,16 +557,14 @@ export default function Home() {
 
             {/* Switch indicator fixed in ON state, momentarily flicks to OFF */}
             <div
-              className={`w-7 h-4 rounded-full p-0.5 transition-colors duration-150 flex items-center ${
-                soundMuteAttempt
+              className={`w-7 h-4 rounded-full p-0.5 transition-colors duration-150 flex items-center ${soundMuteAttempt
                   ? "bg-neutral-300 dark:bg-neutral-700 justify-start"
                   : "bg-neutral-900 dark:bg-neutral-100 justify-end"
-              }`}
+                }`}
             >
               <div
-                className={`w-3 h-3 rounded-full shadow-xs transition-transform duration-150 ${
-                  soundMuteAttempt ? "bg-neutral-500" : "bg-white dark:bg-neutral-900"
-                }`}
+                className={`w-3 h-3 rounded-full shadow-xs transition-transform duration-150 ${soundMuteAttempt ? "bg-neutral-500" : "bg-white dark:bg-neutral-900"
+                  }`}
               />
             </div>
           </button>
@@ -553,10 +584,18 @@ export default function Home() {
 
       {state !== "reveal" ? (
         /* Main Container for Idle / Loading / Gentle / Error */
-        <div className="w-full max-w-xl mx-auto my-auto py-8 space-y-6 animate-fade-in">
+        <div className="relative z-10 w-full max-w-xl mx-auto my-auto space-y-6 animate-fade-in bg-neutral-900/70 border border-neutral-800/80 backdrop-blur-xl rounded-3xl p-6 sm:p-10 shadow-[0_0_50px_-12px_rgba(0,0,0,0.8)]">
           <header className="space-y-2">
-            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-rose-600 dark:text-rose-500 drop-shadow-sm mb-2 select-none">
-              LoveBite
+            <h1 className="group text-5xl sm:text-6xl md:text-7xl font-black tracking-tight mb-2 select-none lemon-wobble transition-all duration-300 drop-shadow-xs hover:drop-shadow-[0_0_20px_rgba(250,204,21,0.8)] cursor-pointer">
+              <span className="bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 group-hover:from-yellow-200 group-hover:to-lime-300 bg-clip-text text-transparent transition-all duration-300">
+                LemonAid
+              </span>{" "}
+              <span
+                className="inline-flex items-center animate-lemon-pop cursor-pointer"
+                onClick={handleLemonClick}
+                role="button"
+                aria-label="Tap the lemon"
+              >🍋</span>
             </h1>
             <h2 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight leading-snug font-normal">
               Take a deep breath. Reflect on the light in your life.
@@ -597,9 +636,8 @@ export default function Home() {
                             onMouseEnter={() => setHoveredMood(index)}
                             onMouseLeave={() => setHoveredMood(null)}
                             onClick={() => handleMoodClick(index)}
-                            className={`p-1 rounded-md transition-transform hover:scale-125 focus:outline-none cursor-pointer inline-flex items-center justify-center ${
-                              isSelected ? "bg-neutral-200/90 ring-1 ring-neutral-400" : ""
-                            }`}
+                            className={`p-1 rounded-md transition-transform hover:scale-125 focus:outline-none cursor-pointer inline-flex items-center justify-center ${isSelected ? "bg-neutral-200/90 ring-1 ring-neutral-400" : ""
+                              }`}
                           >
                             <span role="img" aria-label={label} className="text-base select-none">
                               {emoji}
@@ -613,15 +651,14 @@ export default function Home() {
                   {/* RESERVED HEIGHT CONTAINER: Prevents vertical layout jumping and infinite flutter loop */}
                   <div className="h-5 flex items-center">
                     <p
-                      className={`text-xs text-neutral-600 font-mono tracking-tight transition-opacity duration-150 pl-0.5 ${
-                        hoveredMood !== null || selectedMood !== null ? "opacity-100" : "opacity-0"
-                      }`}
+                      className={`text-xs text-neutral-600 font-mono tracking-tight transition-opacity duration-150 pl-0.5 ${hoveredMood !== null || selectedMood !== null ? "opacity-100" : "opacity-0"
+                        }`}
                     >
                       {hoveredMood !== null
                         ? MOODS[hoveredMood].reaction
                         : selectedMood !== null
-                        ? MOODS[selectedMood].reaction
-                        : ""}
+                          ? MOODS[selectedMood].reaction
+                          : ""}
                     </p>
                   </div>
                 </div>
@@ -646,7 +683,7 @@ export default function Home() {
                   }}
                   placeholder="Today I felt grateful for..."
                   aria-label="What brought you genuine peace or pride today?"
-                  className="w-full resize-none rounded-xl border border-border bg-white p-4 text-base text-foreground placeholder:text-muted-foreground focus:border-foreground focus:outline-none focus:ring-1 focus:ring-foreground transition shadow-sm disabled:opacity-90 disabled:bg-neutral-50"
+                  className="w-full resize-none rounded-xl border border-neutral-800 bg-neutral-900/80 p-4 text-base text-neutral-100 placeholder:text-neutral-500 focus:border-yellow-400 focus:outline-none focus:ring-1 focus:ring-yellow-400 transition shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
                 />
                 <div className="mt-1.5 flex justify-between items-center gap-2">
                   <span className="text-neutral-400 text-xs italic">{currentQuip}</span>
@@ -760,8 +797,11 @@ export default function Home() {
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <span className="text-base font-black tracking-tight text-rose-600 dark:text-rose-500 select-none">
-                    LoveBite
+                  <span className="group text-base font-black tracking-tight select-none lemon-wobble transition-all duration-300 cursor-pointer">
+                    <span className="bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 group-hover:from-yellow-200 group-hover:to-lime-300 bg-clip-text text-transparent transition-all duration-300">
+                      LemonAid
+                    </span>{" "}
+                    <span className="inline-block">🍋</span>
                   </span>
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-neutral-100 border border-neutral-200/80 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-700">
                     The Burn
@@ -785,10 +825,37 @@ export default function Home() {
                 </div>
               </div>
 
-              <blockquote className="font-serif text-xl sm:text-2xl text-[#1F1B16] leading-snug tracking-tight border-l-2 border-[#1F1B16] pl-4 my-2 min-h-[3rem]">
-                &ldquo;{words.slice(0, wordCount).join(" ")}&rdquo;
-                {!isTypingComplete && <span className="inline-block w-1.5 h-5 bg-[#1F1B16] ml-1 animate-pulse align-middle" />}
-              </blockquote>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 my-2">
+                <blockquote className="font-serif text-xl sm:text-2xl text-[#1F1B16] leading-snug tracking-tight border-l-2 border-[#1F1B16] pl-4 flex-1 min-h-[3rem]">
+                  &ldquo;{words.slice(0, wordCount).join(" ")}&rdquo;
+                  {!isTypingComplete && <span className="inline-block w-1.5 h-5 bg-[#1F1B16] ml-1 animate-pulse align-middle" />}
+                </blockquote>
+
+                {/* Matte-Black Industrial Crate Button */}
+                <button
+                  id="crate-coming-soon-btn"
+                  type="button"
+                  onClick={handleOpenCrateModal}
+                  title="Confidential Shipment — COMING SOON"
+                  className="group shrink-0 self-end sm:self-center w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 border-neutral-800 hover:border-yellow-500/70 bg-gradient-to-br from-neutral-900 via-neutral-950 to-black p-2 flex flex-col items-center justify-center gap-1.5 shadow-[inset_0_1px_2px_rgba(255,255,255,0.08),inset_0_-2px_4px_rgba(0,0,0,0.8),0_4px_12px_rgba(0,0,0,0.3)] hover:shadow-[inset_0_1px_2px_rgba(255,255,255,0.15),0_0_16px_rgba(250,204,21,0.25)] transition-all duration-300 hover:scale-[1.04] active:scale-95 cursor-pointer relative overflow-hidden"
+                >
+                  {/* Subtle Industrial Crate Corner Brackets */}
+                  <div className="absolute top-1 left-1 w-2 h-2 border-t border-l border-neutral-700/80 pointer-events-none" />
+                  <div className="absolute top-1 right-1 w-2 h-2 border-t border-r border-neutral-700/80 pointer-events-none" />
+                  <div className="absolute bottom-1 left-1 w-2 h-2 border-b border-l border-neutral-700/80 pointer-events-none" />
+                  <div className="absolute bottom-1 right-1 w-2 h-2 border-b border-r border-neutral-700/80 pointer-events-none" />
+
+                  {/* Crate Icon */}
+                  <span className="text-xl sm:text-2xl transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                    📦
+                  </span>
+
+                  {/* Stencil Label */}
+                  <span className="font-mono text-[9px] sm:text-[10px] font-black tracking-widest text-neutral-400 group-hover:text-yellow-400 transition-colors uppercase text-center leading-tight">
+                    COMING<br />SOON
+                  </span>
+                </button>
+              </div>
 
               <div className="transition-opacity duration-300 opacity-100">
                 <RoastActions
@@ -1039,6 +1106,60 @@ export default function Home() {
               className="w-full py-2.5 px-4 text-xs font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
             >
               Fine, I&apos;ll hit Enter
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Full-Screen Root Modal: Industrial Crate Prank Trap */}
+      {showCrateModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="crate-prank-title"
+          onClick={handleCloseCrateModal}
+          className="fixed inset-0 z-[100] w-screen h-screen bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-[350px] max-w-[90vw] rounded-2xl border-2 border-neutral-800 bg-[#14120E] p-5 text-[#FAF8F5] shadow-2xl animate-fade-in text-center"
+          >
+            <div className="flex items-start justify-between gap-2">
+              <h3 id="crate-prank-title" className="text-xs font-semibold text-neutral-300 uppercase tracking-wider text-left">
+                RESTRICTED SHIPMENT: YOU THOUGHT?
+              </h3>
+              <button
+                type="button"
+                onClick={handleCloseCrateModal}
+                className="rounded-md p-1 text-neutral-400 hover:text-white hover:bg-neutral-800 transition cursor-pointer shrink-0"
+                aria-label="Close modal"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="my-3 flex justify-center">
+              <Image
+                src="/wasnt_ready.jpg"
+                alt="He wasn't ready"
+                width={220}
+                height={220}
+                className="max-h-52 w-auto object-contain mx-auto rounded-xl border border-neutral-700 bg-neutral-900 shadow-inner"
+                priority
+              />
+            </div>
+
+            <p className="text-sm font-medium text-neutral-200 my-2 leading-relaxed px-1">
+              Bro can barely handle a 2-sentence reality check and is already clicking unopened crates hoping for emotional support. You weren&apos;t ready.
+            </p>
+
+            <button
+              id="crate-prank-dismiss-btn"
+              type="button"
+              onClick={handleCloseCrateModal}
+              className="w-full py-2.5 px-4 text-xs font-semibold rounded-xl mt-4 border border-neutral-700/60 bg-neutral-800 text-neutral-200 hover:bg-neutral-700 hover:border-neutral-600 hover:text-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
+            >
+              I admit I wasn&apos;t ready 😔
             </button>
           </div>
         </div>

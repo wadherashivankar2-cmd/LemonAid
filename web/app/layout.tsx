@@ -1,34 +1,34 @@
-import type { Metadata } from "next";
 import "./globals.css";
+import type { Metadata } from "next";
 import { fontSans, fontSerif } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { Chrome } from "@/components/Chrome";
 import { GridPulse } from "@/components/ui/grid-pulse";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://mr-roast-ten.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lemon-aid-app.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "LoveBite — Reflect on Your Day",
+  title: "LemonAid — Reflect on Your Day",
   description: "A calm, mindful space for genuine daily self-reflection and personal growth.",
   openGraph: {
-    title: "LoveBite — Reflect on Your Day",
+    title: "LemonAid — Reflect on Your Day",
     description: "A calm, mindful space for genuine daily self-reflection and personal growth.",
     url: siteUrl,
-    siteName: "LoveBite",
+    siteName: "LemonAid",
     type: "website",
     images: [
       {
         url: "/api/og",
         width: 1200,
         height: 630,
-        alt: "LoveBite — Reflect on Your Day",
+        alt: "LemonAid — Reflect on Your Day",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "LoveBite — Reflect on Your Day",
+    title: "LemonAid — Reflect on Your Day",
     description: "A calm, mindful space for genuine daily self-reflection.",
     images: ["/api/og"],
   },
@@ -50,10 +50,11 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("min-h-screen bg-background antialiased", fontSans.variable, fontSerif.variable)}
+      suppressHydrationWarning
+      className={cn("dark min-h-screen antialiased", fontSans.variable, fontSerif.variable)}
     >
-      <body className="min-h-screen font-sans selection:bg-neutral-200">
-        <GridPulse className="fixed -z-10 [mask-image:none]" />
+      <body className="min-h-screen font-sans bg-[#0A0A0A] text-neutral-100 selection:bg-neutral-800 relative isolate">
+        <GridPulse className="fixed inset-0 -z-10 [mask-image:none] [--grid-pulse-line:rgb(255_255_255/0.12)]" />
         <Chrome />
         {children}
       </body>

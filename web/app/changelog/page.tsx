@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export const metadata = {
   title: "Changelog | Gratitude Journal",
-  description: "Updates and deprecations in Mr.Roast.",
+  description: "Updates and deprecations in LemonAid.",
 };
 
 const RELEASES = [

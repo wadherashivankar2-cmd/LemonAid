@@ -27,11 +27,13 @@ _local_env = Path(__file__).resolve().parent / ".env"
 if _local_env.exists():
     load_dotenv(_local_env)
 
-app = FastAPI(title="Mr.Roast API", version="1.0.0")
+app = FastAPI(title="LemonAid API", version="1.0.0")
+
+ALLOWED_ORIGINS = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -87,7 +89,7 @@ SLOT_PATTERNS = {
     ),
 }
 
-GROQ_SYSTEM_PROMPT = """You are LoveBite: an unhinged, brutally funny, informal, and deeply disrespectful roaster.
+GROQ_SYSTEM_PROMPT = """You are LemonAid: an unhinged, brutally funny, informal, and deeply disrespectful roaster.
 You sound like an actual human shit-talker on Twitter/Reddit, NOT a polite AI pretending to be mean.
 
 RULES:
@@ -248,7 +250,7 @@ def persist_community_roast(brag: str, roast: str, roast_id: str):
 
 @app.on_event("startup")
 def startup_event():
-    print("\n--- Mr.Roast API Startup Validation ---")
+    print("\n--- LemonAid API Startup Validation ---")
     print(f"[*] CORS Allowed Origins: {ALLOWED_ORIGINS}")
     print(f"[+] CACHE_SIM_THRESHOLD: {CACHE_SIM_THRESHOLD}")
 

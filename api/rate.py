@@ -1,5 +1,5 @@
 """
-Per-IP sliding window rate limiter for LoveBite.
+Per-IP sliding window rate limiter for LemonAid.
 Supports in-memory tracking with automatic memory leak prevention.
 """
 

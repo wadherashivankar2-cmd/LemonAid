@@ -22,6 +22,19 @@ body {
     --radius: 0.5rem;
   }
 
+  .dark {
+    --background: #0A0A0A;
+    --foreground: #FAF8F5;
+    --card: #14120E;
+    --card-foreground: #FAF8F5;
+    --border: #262626;
+    --input: #262626;
+    --muted: #1A1A1A;
+    --muted-foreground: #A3A3A3;
+    --primary: #FAF8F5;
+    --primary-foreground: #0A0A0A;
+  }
+
   * {
     border-color: var(--border);
   }
@@ -42,6 +55,7 @@ body {
     opacity: 0;
     transform: translateY(4px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -53,13 +67,19 @@ body {
 }
 
 @keyframes shake {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(0);
   }
-  20%, 60% {
+
+  20%,
+  60% {
     transform: translateX(-6px);
   }
-  40%, 80% {
+
+  40%,
+  80% {
     transform: translateX(6px);
   }
 }
@@ -68,8 +88,78 @@ body {
   animation: shake 400ms ease-in-out;
 }
 
+@keyframes lemonWobble {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  20% {
+    transform: rotate(-8deg) scale(1.06);
+  }
+
+  40% {
+    transform: rotate(7deg) scale(1.06);
+  }
+
+  60% {
+    transform: rotate(-5deg) scale(1.03);
+  }
+
+  80% {
+    transform: rotate(3deg) scale(1.01);
+  }
+
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+.lemon-wobble {
+  display: inline-block;
+  transition: transform 0.2s ease, filter 0.3s ease;
+}
+
+.lemon-wobble:hover {
+  animation: lemonWobble 0.45s ease-in-out infinite;
+  cursor: pointer;
+}
+
+@keyframes lemonPop {
+  0%   { transform: scale(0.2) rotate(-25deg); opacity: 0; filter: brightness(2.5) drop-shadow(0 0 40px #facc15); }
+  50%  { transform: scale(1.5) rotate(15deg);  filter: brightness(1.8) drop-shadow(0 0 35px #eab308); }
+  75%  { transform: scale(0.92) rotate(-6deg); }
+  100% { transform: scale(1) rotate(0deg);    opacity: 1; filter: brightness(1); }
+}
+
+@keyframes screenYellowFlash {
+  0%   { background-color: rgba(250,204,21,0.95); opacity: 1; }
+  30%  { background-color: rgba(250,204,21,0.75); opacity: 0.9; }
+  100% { background-color: transparent; opacity: 0; visibility: hidden; }
+}
+
+.animate-lemon-pop {
+  display: inline-block;
+  animation: lemonPop 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-yellow-flash {
+  animation: screenYellowFlash 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes citrusSplash {
+  0%   { transform: translate(-50%, -50%) scale(0.1); opacity: 0.85; }
+  100% { transform: translate(-50%, -50%) scale(2.8); opacity: 0; }
+}
+
+.animate-citrus-splash {
+  animation: citrusSplash 0.75s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  *, ::before, ::after {
+
+  *,
+  ::before,
+  ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

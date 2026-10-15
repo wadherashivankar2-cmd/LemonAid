@@ -91,8 +91,8 @@ export async function shareCard(elementId = "roast-card"): Promise<void> {
 }
 
 export function shareX(roastText: string): void {
-  const origin = typeof window !== "undefined" ? window.location.origin : "https://lovebite.vercel.app";
-  const tweetText = `I logged my gratitude and LoveBite destroyed me:\n\n"${roastText}"\n\nGet cooked: ${origin}`;
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://lemonaid.vercel.app";
+  const tweetText = `I logged my gratitude and LemonAid destroyed me:\n\n"${roastText}"\n\nGet cooked: ${origin}`;
   const tweetUrl = `https://x.com/intent/post?text=${encodeURIComponent(tweetText)}`;
 
   if (typeof window !== "undefined") {

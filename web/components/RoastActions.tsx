@@ -135,9 +135,9 @@ export function RoastActions({
 
   const handleHumiliateFriend = () => {
     quip("humiliateFriend", undefined, { duration: 5000 });
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://lovebite.vercel.app";
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://lemonaid.vercel.app";
     const text = encodeURIComponent(
-      `I thought I was doing something with my life until LoveBite completely destroyed me. Go get humbled: ${origin}`
+      `I thought I was doing something with my life until LemonAid completely destroyed me. Go get humbled: ${origin}`
     );
     if (typeof window !== "undefined") {
       window.open(`https://api.whatsapp.com/send?text=${text}`, "_blank", "noopener,noreferrer");
@@ -356,14 +356,11 @@ export function RoastActions({
 
             {activeFeedbackModal === "tribute_rejected" ? (
               <div className="relative w-full h-56 my-3 rounded-lg overflow-hidden bg-neutral-800 flex items-center justify-center">
-                <img
+                <Image
                   src="/Superman.jpg"
                   alt="Sad Superman"
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    // Fallback if filename case is lowercase
-                    (e.currentTarget as HTMLImageElement).src = "/superman.jpg";
-                  }}
+                  fill
+                  className="object-cover"
                 />
               </div>
             ) : (
