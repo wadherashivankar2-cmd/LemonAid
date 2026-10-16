@@ -119,7 +119,9 @@ export default function Home() {
   const isSubmittingRef = React.useRef(false);
 
   const words = React.useMemo(() => {
-    return roastData?.text ? roastData.text.trim().split(/\s+/) : [];
+    if (!roastData?.text) return [];
+    const cleanText = roastData.text.trim().replace(/^["'“”`]+|["'“”`]+$/g, "").trim();
+    return cleanText ? cleanText.split(/\s+/) : [];
   }, [roastData?.text]);
 
   const abortControllerRef = React.useRef<AbortController | null>(null);
@@ -492,6 +494,9 @@ export default function Home() {
       }
 
       const data: RoastResponse = await response.json();
+      if (data?.text) {
+        data.text = data.text.trim().replace(/^["'“”`]+|["'“”`]+$/g, '').trim();
+      }
       setRoastData(data);
 
       // Snap loading progress to 100% on completion
@@ -880,7 +885,7 @@ export default function Home() {
 
               <div className="relative my-2">
                 <blockquote className="font-serif text-xl sm:text-2xl text-[#1F1B16] dark:text-neutral-100 leading-snug tracking-tight border-l-2 border-[#1F1B16] dark:border-neutral-200 pl-4 min-h-[3rem] pr-4">
-                  &ldquo;{words.slice(0, wordCount).join(" ")}&rdquo;
+                  {words.slice(0, wordCount).join(" ")}
                   {!isTypingComplete && <span className="inline-block w-1.5 h-5 bg-[#1F1B16] dark:bg-neutral-100 ml-1 animate-pulse align-middle" />}
                 </blockquote>
               </div>

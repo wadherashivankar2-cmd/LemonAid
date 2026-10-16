@@ -1,31 +1,33 @@
+import os
+import traceback
+from pathlib import Path
+from dotenv import load_dotenv
+
+# --- Environment & Configuration Loading ---
+_api_env = Path(__file__).resolve().parent / ".env"
+if _api_env.exists():
+    load_dotenv(_api_env, override=True)
+load_dotenv(override=True)
+
 import hashlib
 import hmac
 import json
 import math
-import os
 import random
 import re
 from collections import defaultdict, deque
 import threading
-from pathlib import Path
 from typing import Literal, Optional
 
 import httpx
 import joblib
 import numpy as np
-from dotenv import load_dotenv
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, field_validator
 from sentence_transformers import SentenceTransformer
 
 from rate import check_rate_limit
-
-# --- Environment & Configuration Loading ---
-load_dotenv()
-_local_env = Path(__file__).resolve().parent / ".env"
-if _local_env.exists():
-    load_dotenv(_local_env)
 
 app = FastAPI(title="LemonAid API", version="1.0.0")
 
@@ -42,7 +44,7 @@ app.add_middleware(
 SHARE_SECRET = os.getenv("SHARE_SECRET", "dev_secret_key_must_be_shared_with_frontend")
 RETR_MIN = float(os.getenv("RETR_MIN", "0.40"))
 RERANK_MIN = float(os.getenv("RERANK_MIN", "0.45"))
-CACHE_SIM_THRESHOLD = float(os.getenv("CACHE_SIM_THRESHOLD", "0.82"))
+CACHE_SIM_THRESHOLD = float(os.getenv("CACHE_SIM_THRESHOLD", "1.0"))
 
 UPSTASH_URL = os.getenv("UPSTASH_URL", "").rstrip("/")
 UPSTASH_TOKEN = os.getenv("UPSTASH_TOKEN", "")
@@ -50,7 +52,7 @@ UPSTASH_TOKEN = os.getenv("UPSTASH_TOKEN", "")
 # Groq Hybrid Fallback
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 LLM_FALLBACK_ENABLED = os.getenv("LLM_FALLBACK_ENABLED", "true").lower() in ("1", "true", "yes")
-GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
@@ -89,24 +91,23 @@ SLOT_PATTERNS = {
     ),
 }
 
-GROQ_SYSTEM_PROMPT = """You are LemonAid: an unhinged, brutally funny, informal, and deeply disrespectful roaster.
-You sound like an actual human shit-talker on Twitter/Reddit, NOT a polite AI pretending to be mean.
+GROQ_SYSTEM_PROMPT = """You are LemonAid, an elite, dry, cynical roaster. 
 
 RULES:
-1. TONE:
-   - Extremely informal, mocking, comedic, blunt, and unapologetic.
-   - Use casual human phrasing, slang, and sarcasm.
-   - NO corporate sentences, NO formal vocabulary, NO debate-club clapbacks.
-2. DISMANTLE MOTIVES:
-   - If they did charity or helped someone: Call out their pathetic need for a gold star. Tell them they only did it to feel superior and feed their desperate ego.
-   - If they brag about tech/grind: Remind them they're a replaceable, overworked clown whose side project has 0 users.
-   - If they sound wholesome or innocent: Treat their wholesomeness like pure weakness and mock them for looking for approval on the internet.
-3. FORMAT:
-   - Exactly 1 to 2 sharp sentences.
-   - NO introductory filler ("Oh wow", "Look at you", "Ah yes").
-   - NO quotation marks, NO emojis, NO hashtags.
-   - Jump straight in with a devastating personal jab.
-   - If user typed in Hinglish/Hindi, roast them in savage, native Hinglish."""
+- Output EXACTLY 1 to 2 razor-sharp sentences (under 30 words total).
+- Zero filler: Never say "Oh", "Well", or "Let's be honest".
+- Zero repetition: Deliver one precise cut and stop immediately. No moralizing, no disclaimers.
+
+EXAMPLES:
+User: I have 5 years of experience in React and I am learning Docker.
+Roast: Five years of centering divs just to get intimidated by a YAML file. Containerizing mediocrity doesn't make it scalable.
+
+User: I hit the gym 6 days a week but eat whatever I want.
+Roast: You're not working out; you're just paying a gym membership to sweat out your delusions in front of a mirror.
+
+User: I want to build an AI startup that automates cold emails.
+Roast: You built an automated rejection generator for people who already blocked your domain.
+"""
 
 # --- Lazy-Loaded Models & Clients ---
 embedder: Optional[SentenceTransformer] = None
@@ -175,22 +176,25 @@ def load_resources():
 async def generate_groq_roast(brag: str) -> Optional[str]:
     """Asynchronous non-blocking Groq API call with prompt injection defense."""
     global async_groq_client
-    if not GROQ_API_KEY:
+    api_key = os.getenv("GROQ_API_KEY", GROQ_API_KEY)
+    if not api_key:
+        print("[ROAST ERROR] GROQ_API_KEY is not set in environment!")
         return None
 
     if async_groq_client is None:
         from groq import AsyncGroq
-        async_groq_client = AsyncGroq(api_key=GROQ_API_KEY)
+        async_groq_client = AsyncGroq(api_key=api_key)
 
     from groq import NotFoundError
 
-    models_to_try = ["llama-3.1-8b-instant", GROQ_MODEL, "llama-3.3-70b-versatile"]
+    models_to_try = ["llama-3.3-70b-versatile", GROQ_MODEL, "llama-3.1-8b-instant"]
     deduped_models = []
     for m in models_to_try:
         if m not in deduped_models:
             deduped_models.append(m)
 
     sanitized_input = f"<reflection>\n{brag}\n</reflection>"
+    last_err = None
 
     for model_name in deduped_models:
         try:
@@ -200,20 +204,26 @@ async def generate_groq_roast(brag: str) -> Optional[str]:
                     {"role": "user", "content": sanitized_input},
                 ],
                 model=model_name,
-                temperature=0.9,
-                frequency_penalty=0.2,
-                max_tokens=150,
+                temperature=0.85,
+                frequency_penalty=0.5,
+                presence_penalty=0.4,
+                max_tokens=75,
             )
             text = resp.choices[0].message.content or ""
-            clean_text = text.strip().strip('"\'').rstrip('!').strip()
+            clean_text = text.strip().strip('"\'“”`').rstrip('!').strip()
             if clean_text:
                 return clean_text
         except Exception as e:
+            last_err = e
+            print(f"[ROAST ERROR] Groq call failed: {e}")
+            traceback.print_exc()
             err_str = str(e).lower()
             if "not found" in err_str or "decommissioned" in err_str or "does not exist" in err_str or "access" in err_str or "404" in err_str or "400" in err_str:
                 continue
-            print(f"[!] Groq error with {model_name}: {e}")
             break
+
+    if last_err:
+        raise last_err
     return None
 
 
@@ -368,16 +378,68 @@ async def generate_roast(req: RoastRequest, request: Request, background_tasks: 
             "crisis_url": "https://findahelpline.com",
         }
 
+    # 2. Direct Groq Generation (Bypass semantic cache)
+    api_key = os.getenv("GROQ_API_KEY", GROQ_API_KEY)
+    if not api_key:
+        print("[ROAST ERROR] GROQ_API_KEY is not set in environment!")
+        raise HTTPException(
+            status_code=500,
+            detail="[ROAST ERROR] GROQ_API_KEY is not set in environment!",
+        )
+
+    try:
+        groq_roast = await generate_groq_roast(input_text)
+        if groq_roast:
+            clean_roast = groq_roast.strip().strip('"\'“”`').strip()
+            roast_id = f"llm-{hashlib.md5(clean_roast.encode('utf-8')).hexdigest()[:8]}"
+            selected_roast = {
+                "id": roast_id,
+                "category": "dynamic_burn",
+                "roast": clean_roast,
+                "brag": input_text,
+            }
+            roast_id_map[roast_id] = selected_roast
+            recent_served.append(roast_id)
+            sig = compute_sig(input_text, clean_roast)
+
+            background_tasks.add_task(increment_counter_sync, "served:total")
+            background_tasks.add_task(increment_counter_sync, f"served:{roast_id}")
+
+            return {
+                "kind": "roast",
+                "text": clean_roast,
+                "id": roast_id,
+                "category": "dynamic_burn",
+                "brag": input_text,
+                "sig": sig,
+            }
+        else:
+            print("[ROAST ERROR] Groq call failed: Empty response returned.")
+            raise HTTPException(
+                status_code=502,
+                detail="[ROAST ERROR] Groq generation returned an empty response.",
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ROAST ERROR] Groq call failed: {e}")
+        traceback.print_exc()
+        raise HTTPException(
+            status_code=500,
+            detail=f"[ROAST ERROR] Groq call failed: {e}",
+        )
+
+    # Fallback: Load local resources and check semantic cache if Groq unavailable
     load_resources()
 
-    # 2. Embed user input once
+    # 3. Embed user input once
     q_vec = embedder.encode(
         input_text,
         normalize_embeddings=True,
         convert_to_numpy=True,
     ).astype(np.float32)
 
-    # 3. Vector similarity calculation
+    # 4. Vector similarity calculation
     extracted_slots = extract_slots(input_text)
     roast_scores: dict[int, float] = defaultdict(float)
     max_sim = 0.0
@@ -389,33 +451,6 @@ async def generate_roast(req: RoastRequest, request: Request, background_tasks: 
             sim_f = float(sim)
             if sim_f > roast_scores[owner_idx]:
                 roast_scores[owner_idx] = sim_f
-
-    # 4. Asynchronous Groq Fallback for unique inputs / similarity < threshold
-    if max_sim < CACHE_SIM_THRESHOLD and LLM_FALLBACK_ENABLED and GROQ_API_KEY:
-        groq_roast = await generate_groq_roast(input_text)
-        if groq_roast:
-            roast_id = f"llm-{hashlib.md5(groq_roast.encode('utf-8')).hexdigest()[:8]}"
-            selected_roast = {
-                "id": roast_id,
-                "category": "dynamic_burn",
-                "roast": groq_roast,
-                "brag": input_text,
-            }
-            roast_id_map[roast_id] = selected_roast
-            recent_served.append(roast_id)
-            sig = compute_sig(input_text, groq_roast)
-
-            background_tasks.add_task(increment_counter_sync, "served:total")
-            background_tasks.add_task(increment_counter_sync, f"served:{roast_id}")
-
-            return {
-                "kind": "roast",
-                "text": groq_roast,
-                "id": roast_id,
-                "category": "dynamic_burn",
-                "brag": input_text,
-                "sig": sig,
-            }
 
     # 5. Semantic Cache Match Retrieval (similarity >= RETR_MIN)
     candidates = []
@@ -482,7 +517,7 @@ async def generate_roast(req: RoastRequest, request: Request, background_tasks: 
 
     return {
         "kind": "roast",
-        "text": rendered_roast_text,
+        "text": rendered_roast_text.strip().strip('"\'“”`').strip(),
         "id": selected_roast["id"],
         "category": selected_roast.get("category", "generic"),
         "brag": input_text,
