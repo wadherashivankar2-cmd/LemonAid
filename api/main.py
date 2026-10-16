@@ -185,8 +185,19 @@ async def generate_groq_roast(brag: str) -> Optional[str]:
         from groq import AsyncGroq
         async_groq_client = AsyncGroq(api_key=api_key)
 
-    target_model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
-    models_to_try = [target_model, "llama-3.3-70b-versatile"]
+    try:
+        from groq import NotFoundError, BadRequestError
+    except ImportError:
+        NotFoundError = ()
+        BadRequestError = ()
+
+    models_to_try = [
+        os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
+        "llama-3.3-70b-versatile",
+        "llama3-70b-8192",
+        "llama-3.1-70b-versatile",
+        "mixtral-8x7b-32768",
+    ]
     deduped_models = []
     for m in models_to_try:
         if m and m not in deduped_models:
@@ -212,17 +223,33 @@ async def generate_groq_roast(brag: str) -> Optional[str]:
             clean_text = text.strip().strip('"\'“”`').rstrip('!').strip()
             if clean_text:
                 return clean_text
+        except (NotFoundError, BadRequestError) as e:
+            last_err = e
+            print(f"[ROAST WARNING] Groq model '{model_name}' failed with {type(e).__name__}: {e}. Trying next model...")
+            continue
         except Exception as e:
             last_err = e
-            print(f"[ROAST ERROR] Groq call failed: {e}")
-            traceback.print_exc()
             err_str = str(e).lower()
-            if "not found" in err_str or "decommissioned" in err_str or "does not exist" in err_str or "access" in err_str or "404" in err_str or "400" in err_str:
+            if (
+                "not found" in err_str
+                or "bad request" in err_str
+                or "model_not_found" in err_str
+                or "decommissioned" in err_str
+                or "does not exist" in err_str
+                or "access" in err_str
+                or "404" in err_str
+                or "400" in err_str
+            ):
+                print(f"[ROAST WARNING] Groq model '{model_name}' failed with {e}. Trying next model...")
                 continue
-            break
+            print(f"[ROAST WARNING] Groq model '{model_name}' encountered unexpected error: {e}. Trying next model...")
+            continue
 
     if last_err:
-        raise last_err
+        raise HTTPException(
+            status_code=500,
+            detail=f"[ROAST ERROR] All candidate Groq models failed. Last error: {last_err}",
+        )
     return None
 
 
