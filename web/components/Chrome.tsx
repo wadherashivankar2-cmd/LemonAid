@@ -49,21 +49,12 @@ export function ThemeToggle({ className }: { className?: string } = {}) {
 
 export function Chrome() {
   const [showCookies, setShowCookies] = React.useState(false);
-  const [theme, setTheme] = React.useState<"dark" | "light">("dark");
   const konamiIndex = React.useRef(0);
 
   React.useEffect(() => {
     const savedTheme = (localStorage.getItem("theme") as "dark" | "light") || "dark";
-    setTheme(savedTheme);
     document.documentElement.classList.toggle("dark", savedTheme === "dark");
   }, []);
-
-  const toggleTheme = () => {
-    const nextTheme = theme === "dark" ? "light" : "dark";
-    setTheme(nextTheme);
-    localStorage.setItem("theme", nextTheme);
-    document.documentElement.classList.toggle("dark", nextTheme === "dark");
-  };
 
   React.useEffect(() => {
     // 1. Devtools console line

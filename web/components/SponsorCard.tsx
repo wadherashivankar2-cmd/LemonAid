@@ -131,7 +131,7 @@ export function SponsorCard({ className = "" }: { className?: string }) {
             {/* Primary Action Button (CTA) */}
             <a
               id="sponsor-modal-cta-btn"
-              href="https://www.youtube.com/watch?v=9QStt6BIoFM"
+              href={CLOWN_TRAINING_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full block text-center font-bold text-xs py-3 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 transition-all shadow-md active:scale-95"
