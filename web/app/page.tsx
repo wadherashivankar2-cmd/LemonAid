@@ -11,6 +11,7 @@ import { quip } from "@/lib/quips";
 import { downloadCard, shareX, setCurrentShare } from "@/lib/share";
 import { GoogleAuthTrap } from "@/components/GoogleAuthTrap";
 import { ThemeToggle } from "@/components/Chrome";
+import { SponsorCard } from "@/components/SponsorCard";
 
 type AppState = "idle" | "loading" | "reveal" | "gentle" | "error";
 
@@ -848,9 +849,12 @@ export default function Home() {
         </div>
       ) : roastData ? (
         /* Permanent Zero-Overlap Flexbox Layout on Reveal */
-        <div className="flex flex-col lg:flex-row items-start justify-center gap-6 w-full max-w-5xl mx-auto my-auto py-8 animate-fade-in">
-          {/* Main Roast Card (Left / Main Column) */}
-          <div className="w-full max-w-xl">
+        <div className="flex flex-col lg:flex-row items-start justify-center gap-6 w-full max-w-7xl mx-auto my-auto py-8 animate-fade-in px-4">
+          {/* Sponsor Card (Positioned on the Left Flank of Main Roast Display on Desktop) */}
+          <SponsorCard className="order-2 lg:order-1" />
+
+          {/* Main Roast Card (Center Column on Desktop) */}
+          <div className="w-full max-w-xl order-1 lg:order-2">
             <div
               id="roast-reveal-container"
               className="space-y-5 rounded-xl bg-white dark:bg-neutral-900/90 border border-neutral-200 dark:border-neutral-800 shadow-xl p-6 sm:p-7"
@@ -906,7 +910,7 @@ export default function Home() {
           </div>
 
           {/* Side Suggestions Widget (Right Column) */}
-          <div className="w-full lg:w-64 shrink-0">
+          <div className="w-full lg:w-64 shrink-0 order-3">
             <div className="bg-white/80 dark:bg-neutral-900/80 border border-neutral-200 dark:border-neutral-800 rounded-xl p-4 text-left shadow-md">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-base" role="img" aria-label="suggestion box">💡</span>

@@ -89,6 +89,7 @@ export function EvasiveGithub() {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const inactivityTimerRef = React.useRef<NodeJS.Timeout | null>(null);
   const exhaustionTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const recoveryTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
   // Minimum screen padding (top padding increased to 48px to accommodate the floating roast bubble)
   const paddingX = 24;
@@ -100,6 +101,7 @@ export function EvasiveGithub() {
     return () => {
       if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
       if (exhaustionTimerRef.current) clearTimeout(exhaustionTimerRef.current);
+      if (recoveryTimerRef.current) clearTimeout(recoveryTimerRef.current);
     };
   }, []);
 
@@ -144,9 +146,12 @@ export function EvasiveGithub() {
       return;
     }
 
-    // Reset inactivity timer
+    // Reset inactivity and recovery timers
     if (inactivityTimerRef.current) {
       clearTimeout(inactivityTimerRef.current);
+    }
+    if (recoveryTimerRef.current) {
+      clearTimeout(recoveryTimerRef.current);
     }
 
     const nextCount = dodgeCount + 1;
@@ -165,7 +170,14 @@ export function EvasiveGithub() {
       exhaustionTimerRef.current = setTimeout(() => {
         setIsExhausted(false);
         setDodgeCount(0);
-        setRoastMessage("");
+        setRoastMessage("Here we go again...");
+
+        if (recoveryTimerRef.current) {
+          clearTimeout(recoveryTimerRef.current);
+        }
+        recoveryTimerRef.current = setTimeout(() => {
+          setRoastMessage((current) => (current === "Here we go again..." ? "" : current));
+        }, 2000);
       }, 4000);
     } else if (nextCount >= 8) {
       nextRoast = getRandomItem(ROASTS_TIER_3);
@@ -244,6 +256,9 @@ export function EvasiveGithub() {
   if (isExhausted) {
     moodClasses = "border-emerald-500/80 shadow-emerald-500/25 shadow-xl ring-2 ring-emerald-500/60 opacity-95 animate-pulse";
     toastClasses = "bg-emerald-950/95 text-emerald-200 border-emerald-500/80 font-semibold shadow-emerald-950/50";
+  } else if (roastMessage === "Here we go again...") {
+    moodClasses = "border-cyan-500/70 shadow-cyan-500/20 shadow-lg ring-1 ring-cyan-500/40";
+    toastClasses = "bg-neutral-900/95 text-cyan-300 border-cyan-500/70 font-medium shadow-cyan-950/40";
   } else if (dodgeCount >= 8) {
     moodClasses = "border-rose-500 shadow-rose-500/30 shadow-xl ring-2 ring-rose-500/60 animate-pulse";
     toastClasses = "bg-rose-950/90 text-rose-200 border-rose-600/80 font-medium";
