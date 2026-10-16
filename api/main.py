@@ -52,7 +52,7 @@ UPSTASH_TOKEN = os.getenv("UPSTASH_TOKEN", "")
 # Groq Hybrid Fallback
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 LLM_FALLBACK_ENABLED = os.getenv("LLM_FALLBACK_ENABLED", "true").lower() in ("1", "true", "yes")
-GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
@@ -192,11 +192,10 @@ async def generate_groq_roast(brag: str) -> Optional[str]:
         BadRequestError = ()
 
     models_to_try = [
-        os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile"),
-        "llama-3.3-70b-versatile",
-        "llama3-70b-8192",
-        "llama-3.1-70b-versatile",
-        "mixtral-8x7b-32768",
+        os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"),
+        "openai/gpt-oss-120b",
+        "openai/gpt-oss-20b",
+        "qwen/qwen3.8-27b",
     ]
     deduped_models = []
     for m in models_to_try:
@@ -204,6 +203,7 @@ async def generate_groq_roast(brag: str) -> Optional[str]:
             deduped_models.append(m)
 
     sanitized_input = f"<reflection>\n{brag}\n</reflection>"
+    temperature = max(0.6, min(1.0, 0.85))
     last_err = None
 
     for model_name in deduped_models:
@@ -214,9 +214,7 @@ async def generate_groq_roast(brag: str) -> Optional[str]:
                     {"role": "user", "content": sanitized_input},
                 ],
                 model=model_name,
-                temperature=0.85,
-                frequency_penalty=0.5,
-                presence_penalty=0.4,
+                temperature=temperature,
                 max_tokens=75,
             )
             text = resp.choices[0].message.content or ""
