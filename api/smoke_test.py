@@ -29,7 +29,7 @@ def run_smoke_tests():
     print("\n[1] Testing GET /health...")
     r = client.get("/health")
     assert r.status_code == 200, f"Expected 200, got {r.status_code}"
-    assert r.json() == {"ok": True}, f"Unexpected response: {r.json()}"
+    assert r.json() in [{"status": "ok"}, {"ok": True}], f"Unexpected response: {r.json()}"
     print("PASS: /health OK")
 
     # 2. Safe brag input

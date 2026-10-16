@@ -185,12 +185,11 @@ async def generate_groq_roast(brag: str) -> Optional[str]:
         from groq import AsyncGroq
         async_groq_client = AsyncGroq(api_key=api_key)
 
-    from groq import NotFoundError
-
-    models_to_try = ["llama-3.3-70b-versatile", GROQ_MODEL, "llama-3.1-8b-instant"]
+    target_model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+    models_to_try = [target_model, "llama-3.3-70b-versatile"]
     deduped_models = []
     for m in models_to_try:
-        if m not in deduped_models:
+        if m and m not in deduped_models:
             deduped_models.append(m)
 
     sanitized_input = f"<reflection>\n{brag}\n</reflection>"
@@ -356,8 +355,8 @@ class VoteRequest(BaseModel):
 # --- Endpoints ---
 
 @app.get("/health")
-def health():
-    return {"ok": True}
+def health_check():
+    return {"status": "ok"}
 
 
 @app.post("/roast")
