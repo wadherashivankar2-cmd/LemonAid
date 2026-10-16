@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { fontSans, fontSerif } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { Chrome } from "@/components/Chrome";
+import { EvasiveGithub } from "@/components/EvasiveGithub";
 import { GridPulse } from "@/components/ui/grid-pulse";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lemon-aid-app.vercel.app";
@@ -57,6 +58,7 @@ export default function RootLayout({
         <GridPulse className="fixed inset-0 -z-10 pointer-events-none [mask-image:none] [--grid-pulse-line:rgb(255_255_255/0.12)]" />
         <Chrome />
         {children}
+        <EvasiveGithub />
       </body>
     </html>
   );
