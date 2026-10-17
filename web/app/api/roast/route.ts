@@ -90,21 +90,45 @@ export async function POST(req: NextRequest) {
 
     const groq = new Groq({ apiKey });
 
-    try {
-      const completion = await groq.chat.completions.create({
-        messages: [
-          { role: "system", content: GROQ_SYSTEM_PROMPT },
-          { role: "user", content: `<reflection>\n${happy_thought.trim()}\n</reflection>` },
-        ],
-        model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
-        temperature: 1.15,
-        top_p: 0.90,
-        presence_penalty: 0.5,
-        frequency_penalty: 0.5,
-        max_tokens: 45,
-      });
+    const modelsToTry = [
+      process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
+      "llama-3.1-8b-instant",
+      "llama-3.1-70b-versatile",
+    ];
 
-      const rawText = completion.choices[0]?.message?.content?.trim() || "";
+    try {
+      let completion = null;
+      let lastErr: unknown = null;
+
+      for (const model of modelsToTry) {
+        try {
+          completion = await groq.chat.completions.create({
+            messages: [
+              { role: "system", content: GROQ_SYSTEM_PROMPT },
+              { role: "user", content: `<reflection>\n${happy_thought.trim()}\n</reflection>` },
+            ],
+            model,
+            temperature: 1.15,
+            top_p: 0.90,
+            presence_penalty: 0.5,
+            frequency_penalty: 0.5,
+            max_tokens: 45,
+          });
+          if (completion?.choices?.[0]?.message?.content) break;
+        } catch (err: unknown) {
+          lastErr = err;
+          const status = (err as { status?: number })?.status;
+          // If model not found (404), try next model
+          if (status === 404) continue;
+          throw err;
+        }
+      }
+
+      if (!completion && lastErr) {
+        throw lastErr;
+      }
+
+      const rawText = completion?.choices?.[0]?.message?.content?.trim() || "";
       const cleaned = rawText.replace(/^["'“”`]+|["'“”`]+$/g, "").trim();
 
       const finalRoast = !cleaned || isSoftRefusal(cleaned)
