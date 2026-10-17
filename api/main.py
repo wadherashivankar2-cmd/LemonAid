@@ -24,12 +24,28 @@ import joblib
 import numpy as np
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field, field_validator
 from sentence_transformers import SentenceTransformer
 
 from rate import check_rate_limit
 
 app = FastAPI(title="LemonAid API", version="1.0.0")
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    if exc.status_code == 429:
+        return JSONResponse(
+            status_code=429,
+            content={
+                "error": "RATE_LIMITED",
+                "message": "Our GPU cluster overheated roasting fragile egos. Cool down for 30 seconds and try again.",
+            },
+        )
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
+    )
 
 ALLOWED_ORIGINS = ["*"]
 
@@ -227,7 +243,23 @@ async def generate_groq_roast(brag: str) -> Optional[str]:
             continue
         except Exception as e:
             last_err = e
+            status_code = getattr(e, "status_code", None)
+            if not status_code and hasattr(e, "response"):
+                status_code = getattr(e.response, "status_code", None)
             err_str = str(e).lower()
+
+            if (
+                status_code == 429
+                or "429" in err_str
+                or "rate limit" in err_str
+                or "ratelimit" in err_str
+                or "too many requests" in err_str
+            ):
+                raise HTTPException(
+                    status_code=429,
+                    detail="Our GPU cluster overheated roasting fragile egos. Cool down for 30 seconds and try again.",
+                )
+
             if (
                 "not found" in err_str
                 or "bad request" in err_str
@@ -439,18 +471,58 @@ async def generate_roast(req: RoastRequest, request: Request, background_tasks: 
             }
         else:
             print("[ROAST ERROR] Groq call failed: Empty response returned.")
-            raise HTTPException(
-                status_code=502,
-                detail="[ROAST ERROR] Groq generation returned an empty response.",
+            return JSONResponse(
+                status_code=500,
+                content={
+                    "error": "SERVER_ERROR",
+                    "message": "The AI refused to process something this boring. Try giving it better material.",
+                },
             )
-    except HTTPException:
-        raise
+    except HTTPException as he:
+        if he.status_code == 429:
+            return JSONResponse(
+                status_code=429,
+                content={
+                    "error": "RATE_LIMITED",
+                    "message": "Our GPU cluster overheated roasting fragile egos. Cool down for 30 seconds and try again.",
+                },
+            )
+        return JSONResponse(
+            status_code=500,
+            content={
+                "error": "SERVER_ERROR",
+                "message": "The AI refused to process something this boring. Try giving it better material.",
+            },
+        )
     except Exception as e:
+        status_code = getattr(e, "status_code", None)
+        if not status_code and hasattr(e, "response"):
+            status_code = getattr(e.response, "status_code", None)
+        err_str = str(e).lower()
+
+        if (
+            status_code == 429
+            or "429" in err_str
+            or "rate limit" in err_str
+            or "ratelimit" in err_str
+            or "too many requests" in err_str
+        ):
+            return JSONResponse(
+                status_code=429,
+                content={
+                    "error": "RATE_LIMITED",
+                    "message": "Our GPU cluster overheated roasting fragile egos. Cool down for 30 seconds and try again.",
+                },
+            )
+
         print(f"[ROAST ERROR] Groq call failed: {e}")
         traceback.print_exc()
-        raise HTTPException(
+        return JSONResponse(
             status_code=500,
-            detail=f"[ROAST ERROR] Groq call failed: {e}",
+            content={
+                "error": "SERVER_ERROR",
+                "message": "The AI refused to process something this boring. Try giving it better material.",
+            },
         )
 
     # Fallback: Load local resources and check semantic cache if Groq unavailable

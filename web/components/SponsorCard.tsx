@@ -60,18 +60,18 @@ export function SponsorCard({ className = "" }: { className?: string }) {
           aria-modal="true"
           aria-labelledby="sponsor-modal-title"
           onClick={() => setIsOpen(false)}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-150"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] animate-in fade-in duration-150"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-[440px] bg-neutral-900 border border-neutral-800 rounded-3xl p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150 text-left max-h-[90vh] overflow-y-auto"
+            className="w-full max-w-[440px] bg-neutral-900 border border-neutral-800 rounded-3xl p-5 sm:p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150 text-left max-h-[88vh] overflow-y-auto overscroll-contain flex flex-col my-auto"
           >
             {/* Top-Right Dismiss Button */}
             <button
               id="sponsor-modal-close-btn"
               type="button"
               onClick={() => setIsOpen(false)}
-              className="absolute top-5 right-5 p-1.5 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-neutral-400"
+              className="absolute top-4 right-4 sm:top-5 sm:right-5 p-1.5 rounded-full text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-neutral-400 z-10"
               aria-label="Close modal"
             >
               <X className="w-5 h-5" />
@@ -83,10 +83,10 @@ export function SponsorCard({ className = "" }: { className?: string }) {
                 src="/mode_smile.jpg"
                 alt="Sponsor Meme"
                 onError={() => setImgError(true)}
-                className="w-full max-h-64 object-contain rounded-xl bg-black/30 border border-neutral-800 mb-4"
+                className="w-full max-h-48 sm:max-h-64 object-contain rounded-xl bg-black/30 border border-neutral-800 mb-3 sm:mb-4 shrink-0"
               />
             ) : (
-              <div className="w-full max-h-64 h-48 flex flex-col items-center justify-center p-4 text-center bg-black/30 border border-neutral-800 rounded-xl mb-4 text-neutral-400">
+              <div className="w-full max-h-48 sm:max-h-64 h-44 sm:h-48 flex flex-col items-center justify-center p-4 text-center bg-black/30 border border-neutral-800 rounded-xl mb-3 sm:mb-4 text-neutral-400 shrink-0">
                 <span className="text-4xl mb-2">☕💸</span>
                 <p className="text-xs font-mono uppercase tracking-wider text-rose-400 font-bold">
                   National Cloud Recovery Initiative
@@ -102,13 +102,13 @@ export function SponsorCard({ className = "" }: { className?: string }) {
             {/* Modal Headline */}
             <h3
               id="sponsor-modal-title"
-              className="text-xl font-bold text-neutral-100 mb-2 leading-snug"
+              className="text-lg sm:text-xl font-bold text-neutral-100 mb-2 leading-snug"
             >
               Smile. Your uniform is ready.
             </h3>
 
             {/* Structured Breakdown (Receipt block) */}
-            <div className="space-y-1.5 text-xs text-neutral-400 font-mono mb-4 text-left bg-neutral-950/60 p-3 rounded-lg border border-neutral-800">
+            <div className="space-y-1.5 text-xs text-neutral-400 font-mono mb-3 sm:mb-4 text-left bg-neutral-950/60 p-3 rounded-lg border border-neutral-800">
               <div className="flex justify-between">
                 <span>Designation:</span>
                 <span className="text-amber-400">Head Circus Performer</span>
@@ -124,30 +124,33 @@ export function SponsorCard({ className = "" }: { className?: string }) {
             </div>
 
             {/* Punchline Body */}
-            <p className="text-xs text-neutral-300 leading-relaxed mb-5">
+            <p className="text-xs text-neutral-300 leading-relaxed mb-4 sm:mb-5">
               You sat through an automated roast, clicked a suspicious sponsor button on the flank, and genuinely expected a checkout counter. We don&apos;t want your money—you clearly need professional training.
             </p>
 
-            {/* Primary Action Button (CTA) */}
-            <a
-              id="sponsor-modal-cta-btn"
-              href={CLOWN_TRAINING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full block text-center font-bold text-xs py-3 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 transition-all shadow-md active:scale-95"
-            >
-              Begin Professional Clown Training 🤡💄
-            </a>
+            {/* Action Buttons Section with Safe Mobile Clearance */}
+            <div className="pt-2 pb-1 space-y-2.5 shrink-0">
+              {/* Primary Action Button (CTA) */}
+              <a
+                id="sponsor-modal-cta-btn"
+                href={CLOWN_TRAINING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full block text-center font-bold text-xs sm:text-sm py-3 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-neutral-950 transition-all shadow-md active:scale-95 touch-manipulation cursor-pointer"
+              >
+                Begin Professional Clown Training 🤡💄
+              </a>
 
-            {/* Secondary Dismiss Button */}
-            <button
-              id="sponsor-modal-dismiss-btn"
-              type="button"
-              onClick={() => setIsOpen(false)}
-              className="text-xs text-neutral-500 hover:text-neutral-400 mt-3 block text-center underline cursor-pointer w-full bg-transparent border-none py-1"
-            >
-              I&apos;ll remain an amateur clown (Close)
-            </button>
+              {/* Secondary Dismiss Button */}
+              <button
+                id="sponsor-modal-dismiss-btn"
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="text-xs text-neutral-400 hover:text-neutral-200 block text-center underline cursor-pointer w-full bg-transparent border-none py-2 active:scale-95 touch-manipulation transition-colors"
+              >
+                I&apos;ll remain an amateur clown (Close)
+              </button>
+            </div>
           </div>
         </div>
       )}

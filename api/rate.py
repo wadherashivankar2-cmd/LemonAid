@@ -28,7 +28,7 @@ def check_rate_limit(
     request: Request,
     limit: int = 5,
     window_seconds: int = 60,
-    detail: str = "Rate limit exceeded. Your desperation is exhausting our servers. Wait a minute before asking for another burn.",
+    detail: str = "Our GPU cluster overheated roasting fragile egos. Cool down for 30 seconds and try again.",
 ):
     """
     Check if the client IP has exceeded the allowed quota (5 requests per 60s).
