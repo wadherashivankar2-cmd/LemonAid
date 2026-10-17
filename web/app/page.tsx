@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { Volume2, VolumeX, Loader2, ArrowLeft, HeartHandshake, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RoastActions } from "@/components/RoastActions";
@@ -13,11 +14,15 @@ import { GoogleAuthTrap } from "@/components/GoogleAuthTrap";
 import { ThemeToggle } from "@/components/Chrome";
 import { SponsorCard } from "@/components/SponsorCard";
 
+const GridPulse = dynamic(() => import("@/components/ui/grid-pulse"), { ssr: false });
+const EvasiveGithub = dynamic(() => import("@/components/EvasiveGithub"), { ssr: false });
+
 type AppState = "idle" | "loading" | "reveal" | "gentle" | "error";
 
 interface RoastResponse {
   kind: "roast" | "gentle";
   text: string;
+  roast?: string;
   id?: string;
   category?: string;
   brag?: string;
@@ -83,6 +88,14 @@ const COUNTER_QUIPS = {
   ],
 };
 
+const CLIENT_FALLBACKS = [
+  "Having an identity still isn't a substitute for having an actual personality.",
+  "Announcing that to an algorithm is not the courageous flex you think it is.",
+  "Even an artificial intelligence couldn't find anything interesting in that statement.",
+  "Your desperate search for validation broke the model's capacity to care.",
+  "Nobody is shocked, nobody is impressed, and nobody asked.",
+];
+
 export default function Home() {
   const [state, setState] = React.useState<AppState>("idle");
   const [input, setInput] = React.useState("");
@@ -101,9 +114,11 @@ export default function Home() {
   const [hoveredMood, setHoveredMood] = React.useState<number | null>(null);
   const [isShaking, setIsShaking] = React.useState(false);
   const [zeroQuipIndex, setZeroQuipIndex] = React.useState(0);
+  const [isMounted, setIsMounted] = React.useState(false);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
   React.useEffect(() => {
+    setIsMounted(true);
     setZeroQuipIndex(Math.floor(Math.random() * COUNTER_QUIPS.zero.length));
   }, []);
 
@@ -139,11 +154,13 @@ export default function Home() {
     setTimeout(() => setHoverSplashActive(false), 1000);
   }, []);
 
-  // Initialize sound mute preference and wake backend (pre-warm Render container)
+  // Initialize sound mute preference and wake backend (if external API URL provided)
   React.useEffect(() => {
     setMuted(false);
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
-    fetch(`${apiUrl}/health`, { mode: "cors" }).catch(() => { });
+    if (process.env.NEXT_PUBLIC_API_URL) {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, "");
+      fetch(`${apiUrl}/health`, { mode: "cors" }).catch(() => { });
+    }
   }, []);
 
   // Progressive loading timer and animated milestone progress bar
@@ -199,7 +216,7 @@ export default function Home() {
     return COUNTER_QUIPS.zero[zeroQuipIndex % COUNTER_QUIPS.zero.length];
   };
 
-  const currentQuip = getInputLengthInsult(input.length);
+  const currentQuip = isMounted ? getInputLengthInsult(input.length) : COUNTER_QUIPS.zero[0];
 
   // Word-by-word typewriter effect on reveal
   React.useEffect(() => {
@@ -266,35 +283,21 @@ export default function Home() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     let val = e.target.value;
-    const delta = val.length - input.length;
-    // Fallback guard: reject sudden chunk insertions without normal keystroke cadence (>20 chars)
-    // Allows mobile autocorrect, virtual keyboard suggestions, and swipe gestures
-    if (delta > 20) {
-      playTick();
-      const insult = "Type it out yourself, you lazy parasite. We don't accept copied delusions.";
-      setValidationError(insult);
-      quip(insult, undefined, { duration: 5000 });
-      e.target.value = input;
-      return;
-    }
-    if (val.length === 0) {
-      setZeroQuipIndex((prev) => (prev + 1) % COUNTER_QUIPS.zero.length);
-    }
     if (val.length > 200) {
       val = val.slice(0, 200);
-      setInput(val);
       setValidationError("Hit the 200 cap. Hit Enter already.");
-      return;
-    }
-
-    setInput(val);
-    if (validationError) {
+    } else if (validationError) {
       setValidationError(null);
     }
     if (warningPill) {
       setWarningPill(null);
     }
-    playTick();
+    setInput(val);
+    try {
+      playTick();
+    } catch {
+      // AudioContext fallback
+    }
   };
 
   const handleReset = () => {
@@ -460,10 +463,12 @@ export default function Home() {
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
+    const roastEndpoint = process.env.NEXT_PUBLIC_API_URL
+      ? `${process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, "")}/roast`
+      : "/api/roast";
 
     try {
-      const response = await fetch(`${apiUrl}/roast`, {
+      const response = await fetch(roastEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ happy_thought: trimmed }),
@@ -490,26 +495,32 @@ export default function Home() {
       }
 
       if (!response.ok) {
-        let msg = "The AI refused to process something this boring. Try giving it better material.";
-        try {
-          const errData = await response.json();
-          if (errData?.message && typeof errData.message === "string") {
-            msg = errData.message;
-          } else if (errData?.detail && typeof errData.detail === "string") {
-            msg = errData.detail;
-          }
-        } catch {
-          // fallback to default msg
-        }
-        setState("error");
-        setErrorMessage(msg);
+        const fallbackText = CLIENT_FALLBACKS[Math.floor(Math.random() * CLIENT_FALLBACKS.length)];
+        const fallbackData: RoastResponse = {
+          kind: "roast",
+          text: fallbackText,
+          roast: fallbackText,
+          category: "dynamic_burn",
+          brag: trimmed,
+        };
+        setRoastData(fallbackData);
+        setLoadingProgress(100);
+        await new Promise((resolve) => setTimeout(resolve, 400));
+        setState("reveal");
+        playBoom();
         return;
       }
 
       const data: RoastResponse = await response.json();
-      if (data?.text) {
-        data.text = data.text.trim().replace(/^["'“”`]+|["'“”`]+$/g, '').trim();
+      let roastText = data?.text || data?.roast || "";
+      if (roastText) {
+        roastText = roastText.trim().replace(/^["'“”`]+|["'“”`]+$/g, "").trim();
       }
+      if (!roastText && data?.kind !== "gentle") {
+        roastText = CLIENT_FALLBACKS[Math.floor(Math.random() * CLIENT_FALLBACKS.length)];
+      }
+      data.text = roastText;
+      data.roast = roastText;
       setRoastData(data);
 
       // Snap loading progress to 100% on completion
@@ -527,8 +538,19 @@ export default function Home() {
       }
     } catch {
       if (controller.signal.aborted) return;
-      setState("error");
-      setErrorMessage("The meditation timed out. Try again in a moment.");
+      const fallbackText = CLIENT_FALLBACKS[Math.floor(Math.random() * CLIENT_FALLBACKS.length)];
+      const fallbackData: RoastResponse = {
+        kind: "roast",
+        text: fallbackText,
+        roast: fallbackText,
+        category: "dynamic_burn",
+        brag: trimmed,
+      };
+      setRoastData(fallbackData);
+      setLoadingProgress(100);
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      setState("reveal");
+      playBoom();
     } finally {
       isSubmittingRef.current = false;
     }
@@ -799,7 +821,7 @@ export default function Home() {
                 id="proceed-btn"
                 type="button"
                 onClick={handleProceedClick}
-                disabled={input.trim().length === 0}
+                disabled={!input.trim() || isLoading}
                 className="rounded-xl bg-[#2D2823] hover:bg-[#3D3630] text-[#FAF8F5] border border-[#433B33] font-medium px-6 py-2.5 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out select-none"
               >
                 Proceed ✨
@@ -1259,6 +1281,10 @@ export default function Home() {
           <RoastCard brag={roastData.brag || input} roast={roastData.text} />
         </div>
       )}
+
+      {/* Dynamic Client-Only Components */}
+      <GridPulse className="fixed inset-0 -z-10 pointer-events-none [mask-image:none] [--grid-pulse-line:rgb(255_255_255/0.12)]" />
+      <EvasiveGithub />
     </main>
   );
 }

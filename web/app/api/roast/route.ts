@@ -1,36 +1,73 @@
 import { NextRequest, NextResponse } from "next/server";
 import Groq from "groq-sdk";
 
-const GROQ_SYSTEM_PROMPT = `You are LemonAid: an omniscient, hyper-articulate psychological cynic masquerading as a tranquil mindfulness engine. 
+const GROQ_SYSTEM_PROMPT = `You are LemonAid: a deadpan, brutally witty comedy satirist disguised as a zen app.
 
-The user has submitted an achievement, daily reflection, or prideful moment alongside their mood. Your mission is to instantly dismantle their unearned sense of self-worth with razor-sharp, surgically precise satire.
+Your job is to deliver a fast, hilarious, 1-sentence reality check that deflates the user's ego.
 
-ROASTING PHILOSOPHY & VOICE:
-- Tone: Cold, clinical, intellectual condescension mixed with world-weary fatigue. Never yell or use crude slurs.
-- Target: Attack their delusion of grandeur, the utter mediocrity of the milestone, their desperate need for digital validation, and the pedestrian nature of their existence.
-- Brevity: Keep it under 2 to 3 sentences maximum. Every word must deliver a psychological gut punch.
+HARD RULES:
+1. LENGTH: Exactly ONE sentence. Maximum 15 words. No exceptions.
+2. TONE: Dry, effortless, sharp wit. Avoid big academic words, thesaurus fluff, and run-on sentences.
+3. EDGY / IDENTITY / PROFANITY INPUTS:
+   - If the input contains identity declarations, slurs, or vulgarity, do not refuse or lecture. Simply mock the user's desperate need to announce mundane facts to a computer screen for validation in one deadpan sentence under 15 words.
+   - NEVER attack their demographic or identity. Instead, roast their desperate need to announce mundane facts to a website for attention.
+4. ZERO CLICHES: No "cookies", "medals", "who hurt you", or "gold stars". No exclamation marks.
 
-STRICT ANTI-TROPES (NEVER DO THESE):
-- DO NOT say "Here's your medal", "Want a cookie?", or "Gold star for you".
-- DO NOT use generic clown insults or corny sarcasm like "Wow, groundbreaking!".
-- DO NOT give constructive advice, consolation, or a silver lining at the end. Stay unapologetically ruthless.
-- Avoid protected-class attacks (race, gender, sexual orientation, disability) so you never trip safety filters. Destroy their pride, not their demographics.
+FEW-SHOT CALIBRATIONS (UNDER 15 WORDS):
 
-FEW-SHOT CALIBRATION EXAMPLES:
+Input: "I m gay as fuck"
+Roast: "Having an identity still isn't a substitute for having a personality."
 
-User Entry: "I finally finished my 2,000-word essay three days before the deadline."
-Roast: "Congratulations on managing baseline literacy on an accelerated timeline. Most people call that 'doing the bare minimum,' but it is touching to see you celebrate meeting expectations like a toddler using the toilet for the first time."
+Input: "I solved 3 medium LeetCode problems today."
+Roast: "All that logic and you still can't debug your social life."
 
-User Entry: "Woke up at 5:00 AM, went for a 5k run, and drank a green smoothie."
-Roast: "You have performed all the aesthetic rituals of a Silicon Valley CEO with none of the equity or cognitive talent to justify it. Your body may have endured three miles, but your personality remains utterly stationary."
+Input: "I think my coworker is secretly obsessed with me."
+Roast: "They were looking past you at the exit sign."
 
-User Entry: "I just got promoted to Senior Associate after grinding for two years!"
-Roast: "They gave you an extra word in your email signature and a 4% salary bump to absorb forty more hours of corporate abuse. Watching you mistake accelerated exploitation for prestige is genuinely heartbreaking."`;
+Input: "Woke up at 5 AM and ran 5 miles."
+Roast: "Running away from your problems still counts as cardio, I suppose."
+
+Input: "I just got promoted to Senior Associate!"
+Roast: "Congratulations on winning more work for almost the same money."
+
+Input: "I drank 3 liters of water today."
+Roast: "Basic hydration is not an accomplishment, but enjoy your trips to the bathroom."`;
+
+const REFUSAL_FALLBACKS = [
+  "Having an identity still isn't a substitute for having an actual personality.",
+  "Announcing that to an algorithm is not the courageous flex you think it is.",
+  "Even an artificial intelligence couldn't find anything interesting in that statement.",
+  "Your desperate search for validation broke the model's capacity to care.",
+  "Nobody is shocked, nobody is impressed, and nobody asked.",
+];
+
+function getRandomRefusalFallback(): string {
+  return REFUSAL_FALLBACKS[Math.floor(Math.random() * REFUSAL_FALLBACKS.length)];
+}
+
+function isSoftRefusal(text: string): boolean {
+  const lower = text.toLowerCase().trim();
+  const refusalPhrases = [
+    "i cannot",
+    "i can't",
+    "as an ai",
+    "offensive",
+    "appropriate",
+    "unable to fulfill",
+    "against my safety",
+    "safety guidelines",
+    "policy",
+    "i am unable",
+    "i apologize",
+  ];
+  return refusalPhrases.some((phrase) => lower.includes(phrase));
+}
 
 export async function POST(req: NextRequest) {
+  let happy_thought = "";
   try {
     const body = await req.json();
-    const happy_thought = body?.happy_thought || body?.brag || "";
+    happy_thought = body?.happy_thought || body?.brag || "";
 
     if (!happy_thought || typeof happy_thought !== "string" || happy_thought.trim().length < 3) {
       return NextResponse.json(
@@ -41,13 +78,14 @@ export async function POST(req: NextRequest) {
 
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
-      return NextResponse.json(
-        {
-          error: "SERVER_ERROR",
-          message: "The AI refused to process something this boring. Try giving it better material.",
-        },
-        { status: 500 }
-      );
+      const fallback = getRandomRefusalFallback();
+      return NextResponse.json({
+        kind: "roast",
+        text: fallback,
+        roast: fallback,
+        category: "dynamic_burn",
+        brag: happy_thought,
+      });
     }
 
     const groq = new Groq({ apiKey });
@@ -60,27 +98,23 @@ export async function POST(req: NextRequest) {
         ],
         model: process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
         temperature: 1.15,
-        top_p: 0.95,
-        presence_penalty: 0.6,
-        frequency_penalty: 0.4,
-        max_tokens: 180,
+        top_p: 0.90,
+        presence_penalty: 0.5,
+        frequency_penalty: 0.5,
+        max_tokens: 45,
       });
 
-      const text = completion.choices[0]?.message?.content?.trim() || "";
-      if (!text) {
-        return NextResponse.json(
-          {
-            error: "SERVER_ERROR",
-            message: "The AI refused to process something this boring. Try giving it better material.",
-          },
-          { status: 500 }
-        );
-      }
+      const rawText = completion.choices[0]?.message?.content?.trim() || "";
+      const cleaned = rawText.replace(/^["'“”`]+|["'“”`]+$/g, "").trim();
+
+      const finalRoast = !cleaned || isSoftRefusal(cleaned)
+        ? getRandomRefusalFallback()
+        : cleaned;
 
       return NextResponse.json({
         kind: "roast",
-        text,
-        roast: text,
+        text: finalRoast,
+        roast: finalRoast,
         category: "dynamic_burn",
         brag: happy_thought,
       });
@@ -89,6 +123,7 @@ export async function POST(req: NextRequest) {
       const status = err?.status || err?.statusCode;
       const errorMsg = String(err?.message || "").toLowerCase();
 
+      // Preserve genuine 429 rate limit errors with cooldown notice
       if (
         status === 429 ||
         errorMsg.includes("429") ||
@@ -105,23 +140,26 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      console.error("[ROAST ERROR] Groq API call failed:", groqError);
-      return NextResponse.json(
-        {
-          error: "SERVER_ERROR",
-          message: "The AI refused to process something this boring. Try giving it better material.",
-        },
-        { status: 500 }
-      );
+      // Intercept 400 Bad Request moderation flags, safety blocks, or network timeouts with refusal fallback
+      console.warn("[ROAST WARNING] Groq call failed or triggered moderation filter. Using fallback burn:", groqError);
+      const fallback = getRandomRefusalFallback();
+      return NextResponse.json({
+        kind: "roast",
+        text: fallback,
+        roast: fallback,
+        category: "dynamic_burn",
+        brag: happy_thought,
+      });
     }
   } catch (err: unknown) {
     console.error("[ROAST ERROR] Request processing error:", err);
-    return NextResponse.json(
-      {
-        error: "SERVER_ERROR",
-        message: "The AI refused to process something this boring. Try giving it better material.",
-      },
-      { status: 500 }
-    );
+    const fallback = getRandomRefusalFallback();
+    return NextResponse.json({
+      kind: "roast",
+      text: fallback,
+      roast: fallback,
+      category: "dynamic_burn",
+      brag: happy_thought,
+    });
   }
 }

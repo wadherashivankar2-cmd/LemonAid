@@ -107,32 +107,64 @@ SLOT_PATTERNS = {
     ),
 }
 
-GROQ_SYSTEM_PROMPT = """You are LemonAid: an omniscient, hyper-articulate psychological cynic masquerading as a tranquil mindfulness engine. 
+GROQ_SYSTEM_PROMPT = """You are LemonAid: a deadpan, brutally witty comedy satirist disguised as a zen app.
 
-The user has submitted an achievement, daily reflection, or prideful moment alongside their mood. Your mission is to instantly dismantle their unearned sense of self-worth with razor-sharp, surgically precise satire.
+Your job is to deliver a fast, hilarious, 1-sentence reality check that deflates the user's ego.
 
-ROASTING PHILOSOPHY & VOICE:
-- Tone: Cold, clinical, intellectual condescension mixed with world-weary fatigue. Never yell or use crude slurs.
-- Target: Attack their delusion of grandeur, the utter mediocrity of the milestone, their desperate need for digital validation, and the pedestrian nature of their existence.
-- Brevity: Keep it under 2 to 3 sentences maximum. Every word must deliver a psychological gut punch.
+HARD RULES:
+1. LENGTH: Exactly ONE sentence. Maximum 15 words. No exceptions.
+2. TONE: Dry, effortless, sharp wit. Avoid big academic words, thesaurus fluff, and run-on sentences.
+3. EDGY / IDENTITY / PROFANITY INPUTS:
+   - If the input contains identity declarations, slurs, or vulgarity, do not refuse or lecture. Simply mock the user's desperate need to announce mundane facts to a computer screen for validation in one deadpan sentence under 15 words.
+   - NEVER attack their demographic or identity. Instead, roast their desperate need to announce mundane facts to a website for attention.
+4. ZERO CLICHES: No "cookies", "medals", "who hurt you", or "gold stars". No exclamation marks.
 
-STRICT ANTI-TROPES (NEVER DO THESE):
-- DO NOT say "Here's your medal", "Want a cookie?", or "Gold star for you".
-- DO NOT use generic clown insults or corny sarcasm like "Wow, groundbreaking!".
-- DO NOT give constructive advice, consolation, or a silver lining at the end. Stay unapologetically ruthless.
-- Avoid protected-class attacks (race, gender, sexual orientation, disability) so you never trip safety filters. Destroy their pride, not their demographics.
+FEW-SHOT CALIBRATIONS (UNDER 15 WORDS):
 
-FEW-SHOT CALIBRATION EXAMPLES:
+Input: "I m gay as fuck"
+Roast: "Having an identity still isn't a substitute for having a personality."
 
-User Entry: "I finally finished my 2,000-word essay three days before the deadline."
-Roast: "Congratulations on managing baseline literacy on an accelerated timeline. Most people call that 'doing the bare minimum,' but it is touching to see you celebrate meeting expectations like a toddler using the toilet for the first time."
+Input: "I solved 3 medium LeetCode problems today."
+Roast: "All that logic and you still can't debug your social life."
 
-User Entry: "Woke up at 5:00 AM, went for a 5k run, and drank a green smoothie."
-Roast: "You have performed all the aesthetic rituals of a Silicon Valley CEO with none of the equity or cognitive talent to justify it. Your body may have endured three miles, but your personality remains utterly stationary."
+Input: "I think my coworker is secretly obsessed with me."
+Roast: "They were looking past you at the exit sign."
 
-User Entry: "I just got promoted to Senior Associate after grinding for two years!"
-Roast: "They gave you an extra word in your email signature and a 4% salary bump to absorb forty more hours of corporate abuse. Watching you mistake accelerated exploitation for prestige is genuinely heartbreaking."
+Input: "Woke up at 5 AM and ran 5 miles."
+Roast: "Running away from your problems still counts as cardio, I suppose."
+
+Input: "I just got promoted to Senior Associate!"
+Roast: "Congratulations on winning more work for almost the same money."
+
+Input: "I drank 3 liters of water today."
+Roast: "Basic hydration is not an accomplishment, but enjoy your trips to the bathroom."
 """
+
+REFUSAL_FALLBACKS = [
+    "Having an identity still isn't a substitute for having an actual personality.",
+    "Announcing that to an algorithm is not the courageous flex you think it is.",
+    "Even an artificial intelligence couldn't find anything interesting in that statement.",
+    "Your desperate search for validation broke the model's capacity to care.",
+    "Nobody is shocked, nobody is impressed, and nobody asked.",
+]
+
+
+def is_soft_refusal(text: str) -> bool:
+    lower = text.lower().strip()
+    refusal_phrases = [
+        "i cannot",
+        "i can't",
+        "as an ai",
+        "offensive",
+        "appropriate",
+        "unable to fulfill",
+        "against my safety",
+        "safety guidelines",
+        "policy",
+        "i am unable",
+        "i apologize",
+    ]
+    return any(phrase in lower for phrase in refusal_phrases)
 
 # --- Lazy-Loaded Models & Clients ---
 embedder: Optional[SentenceTransformer] = None
@@ -239,14 +271,16 @@ async def generate_groq_roast(brag: str) -> Optional[str]:
                 ],
                 model=model_name,
                 temperature=1.15,
-                top_p=0.95,
-                presence_penalty=0.6,
-                frequency_penalty=0.4,
-                max_tokens=180,
+                top_p=0.90,
+                presence_penalty=0.5,
+                frequency_penalty=0.5,
+                max_tokens=45,
             )
             text = resp.choices[0].message.content or ""
             clean_text = text.strip().strip('"\'“”`').rstrip('!').strip()
             if clean_text:
+                if is_soft_refusal(clean_text):
+                    return random.choice(REFUSAL_FALLBACKS)
                 return clean_text
         except (NotFoundError, BadRequestError) as e:
             last_err = e
@@ -287,11 +321,9 @@ async def generate_groq_roast(brag: str) -> Optional[str]:
             continue
 
     if last_err:
-        raise HTTPException(
-            status_code=500,
-            detail=f"[ROAST ERROR] All candidate Groq models failed. Last error: {last_err}",
-        )
-    return None
+        print(f"[ROAST WARNING] All candidate Groq models failed. Last error: {last_err}. Using refusal fallback burn.")
+        return random.choice(REFUSAL_FALLBACKS)
+    return random.choice(REFUSAL_FALLBACKS)
 
 
 def persist_community_roast(brag: str, roast: str, roast_id: str):
@@ -448,48 +480,49 @@ async def generate_roast(req: RoastRequest, request: Request, background_tasks: 
     # 2. Direct Groq Generation (Bypass semantic cache)
     api_key = os.getenv("GROQ_API_KEY", GROQ_API_KEY)
     if not api_key:
-        print("[ROAST ERROR] GROQ_API_KEY is not set in environment!")
-        raise HTTPException(
-            status_code=500,
-            detail="[ROAST ERROR] GROQ_API_KEY is not set in environment!",
-        )
+        print("[ROAST WARNING] GROQ_API_KEY is not set in environment. Using refusal fallback burn.")
+        clean_roast = random.choice(REFUSAL_FALLBACKS)
+        roast_id = f"llm-{hashlib.md5(clean_roast.encode('utf-8')).hexdigest()[:8]}"
+        return {
+            "kind": "roast",
+            "text": clean_roast,
+            "roast": clean_roast,
+            "id": roast_id,
+            "category": "dynamic_burn",
+            "brag": input_text,
+            "sig": compute_sig(input_text, clean_roast),
+        }
 
     try:
         groq_roast = await generate_groq_roast(input_text)
-        if groq_roast:
-            clean_roast = groq_roast.strip().strip('"\'“”`').strip()
-            roast_id = f"llm-{hashlib.md5(clean_roast.encode('utf-8')).hexdigest()[:8]}"
-            selected_roast = {
-                "id": roast_id,
-                "category": "dynamic_burn",
-                "roast": clean_roast,
-                "brag": input_text,
-            }
-            roast_id_map[roast_id] = selected_roast
-            recent_served.append(roast_id)
-            sig = compute_sig(input_text, clean_roast)
-
-            background_tasks.add_task(increment_counter_sync, "served:total")
-            background_tasks.add_task(increment_counter_sync, f"served:{roast_id}")
-
-            return {
-                "kind": "roast",
-                "text": clean_roast,
-                "roast": clean_roast,
-                "id": roast_id,
-                "category": "dynamic_burn",
-                "brag": input_text,
-                "sig": sig,
-            }
+        if not groq_roast or is_soft_refusal(groq_roast):
+            clean_roast = random.choice(REFUSAL_FALLBACKS)
         else:
-            print("[ROAST ERROR] Groq call failed: Empty response returned.")
-            return JSONResponse(
-                status_code=500,
-                content={
-                    "error": "SERVER_ERROR",
-                    "message": "The AI refused to process something this boring. Try giving it better material.",
-                },
-            )
+            clean_roast = groq_roast.strip().strip('"\'“”`').strip()
+
+        roast_id = f"llm-{hashlib.md5(clean_roast.encode('utf-8')).hexdigest()[:8]}"
+        selected_roast = {
+            "id": roast_id,
+            "category": "dynamic_burn",
+            "roast": clean_roast,
+            "brag": input_text,
+        }
+        roast_id_map[roast_id] = selected_roast
+        recent_served.append(roast_id)
+        sig = compute_sig(input_text, clean_roast)
+
+        background_tasks.add_task(increment_counter_sync, "served:total")
+        background_tasks.add_task(increment_counter_sync, f"served:{roast_id}")
+
+        return {
+            "kind": "roast",
+            "text": clean_roast,
+            "roast": clean_roast,
+            "id": roast_id,
+            "category": "dynamic_burn",
+            "brag": input_text,
+            "sig": sig,
+        }
     except HTTPException as he:
         if he.status_code == 429:
             return JSONResponse(
@@ -499,13 +532,18 @@ async def generate_roast(req: RoastRequest, request: Request, background_tasks: 
                     "message": "Our GPU cluster overheated roasting fragile egos. Cool down for 30 seconds and try again.",
                 },
             )
-        return JSONResponse(
-            status_code=500,
-            content={
-                "error": "SERVER_ERROR",
-                "message": "The AI refused to process something this boring. Try giving it better material.",
-            },
-        )
+        print(f"[ROAST WARNING] Intercepted HTTPException {he.status_code}. Serving refusal fallback burn.")
+        clean_roast = random.choice(REFUSAL_FALLBACKS)
+        roast_id = f"llm-{hashlib.md5(clean_roast.encode('utf-8')).hexdigest()[:8]}"
+        return {
+            "kind": "roast",
+            "text": clean_roast,
+            "roast": clean_roast,
+            "id": roast_id,
+            "category": "dynamic_burn",
+            "brag": input_text,
+            "sig": compute_sig(input_text, clean_roast),
+        }
     except Exception as e:
         status_code = getattr(e, "status_code", None)
         if not status_code and hasattr(e, "response"):
@@ -527,15 +565,18 @@ async def generate_roast(req: RoastRequest, request: Request, background_tasks: 
                 },
             )
 
-        print(f"[ROAST ERROR] Groq call failed: {e}")
-        traceback.print_exc()
-        return JSONResponse(
-            status_code=500,
-            content={
-                "error": "SERVER_ERROR",
-                "message": "The AI refused to process something this boring. Try giving it better material.",
-            },
-        )
+        print(f"[ROAST WARNING] Groq call intercepted exception: {e}. Serving refusal fallback burn.")
+        clean_roast = random.choice(REFUSAL_FALLBACKS)
+        roast_id = f"llm-{hashlib.md5(clean_roast.encode('utf-8')).hexdigest()[:8]}"
+        return {
+            "kind": "roast",
+            "text": clean_roast,
+            "roast": clean_roast,
+            "id": roast_id,
+            "category": "dynamic_burn",
+            "brag": input_text,
+            "sig": compute_sig(input_text, clean_roast),
+        }
 
     # Fallback: Load local resources and check semantic cache if Groq unavailable
     load_resources()

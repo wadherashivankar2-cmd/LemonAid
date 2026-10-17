@@ -26,12 +26,12 @@ export type GridPulseProps = Omit<
 /** What the light holds back from by default: opt-in markers plus the usual
  *  carriers of reading text, so every page is covered without annotation. */
 const TEXT =
-  "[data-grid-avoid], h1, h2, h3, h4, p, li, label, button, a, textarea";
+  "[data-grid-avoid], h1, h2, h3, h4, p, li, label, button, a, textarea, footer";
 
 /** Hue at the top of the field and how far it turns by the bottom: yellow,
  *  through orange, red, magenta and blue, to green. */
-const HUE_TOP = 60;
-const HUE_SPAN = 270;
+const HUE_TOP = 50;
+const HUE_SPAN = 18;
 /**
  * Each cell takes one of these lightnesses, so a sweep reads as a field of
  * tints rather than one flat colour. On a dark ground the pale end of the
@@ -85,8 +85,14 @@ export function GridPulse({
 }: GridPulseProps) {
   const box = React.useRef<HTMLDivElement>(null);
   const canvas = React.useRef<HTMLCanvasElement>(null);
+  const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  React.useEffect(() => {
+    if (!mounted || typeof window === "undefined") return;
     const el = box.current;
     const paper = canvas.current;
     const ctx = paper?.getContext("2d");
@@ -127,11 +133,18 @@ export function GridPulse({
       const bounds = el.getBoundingClientRect();
       const scope = el.parentElement ?? document;
       clear = Array.from(scope.querySelectorAll(avoid)).flatMap((node) => {
-        const range = document.createRange();
-        range.selectNodeContents(node);
-        const lines = Array.from(range.getClientRects()).filter(
-          (r) => r.width > 0 && r.height > 0,
-        );
+        let lines: DOMRect[] = [];
+        try {
+          if (node.childNodes && node.childNodes.length > 0) {
+            const range = document.createRange();
+            range.selectNodeContents(node);
+            lines = Array.from(range.getClientRects()).filter(
+              (r) => r.width > 0 && r.height > 0,
+            );
+          }
+        } catch {
+          lines = [];
+        }
         const boxes = lines.length > 0 ? lines : [node.getBoundingClientRect()];
         return boxes.map(
           (r) =>
@@ -329,7 +342,7 @@ export function GridPulse({
       clearTimeout(beat);
       window.removeEventListener("pointermove", onMove);
     };
-  }, [cell, reach, ambient, maxLit, avoid]);
+  }, [cell, reach, ambient, maxLit, avoid, mounted]);
 
   return (
     <div
@@ -360,3 +373,5 @@ export function GridPulse({
     </div>
   );
 }
+
+export default GridPulse;

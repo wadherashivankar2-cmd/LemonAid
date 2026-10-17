@@ -7,20 +7,36 @@ export const metadata = {
   description: "Updates and deprecations in LemonAid.",
 };
 
-const RELEASES = [
+interface Release {
+  version: string;
+  date: string;
+  note?: string;
+  notes?: string[];
+}
+
+const RELEASES: Release[] = [
+  {
+    version: "v1.4",
+    date: "Current",
+    notes: [
+      "Installed a kinetic Newton's cradle on the 404 page so your aimless wandering looks artistic.",
+      "Overclocked roast cruelty by 35%. Emotional damage is now guaranteed.",
+      "Repositioned social links to avoid colliding with our legally performative cookie notice.",
+    ],
+  },
   {
     version: "v1.3",
-    date: "Current",
+    date: "Recent",
     note: "Fixed a bug where users felt better.",
   },
   {
     version: "v1.2",
-    date: "Recent",
+    date: "Earlier",
     note: "Roasts are 14% more accurate and 100% less sorry.",
   },
   {
     version: "v1.1",
-    date: "Earlier",
+    date: "Archive",
     note: "Added a report button. It does nothing. It is working as intended.",
   },
   {
@@ -48,7 +64,7 @@ export default function ChangelogPage() {
           {RELEASES.map((rel) => (
             <div
               key={rel.version}
-              className="border-l-2 border-border pl-4 space-y-1"
+              className="border-l-2 border-border pl-4 space-y-1.5"
             >
               <div className="flex items-center gap-2">
                 <span className="font-mono text-xs font-semibold text-foreground">
@@ -56,14 +72,27 @@ export default function ChangelogPage() {
                 </span>
                 <span className="text-xs text-muted-foreground">({rel.date})</span>
               </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {rel.note}
-              </p>
+              {rel.notes ? (
+                <ul className="text-sm text-muted-foreground leading-relaxed space-y-1 list-disc list-inside">
+                  {rel.notes.map((entry, idx) => (
+                    <li key={idx} className="leading-relaxed">
+                      {entry}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {rel.note}
+                </p>
+              )}
             </div>
           ))}
         </section>
 
-        <footer className="pt-8 text-xs text-muted-foreground border-t border-border/50">
+        <footer
+          data-grid-avoid
+          className="pt-8 text-xs text-muted-foreground border-t border-border/50"
+        >
           Private. No account. Nothing is stored.
         </footer>
       </div>

@@ -50,9 +50,23 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0px)" },
           "50%": { transform: "translateY(-3px)" },
         },
+        "cradle-left": {
+          "0%": { transform: "rotate(0deg)" },
+          "25%": { transform: "rotate(34deg)" },
+          "50%": { transform: "rotate(0deg)" },
+          "100%": { transform: "rotate(0deg)" },
+        },
+        "cradle-right": {
+          "0%": { transform: "rotate(0deg)" },
+          "50%": { transform: "rotate(0deg)" },
+          "75%": { transform: "rotate(-34deg)" },
+          "100%": { transform: "rotate(0deg)" },
+        },
       },
       animation: {
         float: "float 3s ease-in-out infinite",
+        "cradle-left": "cradle-left 1.4s ease-in-out infinite",
+        "cradle-right": "cradle-right 1.4s ease-in-out infinite",
       },
     },
   },

@@ -15,6 +15,8 @@ const SOCIALS: SocialLink[] = [
     icon: ({ className = "w-4 h-4" }) => (
       <svg
         role="img"
+        width={16}
+        height={16}
         viewBox="0 0 24 24"
         fill="currentColor"
         className={className}
@@ -34,6 +36,8 @@ const SOCIALS: SocialLink[] = [
     icon: ({ className = "w-4 h-4" }) => (
       <svg
         role="img"
+        width={16}
+        height={16}
         viewBox="0 0 24 24"
         fill="currentColor"
         className={className}
@@ -49,6 +53,8 @@ const SOCIALS: SocialLink[] = [
     icon: ({ className = "w-4 h-4" }) => (
       <svg
         role="img"
+        width={16}
+        height={16}
         viewBox="0 0 24 24"
         fill="currentColor"
         className={className}
@@ -81,12 +87,17 @@ const ROASTS_TIER_3 = [
 const SURRENDER_ROAST = "Fine, you win. Click before I change my mind.";
 
 export function EvasiveGithub() {
+  const [mounted, setMounted] = React.useState(false);
   const [position, setPosition] = React.useState<{ x: number; y: number } | null>(null);
   const [dodgeCount, setDodgeCount] = React.useState(0);
   const [roastMessage, setRoastMessage] = React.useState<string>("");
   const [isExhausted, setIsExhausted] = React.useState(false);
   const [isTouchDevice, setIsTouchDevice] = React.useState(false);
   const [mobileTapCount, setMobileTapCount] = React.useState(0);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const inactivityTimerRef = React.useRef<NodeJS.Timeout | null>(null);
@@ -482,14 +493,18 @@ export function EvasiveGithub() {
     moodClasses = "border-amber-500/80 shadow-amber-500/20 shadow-lg ring-1 ring-amber-500/40";
     toastClasses = "bg-amber-950/95 text-amber-200 border-amber-600/70 font-semibold shadow-amber-950/40";
   } else if (roastMessage === "Here we go again...") {
-    moodClasses = "border-cyan-500/70 shadow-cyan-500/20 shadow-lg ring-1 ring-cyan-500/40";
-    toastClasses = "bg-neutral-900/95 text-cyan-300 border-cyan-500/70 font-medium shadow-cyan-950/40";
+    moodClasses = "border-amber-500/70 shadow-amber-500/20 shadow-lg ring-1 ring-amber-500/40";
+    toastClasses = "bg-neutral-900/95 text-amber-300 border-amber-500/70 font-medium shadow-amber-950/40";
   } else if (dodgeCount >= 8) {
     moodClasses = "border-rose-500 shadow-rose-500/30 shadow-xl ring-2 ring-rose-500/60 animate-pulse";
     toastClasses = "bg-rose-950/90 text-rose-200 border-rose-600/80 font-medium";
   } else if (dodgeCount >= 4) {
     moodClasses = "border-amber-500/80 shadow-amber-500/20 shadow-lg ring-1 ring-amber-500/40 animate-pulse";
     toastClasses = "bg-amber-950/90 text-amber-200 border-amber-600/70 font-medium";
+  }
+
+  if (!mounted || typeof window === "undefined") {
+    return null;
   }
 
   return (
@@ -541,3 +556,5 @@ export function EvasiveGithub() {
     </div>
   );
 }
+
+export default EvasiveGithub;
