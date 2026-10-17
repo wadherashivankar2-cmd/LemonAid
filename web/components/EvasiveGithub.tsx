@@ -127,6 +127,16 @@ export function EvasiveGithub() {
     }
   }, []);
 
+  // Helper to detect cookie consent banner and calculate clearance
+  const getCookieBannerBounds = () => {
+    if (typeof document === "undefined") return null;
+    const banner = document.querySelector('[aria-label="Cookie consent banner"]');
+    if (!banner) return null;
+    const rect = banner.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return null;
+    return rect;
+  };
+
   // Initialize and keep inside viewport on mount & window resize
   React.useEffect(() => {
     const clampToSafeBounds = () => {
@@ -140,19 +150,27 @@ export function EvasiveGithub() {
         window.matchMedia("(pointer: coarse)").matches ||
         window.innerWidth < 768;
 
+      const bannerRect = getCookieBannerBounds();
+
       if (mobileMode) {
-        // Strictly anchor to bottom corners: bottom-4 right-4 or bottom-4 left-4
+        // Strictly anchor to bottom corners: bottom-4 left-4 or bottom-4 right-4
         // Always strictly below top 60% of viewport
         const padX = 16;
         const padBottom = 16;
         const minX = padX;
         const maxX = Math.max(padX, window.innerWidth - width - padX);
-        const bottomY = Math.max(window.innerHeight * 0.6, window.innerHeight - height - padBottom);
+
+        // If the cookie banner is active on small screens (< 640px, full-width across bottom),
+        // adjust bottomY so the dock rests cleanly above the banner without collision
+        let bottomY = Math.max(window.innerHeight * 0.6, window.innerHeight - height - padBottom);
+        if (bannerRect && bannerRect.top > 0 && bannerRect.top < window.innerHeight) {
+          bottomY = Math.max(window.innerHeight * 0.5, bannerRect.top - height - 12);
+        }
 
         setPosition((prev) => {
           if (!prev) {
-            // Default initial location: bottom-4 right-4
-            return { x: maxX, y: bottomY };
+            // Default initial location: bottom-4 left-4
+            return { x: minX, y: bottomY };
           }
           // Maintain strictly anchored to bottom corners
           const isLeft = prev.x < window.innerWidth / 2;
@@ -171,9 +189,9 @@ export function EvasiveGithub() {
 
       setPosition((prev) => {
         if (!prev) {
-          // Default initial location: bottom-right corner
+          // Default initial location: bottom-left corner
           return {
-            x: maxX,
+            x: minX,
             y: maxY,
           };
         }
@@ -186,7 +204,20 @@ export function EvasiveGithub() {
 
     clampToSafeBounds();
     window.addEventListener("resize", clampToSafeBounds);
-    return () => window.removeEventListener("resize", clampToSafeBounds);
+
+    // Watch for cookie banner appearance/dismissal in the DOM
+    let observer: MutationObserver | null = null;
+    if (typeof MutationObserver !== "undefined" && document.body) {
+      observer = new MutationObserver(() => {
+        clampToSafeBounds();
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
+
+    return () => {
+      window.removeEventListener("resize", clampToSafeBounds);
+      if (observer) observer.disconnect();
+    };
   }, [isTouchDevice]);
 
   const getRandomItem = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
@@ -204,19 +235,24 @@ export function EvasiveGithub() {
       window.innerWidth < 768;
 
     if (mobileMode) {
-      // On mobile/touch devices: anchor strictly to bottom corners (bottom-4 right-4 and bottom-4 left-4).
+      // On mobile/touch devices: anchor strictly to bottom corners (bottom-4 left-4 and bottom-4 right-4).
       // Prevent it from ever hopping into the top 60% of the screen.
       const padX = 16;
       const padBottom = 16;
       const minX = padX;
       const maxX = Math.max(padX, window.innerWidth - width - padX);
-      const bottomY = Math.max(window.innerHeight * 0.6, window.innerHeight - height - padBottom);
+      let bottomY = Math.max(window.innerHeight * 0.6, window.innerHeight - height - padBottom);
+
+      const bannerRect = getCookieBannerBounds();
+      if (bannerRect && bannerRect.top > 0 && bannerRect.top < window.innerHeight) {
+        bottomY = Math.max(window.innerHeight * 0.5, bannerRect.top - height - 12);
+      }
 
       const midX = window.innerWidth / 2;
-      const curX = position ? position.x : maxX;
+      const curX = position ? position.x : minX;
 
-      // Hop strictly between bottom-right and bottom-left corner
-      const targetX = curX >= midX ? minX : maxX;
+      // Hop strictly between bottom-left and bottom-right corner
+      const targetX = curX <= midX ? maxX : minX;
       setPosition({ x: targetX, y: bottomY });
       return;
     }
@@ -229,7 +265,7 @@ export function EvasiveGithub() {
     const midX = (minX + maxX) / 2;
     const midY = (minY + maxY) / 2;
 
-    const curX = position ? position.x : maxX;
+    const curX = position ? position.x : minX;
     const curY = position ? position.y : maxY;
     const curIsLeft = curX < midX;
     const curIsTop = curY < midY;
@@ -242,14 +278,23 @@ export function EvasiveGithub() {
       { name: "bottom-right", x: maxX, y: maxY, isLeft: false, isTop: false },
     ];
 
+    // If cookie banner is active in bottom-right on desktop, ensure bottom-right clears it
+    const bannerRect = getCookieBannerBounds();
+    const safeQuadrants = quadrants.map((q) => {
+      if (q.name === "bottom-right" && bannerRect && bannerRect.top > 0) {
+        return { ...q, y: Math.max(minY, bannerRect.top - height - 12) };
+      }
+      return q;
+    });
+
     // Pick a quadrant different from the current one to hop away cleanly
-    const alternativeQuadrants = quadrants.filter(
+    const alternativeQuadrants = safeQuadrants.filter(
       (q) => !(q.isLeft === curIsLeft && q.isTop === curIsTop)
     );
 
     const targetQuadrant =
       alternativeQuadrants[Math.floor(Math.random() * alternativeQuadrants.length)] ||
-      quadrants[0];
+      safeQuadrants[0];
 
     setPosition({ x: targetQuadrant.x, y: targetQuadrant.y });
   };
@@ -401,8 +446,27 @@ export function EvasiveGithub() {
     }
 
     // Absolute strict clamping: guaranteed to remain strictly in viewport
-    const clampedX = Math.min(maxX, Math.max(minX, targetX));
-    const clampedY = Math.min(maxY, Math.max(minY, targetY));
+    let clampedX = Math.min(maxX, Math.max(minX, targetX));
+    let clampedY = Math.min(maxY, Math.max(minY, targetY));
+
+    // Avoid cookie banner if desktop pointer evasion lands inside its bounding box
+    const bannerRect = getCookieBannerBounds();
+    if (bannerRect && bannerRect.width > 0 && bannerRect.height > 0) {
+      const collidesWithBanner =
+        clampedX + width >= bannerRect.left - 8 &&
+        clampedX <= bannerRect.right + 8 &&
+        clampedY + height >= bannerRect.top - 8 &&
+        clampedY <= bannerRect.bottom + 8;
+
+      if (collidesWithBanner) {
+        // Push up or to the left away from the cookie banner
+        if (clampedX > minX + 50) {
+          clampedX = Math.max(minX, bannerRect.left - width - 16);
+        } else {
+          clampedY = Math.max(minY, bannerRect.top - height - 16);
+        }
+      }
+    }
 
     setPosition({ x: clampedX, y: clampedY });
   };
@@ -438,7 +502,7 @@ export function EvasiveGithub() {
       style={{
         transform: position
           ? `translate3d(${position.x}px, ${position.y}px, 0)`
-          : `translate3d(calc(100vw - 100% - 16px), calc(100vh - 100% - 16px), 0)`,
+          : `translate3d(16px, calc(100vh - 100% - 16px), 0)`,
         transition: isExhausted
           ? "transform 0.2s ease-out, border-color 0.3s ease, box-shadow 0.3s ease"
           : "transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease",
