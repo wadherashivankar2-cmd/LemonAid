@@ -91,6 +91,7 @@ export default function Home() {
   const [loadingProgress, setLoadingProgress] = React.useState(0);
   const [roastData, setRoastData] = React.useState<RoastResponse | null>(null);
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const [warningPill, setWarningPill] = React.useState<string | null>(null);
   const [soundMuteAttempt, setSoundMuteAttempt] = React.useState(false);
   const [muteToast, setMuteToast] = React.useState<string | null>(null);
   const muteTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
@@ -290,6 +291,9 @@ export default function Home() {
     if (validationError) {
       setValidationError(null);
     }
+    if (warningPill) {
+      setWarningPill(null);
+    }
     playTick();
   };
 
@@ -302,6 +306,7 @@ export default function Home() {
     setValidationError(null);
     setRoastData(null);
     setErrorMessage(null);
+    setWarningPill(null);
     setSelectedMood(null);
     setHoveredMood(null);
     setWordCount(0);
@@ -446,6 +451,7 @@ export default function Home() {
 
     isSubmittingRef.current = true;
     setValidationError(null);
+    setWarningPill(null);
     setState("loading");
     setLoadingSeconds(0);
     setLoadingProgress(0);
@@ -465,25 +471,31 @@ export default function Home() {
       });
 
       if (response.status === 429) {
-        let msg = "Rate limit exceeded. Your desperation is exhausting our servers. Wait a minute before asking for another burn.";
+        let msg = "Our GPU cluster overheated roasting fragile egos. Cool down for 30 seconds and try again.";
         try {
           const errData = await response.json();
-          if (errData?.detail && typeof errData.detail === "string") {
+          if (errData?.message && typeof errData.message === "string") {
+            msg = errData.message;
+          } else if (errData?.detail && typeof errData.detail === "string") {
             msg = errData.detail;
           }
         } catch {
           // fallback to default msg
         }
-        setState("error");
-        setErrorMessage(msg);
+        setState("idle");
+        setLoadingSeconds(0);
+        setLoadingProgress(0);
+        setWarningPill(msg);
         return;
       }
 
       if (!response.ok) {
-        let msg = "The universe is buffering. Try again in a moment.";
+        let msg = "The AI refused to process something this boring. Try giving it better material.";
         try {
           const errData = await response.json();
-          if (errData?.detail && typeof errData.detail === "string") {
+          if (errData?.message && typeof errData.message === "string") {
+            msg = errData.message;
+          } else if (errData?.detail && typeof errData.detail === "string") {
             msg = errData.detail;
           }
         } catch {
@@ -543,9 +555,9 @@ export default function Home() {
           style={{ left: s.x, top: s.y }}
         />
       ))}
-      {/* Fixed bottom-right floating crate — visible on reveal */}
+      {/* Fixed bottom-right floating crate — visible on reveal (hidden on mobile < 768px) */}
       {state === "reveal" && (
-        <div className="fixed bottom-48 right-6 sm:bottom-52 sm:right-8 z-30">
+        <div className="hidden md:flex fixed bottom-48 right-6 sm:bottom-52 sm:right-8 z-30">
           <div
             id="crate-coming-soon-btn"
             role="button"
@@ -681,6 +693,28 @@ export default function Home() {
 
           {/* Input Form */}
           <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+            {/* Styled amber/rose warning pill for 429 Rate Limits / Errors above the input area */}
+            {warningPill && (
+              <div
+                id="rate-limit-warning-pill"
+                role="alert"
+                aria-live="polite"
+                className="flex items-center gap-2.5 px-4 py-2.5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-rose-500/15 to-amber-500/15 border border-amber-500/30 text-amber-900 dark:text-amber-200 text-xs sm:text-sm font-medium shadow-md backdrop-blur-md animate-in fade-in slide-in-from-top-2 duration-200"
+              >
+                <span className="flex h-2 w-2 rounded-full bg-rose-500 animate-ping shrink-0" />
+                <span className="flex-1 leading-snug">{warningPill}</span>
+                <button
+                  id="dismiss-warning-pill-btn"
+                  type="button"
+                  onClick={() => setWarningPill(null)}
+                  className="text-amber-700 dark:text-amber-300 hover:text-rose-500 p-0.5 rounded-full transition-colors cursor-pointer shrink-0"
+                  aria-label="Dismiss warning"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+
             <div className="space-y-3">
               {/* Interactive Witty Mood Emojis Above Textarea */}
               {state === "idle" && (
@@ -849,11 +883,8 @@ export default function Home() {
         </div>
       ) : roastData ? (
         /* Permanent Zero-Overlap Flexbox Layout on Reveal */
-        <div className="flex flex-col lg:flex-row items-start justify-center gap-6 w-full max-w-7xl mx-auto my-auto py-8 animate-fade-in px-4">
-          {/* Sponsor Card (Positioned on the Left Flank of Main Roast Display on Desktop) */}
-          <SponsorCard className="order-2 lg:order-1" />
-
-          {/* Main Roast Card (Center Column on Desktop) */}
+        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 w-full max-w-7xl mx-auto my-auto py-8 animate-fade-in px-4">
+          {/* Main Roast Card (Center Column on Desktop, First on Mobile) */}
           <div className="w-full max-w-xl order-1 lg:order-2">
             <div
               id="roast-reveal-container"
@@ -909,8 +940,13 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Side Suggestions Widget (Right Column) */}
-          <div className="w-full lg:w-64 shrink-0 order-3">
+          {/* Sponsor Card (Positioned on the Left Flank on Desktop, Stacked Beneath Main Card on Mobile) */}
+          <div className="w-full max-w-xl lg:w-72 shrink-0 order-2 lg:order-1 flex justify-center">
+            <SponsorCard className="w-full" />
+          </div>
+
+          {/* Side Suggestions Widget (Right Column on Desktop, Stacked Beneath Sponsor Card on Mobile) */}
+          <div className="w-full max-w-xl lg:w-64 shrink-0 order-3">
             <div className="bg-white/80 dark:bg-neutral-900/80 border border-neutral-200 dark:border-neutral-800 rounded-xl p-4 text-left shadow-md">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-base" role="img" aria-label="suggestion box">💡</span>

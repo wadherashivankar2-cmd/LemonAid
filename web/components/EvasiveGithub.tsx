@@ -11,7 +11,7 @@ interface SocialLink {
 const SOCIALS: SocialLink[] = [
   {
     name: "GitHub",
-    url: "https://github.com/wadherashivankar2-cmd",
+    url: "https://github.com/wadherashivankar2-cmd/LemonAid",
     icon: ({ className = "w-4 h-4" }) => (
       <svg
         role="img"
@@ -85,6 +85,8 @@ export function EvasiveGithub() {
   const [dodgeCount, setDodgeCount] = React.useState(0);
   const [roastMessage, setRoastMessage] = React.useState<string>("");
   const [isExhausted, setIsExhausted] = React.useState(false);
+  const [isTouchDevice, setIsTouchDevice] = React.useState(false);
+  const [mobileTapCount, setMobileTapCount] = React.useState(0);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const inactivityTimerRef = React.useRef<NodeJS.Timeout | null>(null);
@@ -94,7 +96,7 @@ export function EvasiveGithub() {
   // Minimum screen padding (top padding increased to 48px to accommodate the floating roast bubble)
   const paddingX = 24;
   const paddingTop = 48;
-  const paddingBottom = 24;
+  const paddingBottom = 28;
 
   // Cleanup timers on unmount
   React.useEffect(() => {
@@ -105,6 +107,26 @@ export function EvasiveGithub() {
     };
   }, []);
 
+  // Check for touch capability (pointer: coarse or touch events)
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const checkTouch = () => {
+      const hasCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+      const hasTouchPoints = typeof navigator !== "undefined" && navigator.maxTouchPoints > 0;
+      const hasTouchEvents = "ontouchstart" in window;
+      setIsTouchDevice(Boolean(hasCoarsePointer || (hasTouchPoints && hasTouchEvents)));
+    };
+
+    checkTouch();
+
+    const mql = window.matchMedia("(pointer: coarse)");
+    if (mql?.addEventListener) {
+      mql.addEventListener("change", checkTouch);
+      return () => mql.removeEventListener("change", checkTouch);
+    }
+  }, []);
+
   // Initialize and keep inside viewport on mount & window resize
   React.useEffect(() => {
     const clampToSafeBounds = () => {
@@ -112,6 +134,35 @@ export function EvasiveGithub() {
       const el = containerRef.current;
       const width = el ? el.offsetWidth : 144;
       const height = el ? el.offsetHeight : 44;
+
+      const mobileMode =
+        isTouchDevice ||
+        window.matchMedia("(pointer: coarse)").matches ||
+        window.innerWidth < 768;
+
+      if (mobileMode) {
+        // Strictly anchor to bottom corners: bottom-4 right-4 or bottom-4 left-4
+        // Always strictly below top 60% of viewport
+        const padX = 16;
+        const padBottom = 16;
+        const minX = padX;
+        const maxX = Math.max(padX, window.innerWidth - width - padX);
+        const bottomY = Math.max(window.innerHeight * 0.6, window.innerHeight - height - padBottom);
+
+        setPosition((prev) => {
+          if (!prev) {
+            // Default initial location: bottom-4 right-4
+            return { x: maxX, y: bottomY };
+          }
+          // Maintain strictly anchored to bottom corners
+          const isLeft = prev.x < window.innerWidth / 2;
+          return {
+            x: isLeft ? minX : maxX,
+            y: bottomY,
+          };
+        });
+        return;
+      }
 
       const minX = paddingX;
       const maxX = Math.max(paddingX, window.innerWidth - width - paddingX);
@@ -136,13 +187,120 @@ export function EvasiveGithub() {
     clampToSafeBounds();
     window.addEventListener("resize", clampToSafeBounds);
     return () => window.removeEventListener("resize", clampToSafeBounds);
-  }, []);
+  }, [isTouchDevice]);
 
   const getRandomItem = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
 
+  // Single-hop evasion to a safe viewport quadrant on mobile touch
+  const hopToSafeQuadrant = () => {
+    if (typeof window === "undefined") return;
+    const el = containerRef.current;
+    const width = el ? el.offsetWidth : 144;
+    const height = el ? el.offsetHeight : 44;
+
+    const mobileMode =
+      isTouchDevice ||
+      window.matchMedia("(pointer: coarse)").matches ||
+      window.innerWidth < 768;
+
+    if (mobileMode) {
+      // On mobile/touch devices: anchor strictly to bottom corners (bottom-4 right-4 and bottom-4 left-4).
+      // Prevent it from ever hopping into the top 60% of the screen.
+      const padX = 16;
+      const padBottom = 16;
+      const minX = padX;
+      const maxX = Math.max(padX, window.innerWidth - width - padX);
+      const bottomY = Math.max(window.innerHeight * 0.6, window.innerHeight - height - padBottom);
+
+      const midX = window.innerWidth / 2;
+      const curX = position ? position.x : maxX;
+
+      // Hop strictly between bottom-right and bottom-left corner
+      const targetX = curX >= midX ? minX : maxX;
+      setPosition({ x: targetX, y: bottomY });
+      return;
+    }
+
+    const minX = paddingX;
+    const maxX = Math.max(paddingX, window.innerWidth - width - paddingX);
+    const minY = paddingTop;
+    const maxY = Math.max(paddingTop, window.innerHeight - height - paddingBottom);
+
+    const midX = (minX + maxX) / 2;
+    const midY = (minY + maxY) / 2;
+
+    const curX = position ? position.x : maxX;
+    const curY = position ? position.y : maxY;
+    const curIsLeft = curX < midX;
+    const curIsTop = curY < midY;
+
+    // Define the 4 safe corner quadrants
+    const quadrants = [
+      { name: "top-left", x: minX, y: minY, isLeft: true, isTop: true },
+      { name: "top-right", x: maxX, y: minY, isLeft: false, isTop: true },
+      { name: "bottom-left", x: minX, y: maxY, isLeft: true, isTop: false },
+      { name: "bottom-right", x: maxX, y: maxY, isLeft: false, isTop: false },
+    ];
+
+    // Pick a quadrant different from the current one to hop away cleanly
+    const alternativeQuadrants = quadrants.filter(
+      (q) => !(q.isLeft === curIsLeft && q.isTop === curIsTop)
+    );
+
+    const targetQuadrant =
+      alternativeQuadrants[Math.floor(Math.random() * alternativeQuadrants.length)] ||
+      quadrants[0];
+
+    setPosition({ x: targetQuadrant.x, y: targetQuadrant.y });
+  };
+
+  // Touch device handler: does NOT hijack default window scrolling
+  const handleTouchStart = () => {
+    if (typeof window === "undefined") return;
+
+    // If already exhausted, do not evade; let user tap links immediately
+    if (isExhausted) return;
+
+    // Reset inactivity and recovery timers
+    if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+    if (exhaustionTimerRef.current) clearTimeout(exhaustionTimerRef.current);
+    if (recoveryTimerRef.current) clearTimeout(recoveryTimerRef.current);
+
+    const nextTaps = mobileTapCount + 1;
+    setMobileTapCount(nextTaps);
+
+    if (nextTaps >= 2) {
+      // Caught after 2 taps: stop evading and unlock links so mobile users aren't locked out!
+      setIsExhausted(true);
+      setRoastMessage("Caught on mobile!");
+
+      exhaustionTimerRef.current = setTimeout(() => {
+        setIsExhausted(false);
+        setMobileTapCount(0);
+        setRoastMessage("");
+      }, 6000);
+      return;
+    }
+
+    // 1st tap: hop strictly between the bottom corners and display subtle hint
+    hopToSafeQuadrant();
+    setRoastMessage("Caught on mobile!");
+
+    // Reset tap count after 4.5s of inactivity
+    inactivityTimerRef.current = setTimeout(() => {
+      setMobileTapCount(0);
+      setRoastMessage("");
+    }, 4500);
+  };
+
   const handleEvade = (e: React.PointerEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement>) => {
-    // If surrendered / exhausted, disable evasion completely so user can click!
-    if (isExhausted || !containerRef.current || typeof window === "undefined") {
+    // On touch devices or mobile viewports (< 768px), evasion is handled exclusively by onTouchStart to prevent stuttering
+    const mobileMode =
+      isTouchDevice ||
+      (typeof window !== "undefined" &&
+        (window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches));
+
+    if (mobileMode || isExhausted || !containerRef.current || typeof window === "undefined") {
       return;
     }
 
@@ -256,6 +414,9 @@ export function EvasiveGithub() {
   if (isExhausted) {
     moodClasses = "border-emerald-500/80 shadow-emerald-500/25 shadow-xl ring-2 ring-emerald-500/60 opacity-95 animate-pulse";
     toastClasses = "bg-emerald-950/95 text-emerald-200 border-emerald-500/80 font-semibold shadow-emerald-950/50";
+  } else if (roastMessage === "Caught on mobile!") {
+    moodClasses = "border-amber-500/80 shadow-amber-500/20 shadow-lg ring-1 ring-amber-500/40";
+    toastClasses = "bg-amber-950/95 text-amber-200 border-amber-600/70 font-semibold shadow-amber-950/40";
   } else if (roastMessage === "Here we go again...") {
     moodClasses = "border-cyan-500/70 shadow-cyan-500/20 shadow-lg ring-1 ring-cyan-500/40";
     toastClasses = "bg-neutral-900/95 text-cyan-300 border-cyan-500/70 font-medium shadow-cyan-950/40";
@@ -270,13 +431,14 @@ export function EvasiveGithub() {
   return (
     <div
       ref={containerRef}
-      onPointerEnter={handleEvade}
-      onPointerOver={handleEvade}
-      className={`fixed left-0 top-0 z-50 flex items-center gap-1.5 p-1.5 rounded-full bg-neutral-900/85 hover:bg-neutral-900/95 text-neutral-400 border backdrop-blur-md select-none transition-all duration-300 ${moodClasses}`}
+      onPointerEnter={isTouchDevice ? undefined : handleEvade}
+      onPointerOver={isTouchDevice ? undefined : handleEvade}
+      onTouchStart={isTouchDevice ? handleTouchStart : undefined}
+      className={`fixed left-0 top-0 z-50 flex items-center gap-1.5 p-1.5 rounded-full bg-neutral-900/85 hover:bg-neutral-900/95 text-neutral-400 border backdrop-blur-md select-none transition-all duration-300 touch-manipulation ${moodClasses}`}
       style={{
         transform: position
           ? `translate3d(${position.x}px, ${position.y}px, 0)`
-          : `translate3d(calc(100vw - 100% - 24px), calc(100vh - 100% - 24px), 0)`,
+          : `translate3d(calc(100vw - 100% - 16px), calc(100vh - 100% - 16px), 0)`,
         transition: isExhausted
           ? "transform 0.2s ease-out, border-color 0.3s ease, box-shadow 0.3s ease"
           : "transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease",
