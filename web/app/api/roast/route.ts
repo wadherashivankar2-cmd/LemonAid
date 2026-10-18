@@ -140,18 +140,20 @@ CRITICAL RULES:
 
           if (response.status === 429) {
             isRateLimited = true;
+            const errorText = await response.text();
+            console.error(`[Roast API Error] Model: ${model} failed. Status: ${response.status}. Details:`, errorText);
             break;
           }
 
           if (response.status === 404 || response.status === 400) {
             const errorText = await response.text();
-            console.warn(`[API/ROAST] Model ${model} returned ${response.status}: ${errorText}. Trying next model...`);
+            console.error(`[Roast API Error] Model: ${model} failed. Status: ${response.status}. Details:`, errorText);
             continue;
           }
 
           if (!response.ok) {
             const errorText = await response.text();
-            console.error(`[API/ROAST] Groq returned status ${response.status} for model ${model}:`, errorText);
+            console.error(`[Roast API Error] Model: ${model} failed. Status: ${response.status}. Details:`, errorText);
             continue;
           }
 
@@ -159,23 +161,27 @@ CRITICAL RULES:
           const content = data.choices?.[0]?.message?.content?.trim();
           if (content) {
             roast = content;
+            console.log(`[Roast API Success] Model: ${model} generated roast successfully.`);
             break;
+          } else {
+            console.error(`[Roast API Error] Model: ${model} failed. Status: 200. Details: Empty choices returned`, data);
           }
         } catch (fetchError: unknown) {
           if (fetchError instanceof Error && fetchError.name === "AbortError") {
+            console.error(`[Roast API Error] Model: ${model} aborted/timed out.`);
             throw fetchError;
           }
-          console.warn(`[API/ROAST] Fetch error with model ${model}:`, fetchError);
+          console.error(`[Roast API Error] Model: ${model} failed with exception:`, fetchError);
         }
       }
     } catch (fetchError: unknown) {
       if (fetchError instanceof Error && fetchError.name === "AbortError") {
-        console.warn("[API/ROAST] Upstream LLM call timed out.");
+        console.error("[Roast API Error] Upstream LLM call timed out after 7s. Using fallback.");
         const fallback = FALLBACK_ROASTS[Math.floor(Math.random() * FALLBACK_ROASTS.length)];
         return NextResponse.json({ roast: fallback, isFallback: true }, { status: 200 });
       }
 
-      console.error("[API/ROAST] Network error during upstream call:", fetchError);
+      console.error("[Roast API Error] Network error during upstream call:", fetchError);
       return NextResponse.json(
         { error: "Failed to connect to judgment engine." },
         { status: 502 }
@@ -185,6 +191,7 @@ CRITICAL RULES:
     }
 
     if (isRateLimited) {
+      console.error("[Roast API Error] Upstream Groq rate limited (429).");
       return NextResponse.json(
         { error: "Upstream engine is overwhelmed. Please wait a moment." },
         { status: 503 }
@@ -192,14 +199,14 @@ CRITICAL RULES:
     }
 
     if (!roast) {
-      console.warn("[API/ROAST] No completion received from any model. Using fallback.");
+      console.error("[Roast API Error] No completion received from any model. Falling back to static roast.");
       const fallback = FALLBACK_ROASTS[Math.floor(Math.random() * FALLBACK_ROASTS.length)];
       return NextResponse.json({ roast: fallback, isFallback: true }, { status: 200 });
     }
 
     return NextResponse.json({ roast });
   } catch (err) {
-    console.error("[API/ROAST] Unexpected route failure:", err);
+    console.error("[Roast API Error] Unexpected route failure:", err);
     return NextResponse.json(
       { error: "An unexpected error occurred processing your reflection." },
       { status: 500 }

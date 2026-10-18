@@ -499,6 +499,7 @@ export default function Home() {
       }
 
       if (!response.ok) {
+        console.error(`[Client Roast Error] Roast request to ${roastEndpoint} failed with status: ${response.status}. Dropping to CLIENT_FALLBACKS.`);
         const fallbackText = CLIENT_FALLBACKS[Math.floor(Math.random() * CLIENT_FALLBACKS.length)];
         const fallbackData: RoastResponse = {
           kind: "roast",
@@ -521,6 +522,7 @@ export default function Home() {
         roastText = roastText.trim().replace(/^["'“”`]+|["'“”`]+$/g, "").trim();
       }
       if (!roastText && data?.kind !== "gentle") {
+        console.warn("[Client Roast Warning] Empty roast text received from API. Using CLIENT_FALLBACKS.");
         roastText = CLIENT_FALLBACKS[Math.floor(Math.random() * CLIENT_FALLBACKS.length)];
       }
       data.text = roastText;
@@ -540,8 +542,9 @@ export default function Home() {
         setState("reveal");
         playBoom();
       }
-    } catch {
+    } catch (fetchErr) {
       if (controller.signal.aborted) return;
+      console.error(`[Client Roast Error] Roast request to ${roastEndpoint} threw exception:`, fetchErr);
       const fallbackText = CLIENT_FALLBACKS[Math.floor(Math.random() * CLIENT_FALLBACKS.length)];
       const fallbackData: RoastResponse = {
         kind: "roast",
