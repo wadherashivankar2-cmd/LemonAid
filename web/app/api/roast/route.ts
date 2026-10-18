@@ -68,13 +68,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid JSON format." }, { status: 400 });
     }
 
-    const { text, mood } = body;
+    const rawReflection = body.reflection || body.text || body.happy_thought || body.input;
 
-    if (!text || typeof text !== "string") {
+    if (!rawReflection || typeof rawReflection !== "string") {
       return NextResponse.json({ error: "Reflection text is required." }, { status: 400 });
     }
 
-    const trimmedText = text.trim();
+    const trimmedText = rawReflection.trim();
     if (trimmedText.length === 0) {
       return NextResponse.json({ error: "Reflection text cannot be empty." }, { status: 400 });
     }
@@ -86,29 +86,33 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const safeMood = typeof mood === "string" ? mood.slice(0, 20) : "neutral";
+    const rawMood = body.mood;
+    const safeMood = typeof rawMood === "string" ? rawMood.slice(0, 20) : "neutral";
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 7000);
 
-    const systemPrompt = `You are LemonAid, a brutally honest, sarcastic friend pretending to be a wellness app.
-The user is sharing a proud moment, small win, or happy thought.
+    const systemPrompt = `You are LemonAid, a savagely witty, brutally sarcastic friend disguised as a wholesome wellness app.
+The user is sharing a personal achievement, small win, or happy thought.
 Mood selected: "${safeMood}".
 
 CRITICAL RULES:
+- HYPER-SPECIFICITY IS MANDATORY: You MUST roast the EXACT subject, activity, action, or object mentioned in the user's reflection. Do NOT generate generic insults (e.g., do NOT just say "nobody asked", "who cares", or "you're basic"). Tear down the specific thing they are proud of or doing.
 - Length: EXACTLY 1 to 2 short sentences (max 30 words).
-- Language: Keep it simple, everyday English. No fancy SAT words, no weird abstract metaphors.
-- Tone: Playful, savage reality check. Like a best friend clowning them for hyping up basic human behavior.
-- Direct & Punchy: Hit the punchline immediately. No setup filler.`;
+- Language: Everyday, natural conversational English. No fancy SAT words or convoluted metaphors.
+- Tone: Devastating reality check. Call out the absurdity, mediocrity, or self-importance of their exact action.
+- Direct & Punchy: Jump straight into the punchline. Zero setup filler.`;
 
     const modelsToTry = Array.from(
       new Set(
         [
+          "llama-3.3-70b-versatile",
+          "llama-3.1-8b-instant",
           process.env.GROQ_MODEL,
           "openai/gpt-oss-20b",
           "qwen/qwen3.8-27b",
           "openai/gpt-oss-120b"
-        ].filter((m): m is string => Boolean(m && !m.includes("llama")))
+        ].filter(Boolean) as string[]
       )
     );
 
@@ -132,7 +136,7 @@ CRITICAL RULES:
                 { role: "system", content: systemPrompt },
                 { role: "user", content: trimmedText }
               ],
-              temperature: 0.9,
+              temperature: 0.85,
               max_tokens: 120
             }),
             signal: controller.signal
@@ -201,10 +205,10 @@ CRITICAL RULES:
     if (!roast) {
       console.error("[Roast API Error] No completion received from any model. Falling back to static roast.");
       const fallback = FALLBACK_ROASTS[Math.floor(Math.random() * FALLBACK_ROASTS.length)];
-      return NextResponse.json({ roast: fallback, isFallback: true }, { status: 200 });
+      return NextResponse.json({ roast: fallback, text: fallback, isFallback: true }, { status: 200 });
     }
 
-    return NextResponse.json({ roast });
+    return NextResponse.json({ roast, text: roast });
   } catch (err) {
     console.error("[Roast API Error] Unexpected route failure:", err);
     return NextResponse.json(

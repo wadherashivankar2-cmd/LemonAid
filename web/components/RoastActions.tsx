@@ -88,7 +88,8 @@ export function RoastActions({
 
   const vote = async (kind: "funny" | "meh" | "salt"): Promise<{ salt?: number; n?: number } | void> => {
     if (!roastId) return;
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    if (!apiUrl) return;
     try {
       const res = await fetch(`${apiUrl}/vote`, {
         method: "POST",
@@ -170,17 +171,7 @@ export function RoastActions({
           setLikeCount(data.count);
         }
       })
-      .catch(() => {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
-        fetch(`${apiUrl}/likes`)
-          .then((res) => (res.ok ? res.json() : null))
-          .then((data: { count?: number } | null) => {
-            if (data && typeof data.count === "number") {
-              setLikeCount(data.count);
-            }
-          })
-          .catch(() => {});
-      });
+      .catch(() => {});
   }, []);
 
   const handleTribute = () => {
@@ -200,17 +191,7 @@ export function RoastActions({
           setLikeCount(data.count);
         }
       })
-      .catch(() => {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
-        fetch(`${apiUrl}/like`, { method: "POST" })
-          .then((res) => res.json())
-          .then((data: { count?: number }) => {
-            if (data && typeof data.count === "number") {
-              setLikeCount(data.count);
-            }
-          })
-          .catch(() => {});
-      });
+      .catch(() => {});
   };
 
   return (

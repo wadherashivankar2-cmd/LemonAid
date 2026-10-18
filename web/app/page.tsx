@@ -154,13 +154,9 @@ export default function Home() {
     setTimeout(() => setHoverSplashActive(false), 1000);
   }, []);
 
-  // Initialize sound mute preference and wake backend (if external API URL provided)
+  // Initialize sound mute preference
   React.useEffect(() => {
     setMuted(false);
-    if (process.env.NEXT_PUBLIC_API_URL) {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, "");
-      fetch(`${apiUrl}/health`, { mode: "cors" }).catch(() => { });
-    }
   }, []);
 
   // Progressive loading timer and animated milestone progress bar
@@ -463,18 +459,14 @@ export default function Home() {
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
-    const roastEndpoint = process.env.NEXT_PUBLIC_API_URL
-      ? `${process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, "")}/roast`
-      : "/api/roast";
-
     try {
-      const response = await fetch(roastEndpoint, {
+      const moodValue = selectedMood !== null && MOODS[selectedMood] ? MOODS[selectedMood].label : "neutral";
+      const response = await fetch("/api/roast", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          text: trimmed,
-          happy_thought: trimmed,
-          mood: selectedMood !== null ? MOODS[selectedMood].label : undefined,
+          reflection: trimmed,
+          mood: moodValue,
         }),
         signal: controller.signal,
       });
@@ -499,7 +491,7 @@ export default function Home() {
       }
 
       if (!response.ok) {
-        console.error(`[Client Roast Error] Roast request to ${roastEndpoint} failed with status: ${response.status}. Dropping to CLIENT_FALLBACKS.`);
+        console.error(`[Client Roast Error] Roast request to /api/roast failed with status: ${response.status}. Dropping to CLIENT_FALLBACKS.`);
         const fallbackText = CLIENT_FALLBACKS[Math.floor(Math.random() * CLIENT_FALLBACKS.length)];
         const fallbackData: RoastResponse = {
           kind: "roast",
@@ -517,7 +509,7 @@ export default function Home() {
       }
 
       const data: RoastResponse = await response.json();
-      let roastText = data?.text || data?.roast || "";
+      let roastText = data?.roast || data?.text || "";
       if (roastText) {
         roastText = roastText.trim().replace(/^["'“”`]+|["'“”`]+$/g, "").trim();
       }
@@ -544,7 +536,7 @@ export default function Home() {
       }
     } catch (fetchErr) {
       if (controller.signal.aborted) return;
-      console.error(`[Client Roast Error] Roast request to ${roastEndpoint} threw exception:`, fetchErr);
+      console.error("[Client Roast Error] Roast request to /api/roast threw exception:", fetchErr);
       const fallbackText = CLIENT_FALLBACKS[Math.floor(Math.random() * CLIENT_FALLBACKS.length)];
       const fallbackData: RoastResponse = {
         kind: "roast",
