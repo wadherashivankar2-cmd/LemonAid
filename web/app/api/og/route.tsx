@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
                 color: "#1F1B16",
               }}
             >
-              &ldquo;{brag}&rdquo;
+              {`“${brag.trim()}”`}
             </div>
           </div>
 
@@ -126,7 +126,7 @@ export async function GET(request: NextRequest) {
                 color: "#8A8A8A",
               }}
             >
-              mrroast.app
+              lemon-aid-app.vercel.app
             </div>
           </div>
         </div>

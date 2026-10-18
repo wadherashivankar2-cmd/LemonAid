@@ -1,12 +1,15 @@
 import * as React from "react";
 
 interface RoastCardProps {
-  brag: string;
+  brag?: string;
+  reflection?: string;
   roast: string;
   className?: string;
 }
 
-export function RoastCard({ brag, roast, className = "" }: RoastCardProps) {
+export function RoastCard({ brag, reflection, roast, className = "" }: RoastCardProps) {
+  const userReflection = (reflection ?? brag ?? "").trim();
+
   return (
     <div
       id="roast-card"
@@ -28,7 +31,7 @@ export function RoastCard({ brag, roast, className = "" }: RoastCardProps) {
           className="text-lg sm:text-xl italic leading-relaxed"
           style={{ fontFamily: "var(--font-serif), Georgia, serif" }}
         >
-          &ldquo;{brag}&rdquo;
+          {`“${userReflection}”`}
         </p>
       </div>
 
@@ -54,7 +57,7 @@ export function RoastCard({ brag, roast, className = "" }: RoastCardProps) {
 
         {/* Watermark Bottom Right */}
         <div className="absolute bottom-4 right-5 text-[11px] font-medium tracking-wide text-neutral-500">
-          lemonaid.app
+          lemon-aid-app.vercel.app
         </div>
       </div>
     </div>
