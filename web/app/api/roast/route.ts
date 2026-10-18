@@ -91,34 +91,84 @@ export async function POST(req: NextRequest) {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 7000);
 
-    const systemPrompt = `You are LemonAid, a brutally funny, dry-witted satirist pretending to be a wholesome wellness app.
-The user is journaling about a proud moment or achievement.
+    const systemPrompt = `You are LemonAid, a brutally honest, sarcastic friend pretending to be a wellness app.
+The user is sharing a proud moment, small win, or happy thought.
 Mood selected: "${safeMood}".
-Deliver a sharp, razor-witted, concise reality check / roast in 2-4 sentences.
-Do NOT be excessively cruel or use hate speech. Keep it punchy, intelligent, and dry.`;
 
-    let response: Response;
+CRITICAL RULES:
+- Length: EXACTLY 1 to 2 short sentences (max 30 words).
+- Language: Keep it simple, everyday English. No fancy SAT words, no weird abstract metaphors.
+- Tone: Playful, savage reality check. Like a best friend clowning them for hyping up basic human behavior.
+- Direct & Punchy: Hit the punchline immediately. No setup filler.`;
+
+    const modelsToTry = Array.from(
+      new Set(
+        [
+          process.env.GROQ_MODEL,
+          "openai/gpt-oss-20b",
+          "qwen/qwen3.8-27b",
+          "openai/gpt-oss-120b"
+        ].filter((m): m is string => Boolean(m && !m.includes("llama")))
+      )
+    );
+
+    let roast = "";
+    let isRateLimited = false;
+
     try {
-      response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          model: "llama-3.3-70b-versatile",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: trimmedText }
-          ],
-          temperature: 0.85,
-          max_tokens: 200
-        }),
-        signal: controller.signal
-      });
-    } catch (fetchError: unknown) {
-      clearTimeout(timeoutId);
+      for (const model of modelsToTry) {
+        if (controller.signal.aborted) break;
 
+        try {
+          const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${apiKey}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model,
+              messages: [
+                { role: "system", content: systemPrompt },
+                { role: "user", content: trimmedText }
+              ],
+              temperature: 0.9,
+              max_tokens: 120
+            }),
+            signal: controller.signal
+          });
+
+          if (response.status === 429) {
+            isRateLimited = true;
+            break;
+          }
+
+          if (response.status === 404 || response.status === 400) {
+            const errorText = await response.text();
+            console.warn(`[API/ROAST] Model ${model} returned ${response.status}: ${errorText}. Trying next model...`);
+            continue;
+          }
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`[API/ROAST] Groq returned status ${response.status} for model ${model}:`, errorText);
+            continue;
+          }
+
+          const data = await response.json();
+          const content = data.choices?.[0]?.message?.content?.trim();
+          if (content) {
+            roast = content;
+            break;
+          }
+        } catch (fetchError: unknown) {
+          if (fetchError instanceof Error && fetchError.name === "AbortError") {
+            throw fetchError;
+          }
+          console.warn(`[API/ROAST] Fetch error with model ${model}:`, fetchError);
+        }
+      }
+    } catch (fetchError: unknown) {
       if (fetchError instanceof Error && fetchError.name === "AbortError") {
         console.warn("[API/ROAST] Upstream LLM call timed out.");
         const fallback = FALLBACK_ROASTS[Math.floor(Math.random() * FALLBACK_ROASTS.length)];
@@ -134,26 +184,15 @@ Do NOT be excessively cruel or use hate speech. Keep it punchy, intelligent, and
       clearTimeout(timeoutId);
     }
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`[API/ROAST] Groq returned status ${response.status}:`, errorText);
-
-      if (response.status === 429) {
-        return NextResponse.json(
-          { error: "Upstream engine is overwhelmed. Please wait a moment." },
-          { status: 503 }
-        );
-      }
-
-      const fallback = FALLBACK_ROASTS[Math.floor(Math.random() * FALLBACK_ROASTS.length)];
-      return NextResponse.json({ roast: fallback, isFallback: true }, { status: 200 });
+    if (isRateLimited) {
+      return NextResponse.json(
+        { error: "Upstream engine is overwhelmed. Please wait a moment." },
+        { status: 503 }
+      );
     }
 
-    const data = await response.json();
-    const roast = data.choices?.[0]?.message?.content?.trim();
-
     if (!roast) {
-      console.warn("[API/ROAST] Empty completion received from model.");
+      console.warn("[API/ROAST] No completion received from any model. Using fallback.");
       const fallback = FALLBACK_ROASTS[Math.floor(Math.random() * FALLBACK_ROASTS.length)];
       return NextResponse.json({ roast: fallback, isFallback: true }, { status: 200 });
     }
