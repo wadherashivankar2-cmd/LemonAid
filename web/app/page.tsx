@@ -571,7 +571,7 @@ export default function Home() {
   };
 
   return (
-    <main className="relative min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 bg-transparent text-neutral-900 dark:text-neutral-100 font-sans">
+    <main className="relative min-h-screen w-full flex flex-col justify-between items-center p-4 sm:p-6 bg-transparent text-neutral-900 dark:text-neutral-100 font-sans">
       {/* Citrus splash ripples */}
       {splashes.map((s) => (
         <div
@@ -908,10 +908,10 @@ export default function Home() {
           )}
         </div>
       ) : roastData ? (
-        /* Permanent Zero-Overlap Flexbox Layout on Reveal */
-        <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center gap-6 w-full max-w-7xl mx-auto my-auto py-8 animate-fade-in px-4">
-          {/* Main Roast Card (Center Column on Desktop, First on Mobile) */}
-          <div className="w-full max-w-xl order-1 lg:order-2">
+        /* Clean Centered Flexbox Layout on Reveal */
+        <div className="flex flex-col items-center justify-center w-full max-w-xl mx-auto my-auto py-8 animate-fade-in px-4">
+          {/* Main Roast Card */}
+          <div className="w-full max-w-xl">
             <div
               id="roast-reveal-container"
               className="space-y-5 rounded-xl bg-white dark:bg-neutral-900/90 border border-neutral-200 dark:border-neutral-800 shadow-xl p-6 sm:p-7"
@@ -963,30 +963,6 @@ export default function Home() {
                   onCharity={handleOpenCharityModal}
                 />
               </div>
-            </div>
-          </div>
-
-          {/* Sponsor Card (Positioned on the Left Flank on Desktop, Stacked Beneath Main Card on Mobile) */}
-          <div className="w-full max-w-xl lg:w-72 shrink-0 order-2 lg:order-1 flex justify-center">
-            <SponsorCard className="w-full" />
-          </div>
-
-          {/* Side Suggestions Widget (Right Column on Desktop, Stacked Beneath Sponsor Card on Mobile) */}
-          <div className="w-full max-w-xl lg:w-64 shrink-0 order-3">
-            <div className="bg-white/80 dark:bg-neutral-900/80 border border-neutral-200 dark:border-neutral-800 rounded-xl p-4 text-left shadow-md">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-base" role="img" aria-label="suggestion box">💡</span>
-                <h4 className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">Have a suggestion?</h4>
-              </div>
-              <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-4">Reviewed with zero care.</p>
-              <button
-                id="suggestions-widget-btn"
-                type="button"
-                onClick={handleSubmitFeedback}
-                className="w-full py-2.5 px-3 text-xs font-semibold rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-black hover:bg-neutral-800 dark:hover:bg-neutral-200 border border-neutral-900 dark:border-neutral-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out cursor-pointer text-center"
-              >
-                Submit Feedback
-              </button>
             </div>
           </div>
         </div>
@@ -1284,6 +1260,21 @@ export default function Home() {
         >
           <RoastCard brag={roastData.brag || input} roast={roastData.text} />
         </div>
+      )}
+
+      {/* Docked Footer Anchored at the Base (Only on Result / Output Screen) */}
+      {state === "reveal" && (
+        <footer className="w-full py-4 mt-auto flex items-center justify-center gap-6 border-t border-zinc-800/40 text-xs text-zinc-400 z-20">
+          <SponsorCard variant="footer" />
+          <button
+            id="suggestions-footer-btn"
+            type="button"
+            onClick={handleSubmitFeedback}
+            className="hover:text-zinc-200 transition-colors flex items-center gap-1.5 cursor-pointer bg-transparent border-0 p-0 text-xs text-zinc-400 font-medium"
+          >
+            <span>💡 Submit Feedback</span>
+          </button>
+        </footer>
       )}
 
       {/* Dynamic Client-Only Components */}

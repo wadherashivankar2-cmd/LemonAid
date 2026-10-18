@@ -56,6 +56,8 @@ const FEEDBACK_MODAL_DATA = {
   },
 };
 
+const TRIBUTE_KEY = "lemonaid_tribute_paid";
+
 export function RoastActions({
   roastId,
   onReset,
@@ -150,20 +152,17 @@ export function RoastActions({
   };
 
   const [likeCount, setLikeCount] = React.useState<number>(1420);
-  const [hasPaidTribute, setHasPaidTribute] = React.useState<boolean>(false);
+  const [mounted, setMounted] = React.useState(false);
+  const [hasPaid, setHasPaid] = React.useState(true); // default true to avoid flash of clickable button
 
   React.useEffect(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("mr_roast_creator_tribute_paid");
-      if (stored === "true") {
-        setHasPaidTribute(true);
-      }
-    }
+    setMounted(true);
+    const paid = localStorage.getItem(TRIBUTE_KEY) === "true" || localStorage.getItem("has_paid_tribute") === "true";
+    setHasPaid(Boolean(paid));
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
-    fetch(`${apiUrl}/likes`)
+    fetch("/api/tribute")
       .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch likes");
+        if (!res.ok) throw new Error("Failed to fetch tribute");
         return res.json();
       })
       .then((data: { count?: number }) => {
@@ -171,31 +170,47 @@ export function RoastActions({
           setLikeCount(data.count);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
+        fetch(`${apiUrl}/likes`)
+          .then((res) => (res.ok ? res.json() : null))
+          .then((data: { count?: number } | null) => {
+            if (data && typeof data.count === "number") {
+              setLikeCount(data.count);
+            }
+          })
+          .catch(() => {});
+      });
   }, []);
 
   const handleTribute = () => {
-    if (hasPaidTribute) {
-      setActiveFeedbackModal("tribute_rejected");
-      return;
-    }
+    if (hasPaid) return;
 
-    setLikeCount((prev) => prev + 1);
-    setHasPaidTribute(true);
+    setHasPaid(true);
     if (typeof window !== "undefined") {
-      localStorage.setItem("mr_roast_creator_tribute_paid", "true");
+      localStorage.setItem(TRIBUTE_KEY, "true");
     }
+    setLikeCount((prev) => prev + 1);
     quip("creatorTribute");
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
-    fetch(`${apiUrl}/like`, { method: "POST" })
+    fetch("/api/tribute", { method: "POST" })
       .then((res) => res.json())
       .then((data: { count?: number }) => {
         if (data && typeof data.count === "number") {
           setLikeCount(data.count);
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://mr-roast-api.onrender.com";
+        fetch(`${apiUrl}/like`, { method: "POST" })
+          .then((res) => res.json())
+          .then((data: { count?: number }) => {
+            if (data && typeof data.count === "number") {
+              setLikeCount(data.count);
+            }
+          })
+          .catch(() => {});
+      });
   };
 
   return (
@@ -259,21 +274,35 @@ export function RoastActions({
       </div>
 
       {/* Acknowledge Creator Row */}
-      <div className="w-full mt-3">
+      <div className="w-full mt-3 flex flex-col items-center gap-1.5">
         <Button
           id="acknowledge-creator-btn"
           variant="outline"
+          disabled={!mounted || hasPaid}
           onClick={handleTribute}
-          className={`w-full py-2.5 px-4 text-xs font-semibold shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 transition-all duration-300 ease-in-out border text-center cursor-pointer ${
-            hasPaidTribute
-              ? "border-neutral-800 bg-neutral-900/60 text-neutral-400 hover:bg-neutral-800 hover:text-neutral-300 hover:border-neutral-700"
-              : "border-amber-500/50 dark:border-amber-500/60 bg-amber-50 dark:bg-amber-950/30 text-amber-900 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-900/50 hover:border-amber-600 dark:hover:border-amber-400 hover:text-amber-950 dark:hover:text-amber-100"
+          title={hasPaid ? "Tribute already recorded. One per soul." : undefined}
+          className={`w-full py-2.5 px-4 text-xs font-semibold shadow-sm transition-all duration-300 ease-in-out border text-center ${
+            !mounted || hasPaid
+              ? "border-neutral-800 bg-neutral-900/60 text-neutral-400 cursor-not-allowed opacity-90"
+              : "border-amber-500/50 dark:border-amber-500/60 bg-amber-50 dark:bg-amber-950/30 text-amber-900 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-900/50 hover:border-amber-600 dark:hover:border-amber-400 hover:text-amber-950 dark:hover:text-amber-100 hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-95 cursor-pointer"
           }`}
         >
-          {hasPaidTribute
-            ? "❤️ Tribute Paid (1 per soul)"
-            : `Acknowledge the Creator ❤️ [${likeCount.toLocaleString()}]`}
+          {hasPaid ? (
+            <span className="flex items-center justify-center gap-2">
+              <span>❤️ Tribute Paid ({likeCount.toLocaleString()} souls)</span>
+              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded bg-neutral-800 text-neutral-300 border border-neutral-700">
+                Recorded
+              </span>
+            </span>
+          ) : (
+            `Acknowledge the Creator ❤️ [${likeCount.toLocaleString()} souls]`
+          )}
         </Button>
+        <span className="text-[10px] text-neutral-500 dark:text-neutral-400 font-mono tracking-tight text-center">
+          {hasPaid
+            ? "Tribute already recorded. One per soul."
+            : "One per soul. Locked to your device."}
+        </span>
       </div>
 
       {/* Divider & Utilities Row */}

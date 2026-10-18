@@ -5,7 +5,13 @@ import { X } from "lucide-react";
 
 const CLOWN_TRAINING_URL = "https://www.youtube.com/watch?v=9QStt6BIoFM";
 
-export function SponsorCard({ className = "" }: { className?: string }) {
+export function SponsorCard({
+  className = "",
+  variant = "card",
+}: {
+  className?: string;
+  variant?: "card" | "footer";
+}) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [imgError, setImgError] = React.useState(false);
 
@@ -36,22 +42,35 @@ export function SponsorCard({ className = "" }: { className?: string }) {
 
   return (
     <>
-      {/* Sponsor Trigger Button on Left Flank */}
-      <button
-        id="sponsor-trigger-btn"
-        type="button"
-        onClick={() => setIsOpen(true)}
-        className={`w-full lg:w-72 shrink-0 bg-neutral-900 border border-amber-500/40 hover:border-amber-400 text-amber-300 font-bold py-3.5 px-6 rounded-2xl shadow-lg transition-all duration-200 hover:scale-[1.02] flex flex-col items-center justify-center gap-1 text-center cursor-pointer select-none active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-neutral-950 ${className}`}
-        aria-haspopup="dialog"
-        aria-expanded={isOpen}
-      >
-        <span className="text-sm sm:text-base font-extrabold flex items-center gap-2">
-          💸 Sponsor This Disaster
-        </span>
-        <span className="text-[10px] font-normal text-amber-300/70 leading-tight">
-          Warning: High risk of financial extortion &amp; emotional damage.
-        </span>
-      </button>
+      {variant === "footer" ? (
+        <button
+          id="sponsor-trigger-btn"
+          type="button"
+          onClick={() => setIsOpen(true)}
+          className={`hover:text-amber-400 dark:hover:text-amber-300 transition-colors inline-flex items-center gap-1.5 cursor-pointer bg-transparent border-0 p-0 text-xs text-zinc-400 font-medium ${className}`}
+          aria-haspopup="dialog"
+          aria-expanded={isOpen}
+        >
+          <span>💸 Sponsor This Disaster</span>
+        </button>
+      ) : (
+        /* Sponsor Trigger Button on Left Flank */
+        <button
+          id="sponsor-trigger-btn"
+          type="button"
+          onClick={() => setIsOpen(true)}
+          className={`w-full lg:w-72 shrink-0 bg-neutral-900 border border-amber-500/40 hover:border-amber-400 text-amber-300 font-bold py-3.5 px-6 rounded-2xl shadow-lg transition-all duration-200 hover:scale-[1.02] flex flex-col items-center justify-center gap-1 text-center cursor-pointer select-none active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-neutral-950 ${className}`}
+          aria-haspopup="dialog"
+          aria-expanded={isOpen}
+        >
+          <span className="text-sm sm:text-base font-extrabold flex items-center gap-2">
+            💸 Sponsor This Disaster
+          </span>
+          <span className="text-[10px] font-normal text-amber-300/70 leading-tight">
+            Warning: High risk of financial extortion &amp; emotional damage.
+          </span>
+        </button>
+      )}
 
       {/* Interactive Brutal Roast Sponsor Modal */}
       {isOpen && (

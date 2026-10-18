@@ -513,11 +513,11 @@ export function EvasiveGithub() {
       onPointerEnter={isTouchDevice ? undefined : handleEvade}
       onPointerOver={isTouchDevice ? undefined : handleEvade}
       onTouchStart={isTouchDevice ? handleTouchStart : undefined}
-      className={`fixed left-0 top-0 z-50 flex items-center gap-1.5 p-1.5 rounded-full bg-neutral-900/85 hover:bg-neutral-900/95 text-neutral-400 border backdrop-blur-md select-none transition-all duration-300 touch-manipulation ${moodClasses}`}
+      className={`fixed left-0 top-0 z-40 flex items-center gap-1.5 p-1.5 rounded-full bg-neutral-900/85 hover:bg-neutral-900/95 text-neutral-400 border backdrop-blur-md select-none transition-all duration-300 touch-manipulation ${moodClasses}`}
       style={{
         transform: position
           ? `translate3d(${position.x}px, ${position.y}px, 0)`
-          : `translate3d(16px, calc(100vh - 100% - 16px), 0)`,
+          : `translate3d(24px, calc(100vh - 100% - 24px), 0)`,
         transition: isExhausted
           ? "transform 0.2s ease-out, border-color 0.3s ease, box-shadow 0.3s ease"
           : "transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease",
