@@ -31,11 +31,11 @@ interface RoastResponse {
 }
 
 const MOODS = [
-  { emoji: "😆", label: "Ecstatic", reaction: "Laughing through the pain won't fix your hairline or your life." },
-  { emoji: "🙂", label: "Happy", reaction: "That fake smile is a desperate cry for psychiatric intervention." },
-  { emoji: "😐", label: "Neutral", reaction: "Numb and dead inside. Just like your personality." },
-  { emoji: "😟", label: "Anxious", reaction: "Anxious? Good. You should be, looking at where your life is heading." },
-  { emoji: "😳", label: "Embarrassed", reaction: "Embarrassed? You should be ashamed of your entire existence." },
+  { emoji: "😆", label: "Ecstatic", reaction: "Delusional optimism." },
+  { emoji: "🙂", label: "Happy", reaction: "Aggressive coping." },
+  { emoji: "😐", label: "Neutral", reaction: "Completely numb." },
+  { emoji: "😥", label: "Anxious", reaction: "Victim complex." },
+  { emoji: "😳", label: "Embarrassed", reaction: "Caught red-handed." },
 ];
 
 const URL_REGEX = /(https?:\/\/|www\.|\.[a-z]{2,}(\/|\s|$))/i;
@@ -56,36 +56,17 @@ const getProgressMilestoneMessage = (progress: number) => {
   return "Calibrating emotional baseline...";
 };
 
-const COUNTER_QUIPS = {
-  zero: [
-    "Blank screen, blank mind.",
-    "Type something or leave.",
-    "Not even a single thought?",
-  ],
-  chars15: [
-    "Already skimming.",
-    "Wrap it up.",
-    "Boring start, but continue.",
-  ],
-  chars50: [
-    "The yap begins.",
-    "Nobody asked for lore.",
-    "Who is this for?",
-  ],
-  chars100: [
-    "Midway through a whole novel.",
-    "Are we venting now?",
-    "Deep breaths. Less typing.",
-  ],
-  chars150: [
-    "Unchecked yapping.",
-    "Save some for your group chat.",
-    "Almost at the ceiling.",
-  ],
-  max200: [
-    "Hit the 200 cap. Hit Enter already.",
-    "Maxed out. Cease typing.",
-  ],
+const getDynamicSubtext = (length: number) => {
+  if (length === 0) return "Blank mind.";
+  if (length <= 10) return "Weak start.";
+  if (length <= 30) return "Already bored.";
+  if (length <= 50) return "Already skimming.";
+  if (length <= 75) return "Get to the point.";
+  if (length <= 100) return "Nobody asked.";
+  if (length <= 125) return "Overexplaining won't help.";
+  if (length <= 150) return "Nobody's reading all this.";
+  if (length <= 175) return "Wrap it up.";
+  return "Maxed out. Still mid.";
 };
 
 const CLIENT_FALLBACKS = [
@@ -113,14 +94,7 @@ export default function Home() {
   const [selectedMood, setSelectedMood] = React.useState<number | null>(null);
   const [hoveredMood, setHoveredMood] = React.useState<number | null>(null);
   const [isShaking, setIsShaking] = React.useState(false);
-  const [zeroQuipIndex, setZeroQuipIndex] = React.useState(0);
-  const [isMounted, setIsMounted] = React.useState(false);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
-
-  React.useEffect(() => {
-    setIsMounted(true);
-    setZeroQuipIndex(Math.floor(Math.random() * COUNTER_QUIPS.zero.length));
-  }, []);
 
   // Typewriter effect state
   const [wordCount, setWordCount] = React.useState(0);
@@ -189,30 +163,6 @@ export default function Home() {
     const index = Math.floor(seconds / 3) % LOADING_MESSAGES.length;
     return LOADING_MESSAGES[index];
   };
-
-  const getInputLengthInsult = (len: number) => {
-    if (len >= 200) {
-      return COUNTER_QUIPS.max200[len % COUNTER_QUIPS.max200.length];
-    }
-    if (len >= 150) {
-      return COUNTER_QUIPS.chars150[len % COUNTER_QUIPS.chars150.length];
-    }
-    if (len >= 100) {
-      return COUNTER_QUIPS.chars100[len % COUNTER_QUIPS.chars100.length];
-    }
-    if (len >= 50) {
-      return COUNTER_QUIPS.chars50[len % COUNTER_QUIPS.chars50.length];
-    }
-    if (len >= 15) {
-      return COUNTER_QUIPS.chars15[len % COUNTER_QUIPS.chars15.length];
-    }
-    if (len > 0) {
-      return COUNTER_QUIPS.chars15[len % COUNTER_QUIPS.chars15.length];
-    }
-    return COUNTER_QUIPS.zero[zeroQuipIndex % COUNTER_QUIPS.zero.length];
-  };
-
-  const currentQuip = isMounted ? getInputLengthInsult(input.length) : COUNTER_QUIPS.zero[0];
 
   // Word-by-word typewriter effect on reveal
   React.useEffect(() => {
@@ -316,7 +266,6 @@ export default function Home() {
     setShowProceedPrankModal(false);
     isSubmittingRef.current = false;
     setLoadingProgress(0);
-    setZeroQuipIndex((prev) => (prev + 1) % COUNTER_QUIPS.zero.length);
     setIsShaking(false);
   };
 
@@ -741,19 +690,20 @@ export default function Home() {
               {state === "idle" && (
                 <div className="flex flex-col items-start gap-1 my-2" aria-label="Select mood">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs text-muted-foreground">Mood:</span>
+                    <span className="text-xs text-muted-foreground select-none">Mood:</span>
                     <div className="flex items-center gap-1.5">
-                      {MOODS.map(({ emoji, label }, index) => {
+                      {MOODS.map(({ emoji, label, reaction }, index) => {
                         const isSelected = selectedMood === index;
                         return (
                           <button
                             key={label}
                             type="button"
                             aria-label={`${label} mood`}
+                            title={`${label}: ${reaction}`}
                             onMouseEnter={() => setHoveredMood(index)}
                             onMouseLeave={() => setHoveredMood(null)}
                             onClick={() => handleMoodClick(index)}
-                            className={`p-1 rounded-md transition-transform hover:scale-125 focus:outline-none cursor-pointer inline-flex items-center justify-center ${isSelected ? "bg-neutral-200/90 ring-1 ring-neutral-400" : ""
+                            className={`p-1 rounded-md transition-transform hover:scale-125 focus:outline-none cursor-pointer inline-flex items-center justify-center ${isSelected ? "bg-neutral-200/90 dark:bg-neutral-800 ring-1 ring-neutral-400 dark:ring-neutral-600" : ""
                               }`}
                           >
                             <span role="img" aria-label={label} className="text-base select-none">
@@ -766,9 +716,9 @@ export default function Home() {
                   </div>
 
                   {/* RESERVED HEIGHT CONTAINER: Prevents vertical layout jumping and infinite flutter loop */}
-                  <div className="h-5 flex items-center">
+                  <div className="h-5 flex items-center min-w-0 max-w-full">
                     <p
-                      className={`text-xs text-neutral-600 font-mono tracking-tight transition-opacity duration-150 pl-0.5 ${hoveredMood !== null || selectedMood !== null ? "opacity-100" : "opacity-0"
+                      className={`text-xs text-neutral-600 dark:text-neutral-400 font-mono tracking-tight transition-opacity duration-150 pl-0.5 truncate whitespace-nowrap ${hoveredMood !== null || selectedMood !== null ? "opacity-100" : "opacity-0"
                         }`}
                     >
                       {hoveredMood !== null
@@ -803,7 +753,7 @@ export default function Home() {
                   className="w-full resize-none rounded-xl border border-neutral-300 dark:border-neutral-800 bg-white dark:bg-neutral-900/80 p-4 text-base text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:border-yellow-400 focus:outline-none focus:ring-1 focus:ring-yellow-400 transition shadow-sm disabled:opacity-60 disabled:cursor-not-allowed"
                 />
                 <div className="mt-1.5 flex justify-between items-center gap-2">
-                  <span className="text-neutral-400 text-xs italic">{currentQuip}</span>
+                  <span className="text-neutral-400 text-xs italic">{getDynamicSubtext(input.length)}</span>
                   <span className="text-neutral-400 text-xs font-mono shrink-0">{input.length}/200</span>
                 </div>
               </div>
