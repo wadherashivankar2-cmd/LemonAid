@@ -35,7 +35,7 @@ const MOODS = [
   { emoji: "🙂", label: "Happy", reaction: "Aggressive coping." },
   { emoji: "😐", label: "Neutral", reaction: "Completely numb." },
   { emoji: "😥", label: "Anxious", reaction: "Victim complex." },
-  { emoji: "😳", label: "Embarrassed", reaction: "Caught red-handed." },
+  { emoji: "😳", label: "Embarrassed", reaction: "Visible panic." },
 ];
 
 const URL_REGEX = /(https?:\/\/|www\.|\.[a-z]{2,}(\/|\s|$))/i;
