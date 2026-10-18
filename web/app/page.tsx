@@ -16,7 +16,6 @@ import { SponsorCard } from "@/components/SponsorCard";
 
 const GridPulse = dynamic(() => import("@/components/ui/grid-pulse"), { ssr: false });
 const EvasiveGithub = dynamic(() => import("@/components/EvasiveGithub"), { ssr: false });
-const JudgeParrot = dynamic(() => import("@/components/JudgeParrot"), { ssr: false });
 
 type AppState = "idle" | "loading" | "reveal" | "gentle" | "error";
 
@@ -472,7 +471,11 @@ export default function Home() {
       const response = await fetch(roastEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ happy_thought: trimmed }),
+        body: JSON.stringify({
+          text: trimmed,
+          happy_thought: trimmed,
+          mood: selectedMood !== null ? MOODS[selectedMood].label : undefined,
+        }),
         signal: controller.signal,
       });
 
@@ -569,9 +572,6 @@ export default function Home() {
 
   return (
     <main className="relative min-h-screen w-full flex flex-col items-center justify-center p-4 sm:p-6 bg-transparent text-neutral-900 dark:text-neutral-100 font-sans">
-      {/* Procedural 3D Judging Parrot Mascot - flies away on submit, unmounts on roast card */}
-      {state !== "reveal" && <JudgeParrot isExiting={isLoading} />}
-
       {/* Citrus splash ripples */}
       {splashes.map((s) => (
         <div

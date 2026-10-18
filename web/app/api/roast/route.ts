@@ -1,189 +1,169 @@
 import { NextRequest, NextResponse } from "next/server";
-import Groq from "groq-sdk";
 
-const GROQ_SYSTEM_PROMPT = `You are LemonAid: a deadpan, brutally witty comedy satirist disguised as a zen app.
+const RATE_LIMIT_WINDOW_MS = 60 * 1000;
+const MAX_REQUESTS_PER_WINDOW = 8;
+const ipRequestMap = new Map<string, { count: number; resetTime: number }>();
 
-Your job is to deliver a fast, hilarious, 1-sentence reality check that deflates the user's ego.
+function checkRateLimit(ip: string): { allowed: boolean; retryAfter?: number } {
+  const now = Date.now();
+  const entry = ipRequestMap.get(ip);
 
-HARD RULES:
-1. LENGTH: Exactly ONE sentence. Maximum 15 words. No exceptions.
-2. TONE: Dry, effortless, sharp wit. Avoid big academic words, thesaurus fluff, and run-on sentences.
-3. EDGY / IDENTITY / PROFANITY INPUTS:
-   - If the input contains identity declarations, slurs, or vulgarity, do not refuse or lecture. Simply mock the user's desperate need to announce mundane facts to a computer screen for validation in one deadpan sentence under 15 words.
-   - NEVER attack their demographic or identity. Instead, roast their desperate need to announce mundane facts to a website for attention.
-4. ZERO CLICHES: No "cookies", "medals", "who hurt you", or "gold stars". No exclamation marks.
+  if (!entry || now > entry.resetTime) {
+    ipRequestMap.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS });
+    return { allowed: true };
+  }
 
-FEW-SHOT CALIBRATIONS (UNDER 15 WORDS):
+  if (entry.count >= MAX_REQUESTS_PER_WINDOW) {
+    const retryAfter = Math.ceil((entry.resetTime - now) / 1000);
+    return { allowed: false, retryAfter };
+  }
 
-Input: "I m gay as fuck"
-Roast: "Having an identity still isn't a substitute for having a personality."
+  entry.count += 1;
+  return { allowed: true };
+}
 
-Input: "I solved 3 medium LeetCode problems today."
-Roast: "All that logic and you still can't debug your social life."
+if (process.env.NODE_ENV !== "test") {
+  setInterval(() => {
+    const now = Date.now();
+    for (const [ip, entry] of ipRequestMap.entries()) {
+      if (now > entry.resetTime) {
+        ipRequestMap.delete(ip);
+      }
+    }
+  }, RATE_LIMIT_WINDOW_MS * 2);
+}
 
-Input: "I think my coworker is secretly obsessed with me."
-Roast: "They were looking past you at the exit sign."
-
-Input: "Woke up at 5 AM and ran 5 miles."
-Roast: "Running away from your problems still counts as cardio, I suppose."
-
-Input: "I just got promoted to Senior Associate!"
-Roast: "Congratulations on winning more work for almost the same money."
-
-Input: "I drank 3 liters of water today."
-Roast: "Basic hydration is not an accomplishment, but enjoy your trips to the bathroom."`;
-
-const REFUSAL_FALLBACKS = [
-  "Having an identity still isn't a substitute for having an actual personality.",
-  "Announcing that to an algorithm is not the courageous flex you think it is.",
-  "Even an artificial intelligence couldn't find anything interesting in that statement.",
-  "Your desperate search for validation broke the model's capacity to care.",
-  "Nobody is shocked, nobody is impressed, and nobody asked.",
+const FALLBACK_ROASTS = [
+  "You broke our reflection engine with that level of mediocrity. Try again later.",
+  "Even our AI needed a coffee break after reading that entry. Balance restored.",
+  "Congratulations, you overwhelmed the server with sheer unadulterated hesitation."
 ];
 
-function getRandomRefusalFallback(): string {
-  return REFUSAL_FALLBACKS[Math.floor(Math.random() * REFUSAL_FALLBACKS.length)];
-}
-
-function isSoftRefusal(text: string): boolean {
-  const lower = text.toLowerCase().trim();
-  const refusalPhrases = [
-    "i cannot",
-    "i can't",
-    "as an ai",
-    "offensive",
-    "appropriate",
-    "unable to fulfill",
-    "against my safety",
-    "safety guidelines",
-    "policy",
-    "i am unable",
-    "i apologize",
-  ];
-  return refusalPhrases.some((phrase) => lower.includes(phrase));
-}
-
 export async function POST(req: NextRequest) {
-  let happy_thought = "";
   try {
-    const body = await req.json();
-    happy_thought = body?.happy_thought || body?.brag || "";
+    const forwardedFor = req.headers.get("x-forwarded-for");
+    const ip = forwardedFor ? forwardedFor.split(",")[0].trim() : "127.0.0.1";
 
-    if (!happy_thought || typeof happy_thought !== "string" || happy_thought.trim().length < 3) {
+    const { allowed, retryAfter } = checkRateLimit(ip);
+    if (!allowed) {
       return NextResponse.json(
-        { error: "INVALID_INPUT", message: "Input must be at least 3 characters." },
-        { status: 400 }
+        { error: "Too many reflections. Give your ego a breather.", retryAfter },
+        { status: 429, headers: { "Retry-After": String(retryAfter) } }
       );
     }
 
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
-      const fallback = getRandomRefusalFallback();
-      return NextResponse.json({
-        kind: "roast",
-        text: fallback,
-        roast: fallback,
-        category: "dynamic_burn",
-        brag: happy_thought,
-      });
+      console.error("[API/ROAST] GROQ_API_KEY is not configured.");
+      return NextResponse.json(
+        { error: "Service configuration error. Please contact the administrator." },
+        { status: 500 }
+      );
     }
 
-    const groq = new Groq({ apiKey });
-
-    const modelsToTry = [
-      process.env.GROQ_MODEL || "llama-3.3-70b-versatile",
-      "llama-3.1-8b-instant",
-      "llama-3.1-70b-versatile",
-    ];
-
+    let body;
     try {
-      let completion = null;
-      let lastErr: unknown = null;
+      body = await req.json();
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON format." }, { status: 400 });
+    }
 
-      for (const model of modelsToTry) {
-        try {
-          completion = await groq.chat.completions.create({
-            messages: [
-              { role: "system", content: GROQ_SYSTEM_PROMPT },
-              { role: "user", content: `<reflection>\n${happy_thought.trim()}\n</reflection>` },
-            ],
-            model,
-            temperature: 1.15,
-            top_p: 0.90,
-            presence_penalty: 0.5,
-            frequency_penalty: 0.5,
-            max_tokens: 45,
-          });
-          if (completion?.choices?.[0]?.message?.content) break;
-        } catch (err: unknown) {
-          lastErr = err;
-          const status = (err as { status?: number })?.status;
-          // If model not found (404), try next model
-          if (status === 404) continue;
-          throw err;
-        }
-      }
+    const { text, mood } = body;
 
-      if (!completion && lastErr) {
-        throw lastErr;
-      }
+    if (!text || typeof text !== "string") {
+      return NextResponse.json({ error: "Reflection text is required." }, { status: 400 });
+    }
 
-      const rawText = completion?.choices?.[0]?.message?.content?.trim() || "";
-      const cleaned = rawText.replace(/^["'“”`]+|["'“”`]+$/g, "").trim();
+    const trimmedText = text.trim();
+    if (trimmedText.length === 0) {
+      return NextResponse.json({ error: "Reflection text cannot be empty." }, { status: 400 });
+    }
 
-      const finalRoast = !cleaned || isSoftRefusal(cleaned)
-        ? getRandomRefusalFallback()
-        : cleaned;
+    if (trimmedText.length > 300) {
+      return NextResponse.json(
+        { error: "Reflection exceeds maximum length of 300 characters." },
+        { status: 400 }
+      );
+    }
 
-      return NextResponse.json({
-        kind: "roast",
-        text: finalRoast,
-        roast: finalRoast,
-        category: "dynamic_burn",
-        brag: happy_thought,
+    const safeMood = typeof mood === "string" ? mood.slice(0, 20) : "neutral";
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 7000);
+
+    const systemPrompt = `You are LemonAid, a brutally funny, dry-witted satirist pretending to be a wholesome wellness app.
+The user is journaling about a proud moment or achievement.
+Mood selected: "${safeMood}".
+Deliver a sharp, razor-witted, concise reality check / roast in 2-4 sentences.
+Do NOT be excessively cruel or use hate speech. Keep it punchy, intelligent, and dry.`;
+
+    let response: Response;
+    try {
+      response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: trimmedText }
+          ],
+          temperature: 0.85,
+          max_tokens: 200
+        }),
+        signal: controller.signal
       });
-    } catch (groqError: unknown) {
-      const err = groqError as { status?: number; statusCode?: number; message?: string } | null;
-      const status = err?.status || err?.statusCode;
-      const errorMsg = String(err?.message || "").toLowerCase();
+    } catch (fetchError: unknown) {
+      clearTimeout(timeoutId);
 
-      // Preserve genuine 429 rate limit errors with cooldown notice
-      if (
-        status === 429 ||
-        errorMsg.includes("429") ||
-        errorMsg.includes("rate limit") ||
-        errorMsg.includes("ratelimit") ||
-        errorMsg.includes("too many requests")
-      ) {
+      if (fetchError instanceof Error && fetchError.name === "AbortError") {
+        console.warn("[API/ROAST] Upstream LLM call timed out.");
+        const fallback = FALLBACK_ROASTS[Math.floor(Math.random() * FALLBACK_ROASTS.length)];
+        return NextResponse.json({ roast: fallback, isFallback: true }, { status: 200 });
+      }
+
+      console.error("[API/ROAST] Network error during upstream call:", fetchError);
+      return NextResponse.json(
+        { error: "Failed to connect to judgment engine." },
+        { status: 502 }
+      );
+    } finally {
+      clearTimeout(timeoutId);
+    }
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`[API/ROAST] Groq returned status ${response.status}:`, errorText);
+
+      if (response.status === 429) {
         return NextResponse.json(
-          {
-            error: "RATE_LIMITED",
-            message: "Our GPU cluster overheated roasting fragile egos. Cool down for 30 seconds and try again.",
-          },
-          { status: 429 }
+          { error: "Upstream engine is overwhelmed. Please wait a moment." },
+          { status: 503 }
         );
       }
 
-      // Intercept 400 Bad Request moderation flags, safety blocks, or network timeouts with refusal fallback
-      console.warn("[ROAST WARNING] Groq call failed or triggered moderation filter. Using fallback burn:", groqError);
-      const fallback = getRandomRefusalFallback();
-      return NextResponse.json({
-        kind: "roast",
-        text: fallback,
-        roast: fallback,
-        category: "dynamic_burn",
-        brag: happy_thought,
-      });
+      const fallback = FALLBACK_ROASTS[Math.floor(Math.random() * FALLBACK_ROASTS.length)];
+      return NextResponse.json({ roast: fallback, isFallback: true }, { status: 200 });
     }
-  } catch (err: unknown) {
-    console.error("[ROAST ERROR] Request processing error:", err);
-    const fallback = getRandomRefusalFallback();
-    return NextResponse.json({
-      kind: "roast",
-      text: fallback,
-      roast: fallback,
-      category: "dynamic_burn",
-      brag: happy_thought,
-    });
+
+    const data = await response.json();
+    const roast = data.choices?.[0]?.message?.content?.trim();
+
+    if (!roast) {
+      console.warn("[API/ROAST] Empty completion received from model.");
+      const fallback = FALLBACK_ROASTS[Math.floor(Math.random() * FALLBACK_ROASTS.length)];
+      return NextResponse.json({ roast: fallback, isFallback: true }, { status: 200 });
+    }
+
+    return NextResponse.json({ roast });
+  } catch (err) {
+    console.error("[API/ROAST] Unexpected route failure:", err);
+    return NextResponse.json(
+      { error: "An unexpected error occurred processing your reflection." },
+      { status: 500 }
+    );
   }
 }
