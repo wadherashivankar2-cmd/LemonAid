@@ -31,7 +31,7 @@ export function QuipHost() {
     <div
       role="status"
       aria-live="polite"
-      className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[110] flex flex-col items-center gap-2 max-w-[90vw] sm:max-w-[480px] pointer-events-none"
+      className="fixed bottom-16 sm:bottom-20 left-1/2 -translate-x-1/2 z-50 pointer-events-none flex flex-col items-center gap-2 max-w-[90vw] sm:max-w-[480px]"
     >
       {toasts.map((toast) => (
         <div
