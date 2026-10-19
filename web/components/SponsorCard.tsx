@@ -96,16 +96,16 @@ export function SponsorCard({
               <X className="w-5 h-5" />
             </button>
 
-            {/* Meme Image without Cropping (Full Photo Visible) */}
+            {/* Circus Performer Uniform Image */}
             {!imgError ? (
               <img
-                src="/mode_smile.jpg"
-                alt="Sponsor Meme"
+                src="/clown.jpg"
+                alt="Circus performer uniform"
                 onError={() => setImgError(true)}
-                className="w-full max-h-48 sm:max-h-64 object-contain rounded-xl bg-black/30 border border-neutral-800 mb-3 sm:mb-4 shrink-0"
+                className="w-full h-48 object-cover rounded-t-xl bg-black/30 border border-neutral-800 mb-3 sm:mb-4 shrink-0"
               />
             ) : (
-              <div className="w-full max-h-48 sm:max-h-64 h-44 sm:h-48 flex flex-col items-center justify-center p-4 text-center bg-black/30 border border-neutral-800 rounded-xl mb-3 sm:mb-4 text-neutral-400 shrink-0">
+              <div className="w-full h-48 flex flex-col items-center justify-center p-4 text-center bg-black/30 border border-neutral-800 rounded-t-xl mb-3 sm:mb-4 text-neutral-400 shrink-0">
                 <span className="text-4xl mb-2">☕💸</span>
                 <p className="text-xs font-mono uppercase tracking-wider text-rose-400 font-bold">
                   National Cloud Recovery Initiative
