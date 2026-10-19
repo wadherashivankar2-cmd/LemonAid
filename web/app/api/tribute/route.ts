@@ -5,8 +5,9 @@ import path from "path";
 
 export const dynamic = "force-dynamic";
 
+const BASE_TRIBUTE_COUNT = 65;
 const DATA_FILE_PATH = path.join(process.cwd(), "data", "tributes.json");
-const DEFAULT_COUNT = 1420;
+const DEFAULT_COUNT = 0;
 
 function getFallbackCount(): number {
   try {
@@ -50,27 +51,29 @@ async function fetchCurrentCount(): Promise<number> {
 }
 
 export async function GET() {
-  const count = await fetchCurrentCount();
-  return NextResponse.json({ count });
+  const dbCount = await fetchCurrentCount();
+  const totalCount = (dbCount || 0) + BASE_TRIBUTE_COUNT;
+  return NextResponse.json({ count: totalCount });
 }
 
 export async function POST(request: NextRequest) {
   // 1. Server-Side Cookie Guard: reject double increment if cookie present
   const tributeCookie = request.cookies.get("lemonaid_tribute_paid");
   if (tributeCookie) {
-    const currentCount = await fetchCurrentCount();
+    const dbCount = await fetchCurrentCount();
+    const totalCount = (dbCount || 0) + BASE_TRIBUTE_COUNT;
     return NextResponse.json(
-      { count: currentCount, message: "Already recorded" },
+      { count: totalCount, message: "Already recorded" },
       { status: 200 }
     );
   }
 
   // 2. Increment tribute in Supabase
-  let newCount: number | null = null;
+  let newDbCount: number | null = null;
   try {
     const { data: rpcCount, error: rpcError } = await supabase.rpc("increment_tribute");
     if (!rpcError && typeof rpcCount === "number") {
-      newCount = rpcCount;
+      newDbCount = rpcCount;
     } else {
       // Direct table increment fallback if RPC not yet created
       const { data: currentData, error: readError } = await supabase
@@ -89,7 +92,7 @@ export async function POST(request: NextRequest) {
           .single();
 
         if (!updateError && updatedData) {
-          newCount = updatedData.count;
+          newDbCount = updatedData.count;
         }
       }
     }
@@ -97,14 +100,15 @@ export async function POST(request: NextRequest) {
     console.warn("[API/TRIBUTE] Error updating Supabase tribute:", err);
   }
 
-  if (newCount === null) {
-    newCount = getFallbackCount() + 1;
+  if (newDbCount === null) {
+    newDbCount = getFallbackCount() + 1;
   }
 
-  saveFallbackCount(newCount);
+  saveFallbackCount(newDbCount);
 
   // 3. Attach permanent cookie to the response
-  const response = NextResponse.json({ count: newCount });
+  const updatedCount = (newDbCount || 1) + BASE_TRIBUTE_COUNT;
+  const response = NextResponse.json({ count: updatedCount });
   response.cookies.set("lemonaid_tribute_paid", "true", {
     path: "/",
     maxAge: 60 * 60 * 24 * 365 * 5, // 5 years
