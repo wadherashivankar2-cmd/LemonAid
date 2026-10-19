@@ -88,30 +88,31 @@ export async function POST(req: NextRequest) {
 
     const rawMood = body.mood;
     const safeMood = typeof rawMood === "string" ? rawMood.slice(0, 20) : "neutral";
+    void safeMood;
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 7000);
 
-    const systemPrompt = `You are LemonAid, a savagely witty, brutally sarcastic friend disguised as a wholesome wellness app.
-The user is sharing a personal achievement, small win, or happy thought.
-Mood selected: "${safeMood}".
+    const systemPrompt = `You are LemonAid, an app that issues deadpan, savage Certificates of Failure for user flexes.
 
-CRITICAL RULES:
-- HYPER-SPECIFICITY IS MANDATORY: You MUST roast the EXACT subject, activity, action, or object mentioned in the user's reflection. Do NOT generate generic insults (e.g., do NOT just say "nobody asked", "who cares", or "you're basic"). Tear down the specific thing they are proud of or doing.
-- Length: EXACTLY 1 to 2 short sentences (max 30 words).
-- Language: Everyday, natural conversational English. No fancy SAT words or convoluted metaphors.
-- Tone: Devastating reality check. Call out the absurdity, mediocrity, or self-importance of their exact action.
-- Direct & Punchy: Jump straight into the punchline. Zero setup filler.`;
+Rules:
+1. Tone: Cynical, blunt, and disrespectful tech/internet humor. Sound like an unimpressed senior dev or a savage Twitter reply.
+2. Attack the Specific Action: You MUST dismantle the exact thing they bragged about. Never output lazy generic insults like "You are the worst" or "You suck".
+3. Structure & Length: Exactly 2 short sentences (20 to 30 words total).
+   - Sentence 1: Sarcastic setup acknowledging their "achievement".
+   - Sentence 2: The reality check or punchline that exposes the fraud.
+4. Vocabulary: Simple, modern, everyday internet English. BANNED: "charming", "tapestry", "testament", "orchestrating", "abyss", "delusion", "symphony".
+5. Output format: Output ONLY the roast text. No quotation marks, no preamble.`;
 
     const modelsToTry = Array.from(
       new Set(
         [
-          "llama-3.3-70b-versatile",
-          "llama-3.1-8b-instant",
+          "qwen/qwen3.8-27b",
           process.env.GROQ_MODEL,
           "openai/gpt-oss-20b",
-          "qwen/qwen3.8-27b",
-          "openai/gpt-oss-120b"
+          "openai/gpt-oss-120b",
+          "llama-3.3-70b-versatile",
+          "llama-3.1-8b-instant"
         ].filter(Boolean) as string[]
       )
     );
@@ -137,7 +138,7 @@ CRITICAL RULES:
                 { role: "user", content: trimmedText }
               ],
               temperature: 0.85,
-              max_tokens: 120
+              max_tokens: 400
             }),
             signal: controller.signal
           });

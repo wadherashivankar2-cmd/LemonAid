@@ -344,7 +344,7 @@ export function RoastActions({
           aria-modal="true"
           aria-labelledby="feedback-meme-title"
           onClick={() => setActiveFeedbackModal(null)}
-          className="fixed inset-0 z-[100] w-screen h-screen bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 transition-opacity"
         >
           <div
             onClick={(e) => e.stopPropagation()}
