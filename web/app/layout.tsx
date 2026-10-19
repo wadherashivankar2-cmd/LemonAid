@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { fontSans, fontSerif } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import { Chrome } from "@/components/Chrome";
+import { Analytics } from "@vercel/analytics/react";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://lemon-aid-app.vercel.app";
 
@@ -55,6 +56,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-[#F4F4F0] text-neutral-900 dark:bg-[#0A0A0A] dark:text-neutral-100 font-sans selection:bg-neutral-800 transition-colors duration-300 relative isolate">
         <Chrome />
         {children}
+        <Analytics />
       </body>
     </html>
   );
