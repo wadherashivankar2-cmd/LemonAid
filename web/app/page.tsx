@@ -38,7 +38,8 @@ const MOODS = [
   { emoji: "😳", label: "Embarrassed", reaction: "Visible panic." },
 ];
 
-const URL_REGEX = /(https?:\/\/|www\.|\.[a-z]{2,}(\/|\s|$))/i;
+const URL_REGEX =
+  /(?:https?:\/\/|www\.)[^\s]+|(?:\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com|org|net|io|co|dev|app|ai|me|edu|gov)\b(?:\/[^\s]*)?)/i;
 
 const LOADING_MESSAGES = [
   "Waking up the server from a coma...",
